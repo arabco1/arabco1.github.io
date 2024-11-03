@@ -122,6 +122,18 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
     <script>
+        window.onload = function() {
+    document.getElementById('furniture-percentage').innerText = localStorage.getItem('furniture') + '%';
+    document.getElementById('home-percentage').innerText = localStorage.getItem('home') + '%';
+    document.getElementById('perfume-percentage').innerText = localStorage.getItem('perfume') + '%';
+    document.getElementById('mens-clothing-percentage').innerText = localStorage.getItem('mensClothing') + '%';
+    document.getElementById('womens-clothing-percentage').innerText = localStorage.getItem('womensClothing') + '%';
+    document.getElementById('kids-clothing-percentage').innerText = localStorage.getItem('kidsClothing') + '%';
+    document.getElementById('office-supplies-percentage').innerText = localStorage.getItem('officeSupplies') + '%';
+    document.getElementById('sephora-percentage').innerText = localStorage.getItem('sephora') + '%';
+    document.getElementById('discounts-percentage').innerText = localStorage.getItem('discounts') + '%';
+}
+
         function createChart(chartId, percentage) {
             new Chart(document.getElementById(chartId), {
                 type: 'doughnut',
