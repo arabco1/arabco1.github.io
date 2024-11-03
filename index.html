@@ -1,11 +1,12 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الإدارة لداشبورد المبيعات</title>
+    <title>داشبورد تفاعلي لعرض نسب تحقيق اهداف المبيعات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.css">
     <style>
         body {
             font-family: 'Almarai', sans-serif;
@@ -16,14 +17,10 @@
             direction: rtl;
             color: #fff;
         }
-        .admin-panel {
-            max-width: 800px;
+        .dashboard {
+            max-width: 1200px;
             margin: auto;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-top: 50px;
         }
         .header {
             text-align: center;
@@ -32,63 +29,107 @@
         .header h1 {
             color: #fff;
         }
-        .admin-panel label {
-            display: block;
-            margin: 10px 0;
-            font-size: 1.2em;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
-        .admin-panel input[type="number"] {
-            width: 100px;
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
-            font-size: 1.2em;
+        .card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
-        .admin-panel button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background: #4CAF50;
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card-title {
+            margin-bottom: 20px;
+            font-size: 1.2em;
             color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
+        }
+        .percentage-box {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fff;
+            color: #000;
+            font-size: 2em;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        canvas {
+            max-height: 150px;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="admin-panel">
+    <div class="dashboard">
         <div class="header">
-            <h1>لوحة تحكم الإدارة لإدارة النسب</h1>
+            <h1>داشبورد التفاعل لعرض نسب تحقيق اهداف المبيعات</h1>
         </div>
-        <form id="admin-form">
-            <label>المفروشات: <input type="number" id="furniture-input" value="70" min="0" max="100">%</label><br>
-            <label>المنزلية: <input type="number" id="home-input" value="55" min="0" max="100">%</label><br>
-            <label>العطور: <input type="number" id="perfume-input" value="80" min="0" max="100">%</label><br>
-            <label>الملابس الرجالية: <input type="number" id="mens-clothing-input" value="65" min="0" max="100">%</label><br>
-            <label>الملابس النسائية: <input type="number" id="womens-clothing-input" value="75" min="0" max="100">%</label><br>
-            <label>الملابس الولادي: <input type="number" id="kids-clothing-input" value="60" min="0" max="100">%</label><br>
-            <label>المستلزمات المكتبية: <input type="number" id="office-supplies-input" value="50" min="0" max="100">%</label><br>
-            <label>سيفورا الوادي: <input type="number" id="sephora-input" value="90" min="0" max="100">%</label><br>
-            <label>التخفيضات: <input type="number" id="discounts-input" value="40" min="0" max="100">%</label><br>
-            <button type="button" onclick="updatePercentages()">تحديث النسب</button>
-        </form>
+        <div class="grid-container" id="cards-container">
+            <!-- Cards will be generated here -->
+        </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
     <script>
-        function updatePercentages() {
-            localStorage.setItem('furniture', document.getElementById('furniture-input').value);
-            localStorage.setItem('home', document.getElementById('home-input').value);
-            localStorage.setItem('perfume', document.getElementById('perfume-input').value);
-            localStorage.setItem('mensClothing', document.getElementById('mens-clothing-input').value);
-            localStorage.setItem('womensClothing', document.getElementById('womens-clothing-input').value);
-            localStorage.setItem('kidsClothing', document.getElementById('kids-clothing-input').value);
-            localStorage.setItem('officeSupplies', document.getElementById('office-supplies-input').value);
-            localStorage.setItem('sephora', document.getElementById('sephora-input').value);
-            localStorage.setItem('discounts', document.getElementById('discounts-input').value);
+        const data = JSON.parse(localStorage.getItem('percentages')) || [
+            { title: 'المفروشات', percentage: 70 },
+            { title: 'المنزلية', percentage: 55 },
+            { title: 'العطور', percentage: 80 },
+            { title: 'الملابس الرجالية', percentage: 65 },
+            { title: 'الملابس النسائية', percentage: 75 },
+            { title: 'الملابس الولادي', percentage: 60 },
+            { title: 'المستلزمات المكتبية', percentage: 50 },
+            { title: 'سيفورا الوادي', percentage: 90 },
+            { title: 'التخفيضات', percentage: 40 }
+        ];
 
-            alert("تم تحديث النسب بنجاح!");
+        function createCard(cardData, chartId) {
+            return `
+                <div class="card">
+                    <div class="percentage-box">${cardData.percentage}%</div>
+                    <div class="card-title">${cardData.title}</div>
+                    <canvas id="${chartId}"></canvas>
+                </div>
+            `;
         }
+
+        function createChart(chartId, percentage) {
+            new Chart(document.getElementById(chartId), {
+                type: 'doughnut',
+                data: {
+                    labels: ['تحقيق الهدف', 'المتبقي'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#4CAF50', '#FFC107'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('cards-container');
+            data.forEach((item, index) => {
+                const chartId = `chart${index}`;
+                container.innerHTML += createCard(item, chartId);
+                createChart(chartId, item.percentage);
+            });
+        });
     </script>
 </body>
 </html>
