@@ -1,3 +1,35 @@
-<html>
-<h1>Hello Admin</h1>
-</html>
+// JavaScript code for admin.html to manage the percentages of the sales dashboard
+
+// Update the percentages on the main dashboard
+function updatePercentages() {
+    document.getElementById('furniture-percentage').innerText = document.getElementById('furniture-input').value + '%';
+    document.getElementById('home-percentage').innerText = document.getElementById('home-input').value + '%';
+    document.getElementById('perfume-percentage').innerText = document.getElementById('perfume-input').value + '%';
+    document.getElementById('mens-clothing-percentage').innerText = document.getElementById('mens-clothing-input').value + '%';
+    document.getElementById('womens-clothing-percentage').innerText = document.getElementById('womens-clothing-input').value + '%';
+    document.getElementById('kids-clothing-percentage').innerText = document.getElementById('kids-clothing-input').value + '%';
+    document.getElementById('office-supplies-percentage').innerText = document.getElementById('office-supplies-input').value + '%';
+    document.getElementById('sephora-percentage').innerText = document.getElementById('sephora-input').value + '%';
+    document.getElementById('discounts-percentage').innerText = document.getElementById('discounts-input').value + '%';
+}
+
+// Event listener for the form submission
+window.onload = function() {
+    document.getElementById('admin-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        updatePercentages();
+    });
+}
+
+// Load existing percentages into the inputs for editing
+window.onload = function() {
+    document.getElementById('furniture-input').value = document.getElementById('furniture-percentage').innerText.replace('%', '');
+    document.getElementById('home-input').value = document.getElementById('home-percentage').innerText.replace('%', '');
+    document.getElementById('perfume-input').value = document.getElementById('perfume-percentage').innerText.replace('%', '');
+    document.getElementById('mens-clothing-input').value = document.getElementById('mens-clothing-percentage').innerText.replace('%', '');
+    document.getElementById('womens-clothing-input').value = document.getElementById('womens-clothing-percentage').innerText.replace('%', '');
+    document.getElementById('kids-clothing-input').value = document.getElementById('kids-clothing-percentage').innerText.replace('%', '');
+    document.getElementById('office-supplies-input').value = document.getElementById('office-supplies-percentage').innerText.replace('%', '');
+    document.getElementById('sephora-input').value = document.getElementById('sephora-percentage').innerText.replace('%', '');
+    document.getElementById('discounts-input').value = document.getElementById('discounts-percentage').innerText.replace('%', '');
+} 
