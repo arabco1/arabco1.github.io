@@ -1,6 +1,5 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="ar">https://github.com/arabco1/arabco1.github.io/blob/main/index.html
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,64 +71,38 @@
         <div class="header">
             <h1>داشبورد التفاعل لعرض نسب تحقيق اهداف المبيعات</h1>
         </div>
-        <div class="grid-container" id="cards-container">
-            <!-- Cards will be generated here -->
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
-    <script>
-        const data = JSON.parse(localStorage.getItem('percentages')) || [
-            { title: 'المفروشات', percentage: 70 },
-            { title: 'المنزلية', percentage: 55 },
-            { title: 'العطور', percentage: 80 },
-            { title: 'الملابس الرجالية', percentage: 65 },
-            { title: 'الملابس النسائية', percentage: 75 },
-            { title: 'الملابس الولادي', percentage: 60 },
-            { title: 'المستلزمات المكتبية', percentage: 50 },
-            { title: 'سيفورا الوادي', percentage: 90 },
-            { title: 'التخفيضات', percentage: 40 }
-        ];
-
-        function createCard(cardData, chartId) {
-            return `
-                <div class="card">
-                    <div class="percentage-box">${cardData.percentage}%</div>
-                    <div class="card-title">${cardData.title}</div>
-                    <canvas id="${chartId}"></canvas>
-                </div>
-            `;
-        }
-
-        function createChart(chartId, percentage) {
-            new Chart(document.getElementById(chartId), {
-                type: 'doughnut',
-                data: {
-                    labels: ['تحقيق الهدف', 'المتبقي'],
-                    datasets: [{
-                        data: [percentage, 100 - percentage],
-                        backgroundColor: ['#4CAF50', '#FFC107'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.getElementById('cards-container');
-            data.forEach((item, index) => {
-                const chartId = `chart${index}`;
-                container.innerHTML += createCard(item, chartId);
-                createChart(chartId, item.percentage);
-            });
-        });
-    </script>
-</body>
-</html>
+        <div class="grid-container">
+            <div class="card">
+                <div class="percentage-box">70%</div>
+                <div class="card-title">المفروشات</div>
+                <canvas id="furnitureChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">55%</div>
+                <div class="card-title">المنزلية</div>
+                <canvas id="homeChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">80%</div>
+                <div class="card-title">العطور</div>
+                <canvas id="perfumeChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">65%</div>
+                <div class="card-title">الملابس الرجالية</div>
+                <canvas id="mensClothingChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">75%</div>
+                <div class="card-title">الملابس النسائية</div>
+                <canvas id="womensClothingChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">60%</div>
+                <div class="card-title">الملابس الولادي</div>
+                <canvas id="kidsClothingChart"></canvas>
+            </div>
+            <div class="card">
+                <div class="percentage-box">50%</div>
+                <div class="card-title">المستلزمات المكتبية</div>
+     
