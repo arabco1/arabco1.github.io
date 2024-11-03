@@ -1,35 +1,80 @@
-// JavaScript code for admin.html to manage the percentages of the sales dashboard
-
-// Update the percentages on the main dashboard
-function updatePercentages() {
-    document.getElementById('furniture-percentage').innerText = document.getElementById('furniture-input').value + '%';
-    document.getElementById('home-percentage').innerText = document.getElementById('home-input').value + '%';
-    document.getElementById('perfume-percentage').innerText = document.getElementById('perfume-input').value + '%';
-    document.getElementById('mens-clothing-percentage').innerText = document.getElementById('mens-clothing-input').value + '%';
-    document.getElementById('womens-clothing-percentage').innerText = document.getElementById('womens-clothing-input').value + '%';
-    document.getElementById('kids-clothing-percentage').innerText = document.getElementById('kids-clothing-input').value + '%';
-    document.getElementById('office-supplies-percentage').innerText = document.getElementById('office-supplies-input').value + '%';
-    document.getElementById('sephora-percentage').innerText = document.getElementById('sephora-input').value + '%';
-    document.getElementById('discounts-percentage').innerText = document.getElementById('discounts-input').value + '%';
-}
-
-// Event listener for the form submission
-window.onload = function() {
-    document.getElementById('admin-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        updatePercentages();
-    });
-}
-
-// Load existing percentages into the inputs for editing
-window.onload = function() {
-    document.getElementById('furniture-input').value = document.getElementById('furniture-percentage').innerText.replace('%', '');
-    document.getElementById('home-input').value = document.getElementById('home-percentage').innerText.replace('%', '');
-    document.getElementById('perfume-input').value = document.getElementById('perfume-percentage').innerText.replace('%', '');
-    document.getElementById('mens-clothing-input').value = document.getElementById('mens-clothing-percentage').innerText.replace('%', '');
-    document.getElementById('womens-clothing-input').value = document.getElementById('womens-clothing-percentage').innerText.replace('%', '');
-    document.getElementById('kids-clothing-input').value = document.getElementById('kids-clothing-percentage').innerText.replace('%', '');
-    document.getElementById('office-supplies-input').value = document.getElementById('office-supplies-percentage').innerText.replace('%', '');
-    document.getElementById('sephora-input').value = document.getElementById('sephora-percentage').innerText.replace('%', '');
-    document.getElementById('discounts-input').value = document.getElementById('discounts-percentage').innerText.replace('%', '');
-} 
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الإدارة لداشبورد المبيعات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Almarai', sans-serif;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            color: #fff;
+        }
+        .admin-panel {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #fff;
+        }
+        .admin-panel label {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .admin-panel input[type="number"] {
+            width: 100px;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.2em;
+        }
+        .admin-panel button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-panel">
+        <div class="header">
+            <h1>لوحة تحكم الإدارة لإدارة النسب</h1>
+        </div>
+        <form id="admin-form">
+            <label>المفروشات: <input type="number" id="furniture-input" value="70" min="0" max="100">%</label><br>
+            <label>المنزلية: <input type="number" id="home-input" value="55" min="0" max="100">%</label><br>
+            <label>العطور: <input type="number" id="perfume-input" value="80" min="0" max="100">%</label><br>
+            <label>الملابس الرجالية: <input type="number" id="mens-clothing-input" value="65" min="0" max="100">%</label><br>
+            <label>الملابس النسائية: <input type="number" id="womens-clothing-input" value="75" min="0" max="100">%</label><br>
+            <label>الملابس الولادي: <input type="number" id="kids-clothing-input" value="60" min="0" max="100">%</label><br>
+            <label>المستلزمات المكتبية: <input type="number" id="office-supplies-input" value="50" min="0" max="100">%</label><br>
+            <label>سيفورا الوادي: <input type="number" id="sephora-input" value="90" min="0" max="100">%</label><br>
+            <label>التخفيضات: <input type="number" id="discounts-input" value="40" min="0" max="100">%</label><br>
+            <button type="button" onclick="updatePercentages()">تحديث النسب</button>
+        </form>
+    </div>
+    <script src="admin_panel.js"></script>
+</body>
+</html>
