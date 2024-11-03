@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>داشبورد تفاعلي لعرض نسب تحقيق اهداف المبيعات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.css">
     <style>
         body {
             font-family: 'Almarai', sans-serif;
@@ -51,12 +53,16 @@
         }
         .percentage-box {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 4em;
-            font-weight: bold;
+            top: 10px;
+            right: 10px;
+            background: #fff;
+            color: #000;
+            font-size: 2em;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        canvas {
+            max-height: 150px;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
@@ -70,40 +76,85 @@
             <div class="card">
                 <div class="percentage-box">70%</div>
                 <div class="card-title">المفروشات</div>
+                <canvas id="furnitureChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">55%</div>
                 <div class="card-title">المنزلية</div>
+                <canvas id="homeChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">80%</div>
                 <div class="card-title">العطور</div>
+                <canvas id="perfumeChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">65%</div>
                 <div class="card-title">الملابس الرجالية</div>
+                <canvas id="mensClothingChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">75%</div>
                 <div class="card-title">الملابس النسائية</div>
+                <canvas id="womensClothingChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">60%</div>
                 <div class="card-title">الملابس الولادي</div>
+                <canvas id="kidsClothingChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">50%</div>
                 <div class="card-title">المستلزمات المكتبية</div>
+                <canvas id="officeSuppliesChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">90%</div>
                 <div class="card-title">سيفورا الوادي</div>
+                <canvas id="sephoraChart"></canvas>
             </div>
             <div class="card">
                 <div class="percentage-box">40%</div>
                 <div class="card-title">التخفيضات</div>
+                <canvas id="discountsChart"></canvas>
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
+    <script>
+        function createChart(chartId, percentage) {
+            new Chart(document.getElementById(chartId), {
+                type: 'doughnut',
+                data: {
+                    labels: ['تحقيق الهدف', 'المتبقي'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#4CAF50', '#FFC107'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createChart('furnitureChart', 70);
+            createChart('homeChart', 55);
+            createChart('perfumeChart', 80);
+            createChart('mensClothingChart', 65);
+            createChart('womensClothingChart', 75);
+            createChart('kidsClothingChart', 60);
+            createChart('officeSuppliesChart', 50);
+            createChart('sephoraChart', 90);
+            createChart('discountsChart', 40);
+        });
+    </script>
 </body>
 </html>
