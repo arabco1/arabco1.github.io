@@ -47,15 +47,18 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
         }
-        .card:nth-child(1) { background: rgba(255, 99, 132, 0.2); }
-        .card:nth-child(2) { background: rgba(54, 162, 235, 0.2); }
-        .card:nth-child(3) { background: rgba(75, 192, 192, 0.2); }
-        .card:nth-child(4) { background: rgba(255, 206, 86, 0.2); }
-        .card:nth-child(5) { background: rgba(153, 102, 255, 0.2); }
-        .card:nth-child(6) { background: rgba(255, 159, 64, 0.2); }
-        .card:nth-child(7) { background: rgba(199, 199, 199, 0.2); }
-        .card:nth-child(8) { background: rgba(143, 188, 143, 0.2); }
-        .card:nth-child(9) { background: rgba(240, 128, 128, 0.2); }
+        .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); }
+        .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); }
+        .card:nth-child(3) { background: rgba(75, 192, 192, 0.3); }
+        .card:nth-child(4) { background: rgba(255, 206, 86, 0.3); }
+        .card:nth-child(5) { background: rgba(153, 102, 255, 0.3); }
+        .card:nth-child(6) { background: rgba(255, 159, 64, 0.3); }
+        .card:nth-child(7) { background: rgba(199, 199, 199, 0.3); }
+        .card:nth-child(8) { background: rgba(143, 188, 143, 0.3); }
+        .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); }
+        .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); }
+        .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); }
+        
         .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
@@ -126,7 +129,7 @@
             <div class="circle-container">
                 <div class="circle-ring"></div> <!-- الحلقة الخارجية -->
                 <div class="circle-inner">
-                    <div class="circle-text">75%</div> <!-- نسبة توضيحية -->
+                    <div class="circle-text" id="total-percentage">0%</div> <!-- نسبة توضيحية -->
                 </div>
             </div>
             <div class="card-title">الهدف الإجمالي</div>
@@ -134,17 +137,34 @@
     </div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 70, icon: 'fa-couch' },
-            { title: 'المنزلية', percentage: 55, icon: 'fa-home' },
-            { title: 'العطور', percentage: 80, icon: 'fa-spray-can' },
-            { title: 'الأحذية', percentage: 60, icon: 'fa-shoe-prints' },
-            { title: 'الملابس الرجالية', percentage: 65, icon: 'fa-tshirt' },
-            { title: 'الملابس النسائية', percentage: 75, icon: 'fa-female' },
-            { title: 'الملابس الولادي', percentage: 60, icon: 'fa-child' },
-            { title: 'المستلزمات المكتبية', percentage: 50, icon: 'fa-pen' },
-            { title: 'سيفورا الوادي', percentage: 90, icon: 'fa-store' },
-            { title: 'التخفيضات', percentage: 40, icon: 'fa-tags' }
+            { title: 'المفروشات', percentage: 9, icon: 'fa-couch' },
+            { title: 'المنزلية', percentage: 5, icon: 'fa-home' },
+            { title: 'الملابس الرجالية', percentage: 4, icon: 'fa-tshirt' },
+            { title: 'الملابس النسائية', percentage: 5, icon: 'fa-female' },
+            { title: 'الملابس الولادي', percentage: 6, icon: 'fa-child' },
+            { title: 'العطور', percentage: 5, icon: 'fa-spray-can' },
+            { title: 'الأحذية', percentage: 6, icon: 'fa-shoe-prints' },
+            { title: 'الألعاب', percentage: 6, icon: 'fa-gamepad' },
+            { title: 'الرياضة', percentage: 5, icon: 'fa-futbol' },
+            { title: 'التخفيضات', percentage: 8, icon: 'fa-tags' },
+            { title: 'سيفورا الوادي', percentage: 3, icon: 'fa-store' }
         ];
+
+        // حساب المتوسط
+        const totalPercentage = data.reduce((sum, item) => sum + item.percentage, 0) / data.length;
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('cards-container');
+            let cardsHTML = '';
+
+            data.forEach(item => {
+                cardsHTML += createCard(item);
+            });
+
+            container.innerHTML += cardsHTML;
+
+            // تحديث نسبة الهدف الإجمالي
+            document.getElementById('total-percentage').textContent = `${totalPercentage.toFixed(1)}%`;
+        });
 
         function createCard(cardData) {
             return `
@@ -155,17 +175,6 @@
                 </div>
             `;
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.getElementById('cards-container');
-            let cardsHTML = '';
-
-            data.forEach(item => {
-                cardsHTML += createCard(item);
-            });
-
-            container.innerHTML += cardsHTML;
-        });
     </script>
 </body>
 </html>
