@@ -98,4 +98,21 @@
                 `;
             });
 
-            document.getElementById
+            document.getElementById('saveButton').addEventListener('click', function () {
+                const updatedData = data.map((item, index) => {
+                    const percentage = document.getElementById(`percentage${index}`).value;
+                    return { ...item, percentage: parseInt(percentage) };
+                });
+
+                database.ref('percentages').set(updatedData)
+                    .then(() => {
+                        alert('تم حفظ التغييرات بنجاح!');
+                    })
+                    .catch((error) => {
+                        console.error('حدث خطأ أثناء الحفظ:', error);
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
