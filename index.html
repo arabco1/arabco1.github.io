@@ -47,18 +47,22 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
         }
-        .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); }
-        .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); }
-        .card:nth-child(3) { background: rgba(75, 192, 192, 0.3); }
-        .card:nth-child(4) { background: rgba(255, 206, 86, 0.3); }
-        .card:nth-child(5) { background: rgba(153, 102, 255, 0.3); }
-        .card:nth-child(6) { background: rgba(255, 159, 64, 0.3); }
-        .card:nth-child(7) { background: rgba(199, 199, 199, 0.3); }
-        .card:nth-child(8) { background: rgba(143, 188, 143, 0.3); }
-        .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); }
-        .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); }
-        .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); }
+        .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); } /* لون وردي */
+        .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); } /* لون أزرق */
+        .card:nth-child(3) { background: rgba(75, 192, 192, 0.3); } /* لون فيروزي */
+        .card:nth-child(4) { background: rgba(255, 206, 86, 0.3); } /* لون أصفر */
+        .card:nth-child(5) { background: rgba(153, 102, 255, 0.3); } /* لون بنفسجي */
+        .card:nth-child(6) { background: rgba(255, 159, 64, 0.3); } /* لون برتقالي */
+        .card:nth-child(7) { background: rgba(199, 199, 199, 0.3); } /* لون رمادي */
+        .card:nth-child(8) { background: rgba(143, 188, 143, 0.3); } /* لون أخضر فاتح */
+        .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); } /* لون أحمر فاتح */
+        .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); } /* لون أزرق ملكي */
+        .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); } /* لون زهري فاتح */
         
+        .card.golden {
+            border: 2px solid #ffd700; /* إطار ذهبي */
+            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); /* توهج خفيف */
+        }
         .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
@@ -152,12 +156,24 @@
 
         // حساب المتوسط
         const totalPercentage = data.reduce((sum, item) => sum + item.percentage, 0) / data.length;
+
+        // تحديد الثلاثة أقسام الأعلى نسبة
+        const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
+
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('cards-container');
             let cardsHTML = '';
 
             data.forEach(item => {
-                cardsHTML += createCard(item);
+                const isTopThree = topThree.some(topItem => topItem.title === item.title);
+                const cardClass = isTopThree ? 'card golden' : 'card';
+                cardsHTML += `
+                    <div class="${cardClass}">
+                        <div class="icon"><i class="fas ${item.icon}"></i></div>
+                        <div class="percentage-box">${item.percentage}%</div>
+                        <div class="card-title">${item.title}</div>
+                    </div>
+                `;
             });
 
             container.innerHTML += cardsHTML;
@@ -165,16 +181,6 @@
             // تحديث نسبة الهدف الإجمالي
             document.getElementById('total-percentage').textContent = `${totalPercentage.toFixed(1)}%`;
         });
-
-        function createCard(cardData) {
-            return `
-                <div class="card">
-                    <div class="icon"><i class="fas ${cardData.icon}"></i></div>
-                    <div class="percentage-box">${cardData.percentage}%</div>
-                    <div class="card-title">${cardData.title}</div>
-                </div>
-            `;
-        }
     </script>
 </body>
 </html>
