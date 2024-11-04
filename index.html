@@ -17,7 +17,6 @@
             margin: 0;
             padding: 20px;
             direction: rtl;
-            perspective: 1000px;
         }
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
@@ -35,17 +34,82 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            perspective: 1000px;
         }
         .card {
             position: relative;
-            padding: 30px;
+            width: 100%;
+            height: 350px;
+            transform-style: preserve-3d;
+            transform-origin: center;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 15px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.5s, box-shadow 0.5s;
-            text-align: center;
             background: rgba(255, 255, 255, 0.1);
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card-front .icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        .card-front .percentage-box {
+            font-size: 3.5em; /* تكبير الأرقام بشكل متناسب */
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            margin: 10px 0;
+        }
+        .card-title {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .card-back {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotateY(180deg);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .goal {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .goal-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+        .card.golden {
+            border: 2px solid #ffd700; /* إطار ذهبي */
+            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); /* توهج خفيف */
         }
         .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); }
         .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); }
@@ -58,104 +122,29 @@
         .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); }
         .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); }
         .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); }
-        
-        .card.golden {
-            border: 2px solid #ffd700; /* إطار ذهبي */
-            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); /* توهج خفيف */
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
-        }
-        .icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-        .percentage-box {
-            font-size: 4.5em; /* تكبير الأرقام بنسبة 50% */
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-        }
-        .card-title {
-            font-size: 1.5em;
-            margin-top: 20px;
-            color: #fff;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-        }
-        .total-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .circle-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .circle-ring {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(#4caf50 0% 75%, #ddd 75% 100%);
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .circle-inner {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-        .circle-text {
-            font-size: 3.75em; /* تكبير الأرقام بنسبة 50% */
-            color: #fff;
-        }
+        .card:nth-child(12) { background: rgba(255, 215, 0, 0.3); } /* لون مميز لصندوق "إجمالي المحقق من الأهداف" */
     </style>
 </head>
 <body>
-    <div class="header">نسب تحقيق الأهداف البيعية</div>
+    <div class="header">نسب تحقيق الأهداف البيعية - نوفمبر 2024</div>
     <div class="dashboard" id="cards-container">
-        <!-- صندوق الهدف الإجمالي -->
-        <div class="card total-card">
-            <div class="icon"><i class="fas fa-bullseye"></i></div>
-            <div class="circle-container">
-                <div class="circle-ring"></div> <!-- الحلقة الخارجية -->
-                <div class="circle-inner">
-                    <div class="circle-text" id="total-percentage">0%</div> <!-- نسبة توضيحية -->
-                </div>
-            </div>
-            <div class="card-title">الهدف الإجمالي</div>
-        </div>
+        <!-- صناديق البيانات -->
     </div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 9, icon: 'fa-couch' },
-            { title: 'المنزلية', percentage: 5, icon: 'fa-home' },
-            { title: 'الملابس الرجالية', percentage: 4, icon: 'fa-tshirt' },
-            { title: 'الملابس النسائية', percentage: 5, icon: 'fa-female' },
-            { title: 'الملابس الولادي', percentage: 6, icon: 'fa-child' },
-            { title: 'العطور', percentage: 5, icon: 'fa-spray-can' },
-            { title: 'الأحذية', percentage: 6, icon: 'fa-shoe-prints' },
-            { title: 'الألعاب', percentage: 6, icon: 'fa-gamepad' },
-            { title: 'الرياضة', percentage: 5, icon: 'fa-futbol' },
-            { title: 'التخفيضات', percentage: 8, icon: 'fa-tags' },
-            { title: 'سيفورا الوادي', percentage: 3, icon: 'fa-store' }
+            { title: 'المفروشات', percentage: 8.87, icon: 'fa-couch' },
+            { title: 'المنزلية', percentage: 4.54, icon: 'fa-home' },
+            { title: 'الملابس الرجالية', percentage: 3.68, icon: 'fa-tshirt' },
+            { title: 'الملابس النسائية', percentage: 5.77, icon: 'fa-female' },
+            { title: 'الملابس الولادي', percentage: 5.50, icon: 'fa-child' },
+            { title: 'العطور', percentage: 5.28, icon: 'fa-spray-can' },
+            { title: 'الأحذية', percentage: 4.90, icon: 'fa-shoe-prints' },
+            { title: 'الألعاب', percentage: 5.03, icon: 'fa-bicycle' },
+            { title: 'الرياضة', percentage: 4.61, icon: 'fa-futbol' },
+            { title: 'التخفيضات', percentage: 7.00, icon: 'fa-tags' },
+            { title: 'سيفورا الوادي', percentage: 3.87, icon: 'fa-store' },
+            { title: 'إجمالي المحقق من الأهداف', percentage: ((8.87 + 4.54 + 3.68 + 5.77 + 5.50 + 5.28 + 4.90 + 5.03 + 4.61 + 7.00 + 3.87) / 11).toFixed(2), icon: 'fa-chart-pie' }
         ];
-
-        // حساب المتوسط
-        const totalPercentage = data.reduce((sum, item) => sum + item.percentage, 0) / data.length;
 
         // تحديد الثلاثة أقسام الأعلى نسبة
         const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
@@ -168,18 +157,32 @@
                 const isTopThree = topThree.some(topItem => topItem.title === item.title);
                 const cardClass = isTopThree ? 'card golden' : 'card';
                 cardsHTML += `
-                    <div class="${cardClass}">
-                        <div class="icon"><i class="fas ${item.icon}"></i></div>
-                        <div class="percentage-box">${item.percentage}%</div>
-                        <div class="card-title">${item.title}</div>
+                    <div class="${cardClass}" onclick="this.classList.toggle('is-flipped')">
+                        <div class="card-inner card-front">
+                            <div class="icon"><i class="fas ${item.icon}"></i></div>
+                            <div class="percentage-box">${item.percentage}%</div>
+                            <div class="card-title">${item.title}</div>
+                        </div>
+                        <div class="card-inner card-back">
+                            <div class="card-title">حافز المبيعات</div>
+                            <div class="goal">
+                                <span>الهدف الأول</span>
+                                <div class="goal-box"></div>
+                            </div>
+                            <div class="goal">
+                                <span>الهدف الثاني</span>
+                                <div class="goal-box"></div>
+                            </div>
+                            <div class="goal">
+                                <span>الهدف الثالث</span>
+                                <div class="goal-box"></div>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
 
             container.innerHTML += cardsHTML;
-
-            // تحديث نسبة الهدف الإجمالي
-            document.getElementById('total-percentage').textContent = `${totalPercentage.toFixed(1)}%`;
         });
     </script>
 </body>
