@@ -113,8 +113,13 @@
             database.ref('percentages').once('value').then((snapshot) => {
                 const data = snapshot.val() || [];
                 const container = document.getElementById('cards-container');
-                let cardsHTML = '';
 
+                if (data.length === 0) {
+                    container.innerHTML = '<p>لا توجد بيانات متاحة حالياً.</p>';
+                    return;
+                }
+
+                let cardsHTML = '';
                 data.forEach((item, index) => {
                     const chartId = `chart${index}`;
                     cardsHTML += createCard(item, chartId);
@@ -125,6 +130,9 @@
                 data.forEach((item, index) => {
                     createChart(`chart${index}`, item.percentage);
                 });
+            }).catch((error) => {
+                console.error('خطأ في جلب البيانات:', error);
+                document.getElementById('cards-container').innerHTML = '<p>حدث خطأ في جلب البيانات.</p>';
             });
         });
 
