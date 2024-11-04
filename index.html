@@ -103,6 +103,22 @@
             `;
         }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('cards-container');
+            let cardsHTML = ''; // جمع محتوى جميع البطاقات
+
+            data.forEach((item, index) => {
+                const chartId = `chart${index}`;
+                cardsHTML += createCard(item, chartId);
+            });
+
+            container.innerHTML = cardsHTML; // تعيين جميع البطاقات دفعة واحدة
+
+            data.forEach((item, index) => {
+                createChart(`chart${index}`, item.percentage);
+            });
+        });
+
         function createChart(chartId, percentage) {
             new Chart(document.getElementById(chartId), {
                 type: 'doughnut',
@@ -124,15 +140,6 @@
                 }
             });
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.getElementById('cards-container');
-            data.forEach((item, index) => {
-                const chartId = `chart${index}`;
-                container.innerHTML += createCard(item, chartId);
-                createChart(chartId, item.percentage);
-            });
-        });
     </script>
 </body>
 </html>
