@@ -5,51 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صفحة الإدارة</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Almarai', sans-serif;
             background: linear-gradient(135deg, #2575fc, #6a11cb);
-            margin: 0;
-            padding: 0;
-            direction: rtl;
             color: #fff;
-        }
-        .admin {
-            max-width: 600px;
-            margin: auto;
+            margin: 0;
             padding: 20px;
+            direction: rtl;
         }
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
-        .header h1 {
-            color: #fff;
-        }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        label {
+        label, input {
             display: block;
-            margin-bottom: 5px;
-        }
-        input[type="number"] {
             width: 100%;
+        }
+        input {
             padding: 10px;
             border-radius: 5px;
             border: none;
+            margin-top: 5px;
         }
         button {
-            display: block;
             width: 100%;
             padding: 10px;
             background-color: #4CAF50;
             border: none;
             border-radius: 5px;
             color: #fff;
-            font-size: 1.2em;
+            margin-top: 20px;
             cursor: pointer;
         }
         button:hover {
@@ -60,17 +50,12 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
 </head>
 <body>
-    <div class="admin">
-        <div class="header">
-            <h1>صفحة الإدارة لتحديث النسب</h1>
-        </div>
-        <form id="adminForm">
-            <!-- Form inputs will be generated here -->
-        </form>
-        <button id="saveButton">حفظ التغييرات</button>
+    <div class="header">
+        <h1>صفحة الإدارة لتحديث النسب</h1>
     </div>
+    <form id="adminForm"></form>
+    <button id="saveButton">حفظ التغييرات</button>
     <script>
-        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -81,7 +66,6 @@
             appId: "YOUR_APP_ID"
         };
 
-        // تهيئة Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -92,29 +76,23 @@
             data.forEach((item, index) => {
                 form.innerHTML += `
                     <div class="form-group">
-                        <label for="percentage${index}">${item.title}</label>
+                        <label>${item.title}</label>
                         <input type="number" id="percentage${index}" value="${item.percentage}" min="0" max="100">
                     </div>
                 `;
             });
 
-            document.getElementById('saveButton').addEventListener('click', function () {
+            document.getElementById('saveButton').addEventListener('click', () => {
                 const updatedData = data.map((item, index) => {
                     const percentage = document.getElementById(`percentage${index}`).value;
                     return { ...item, percentage: parseInt(percentage) };
                 });
 
                 database.ref('percentages').set(updatedData)
-                    .then(() => {
-                        alert('تم حفظ التغييرات بنجاح!');
-                    })
-                    .catch((error) => {
-                        console.error('حدث خطأ أثناء الحفظ:', error);
-                    });
+                    .then(() => alert('تم حفظ التغييرات بنجاح!'))
+                    .catch((error) => console.error('حدث خطأ أثناء الحفظ:', error));
             });
-        }).catch((error) => {
-            console.error('خطأ في جلب البيانات:', error);
-        });
+        }).catch((error) => console.error('خطأ في جلب البيانات:', error));
     </script>
 </body>
 </html>
