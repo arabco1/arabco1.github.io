@@ -85,4 +85,36 @@
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        database.ref('percentages').once('value').then((snapshot) =>
+        database.ref('percentages').once('value').then((snapshot) => {
+            const data = snapshot.val() || [];
+            const form = document.getElementById('adminForm');
+
+            data.forEach((item, index) => {
+                form.innerHTML += `
+                    <div class="form-group">
+                        <label for="percentage${index}">${item.title}</label>
+                        <input type="number" id="percentage${index}" value="${item.percentage}" min="0" max="100">
+                    </div>
+                `;
+            });
+
+            document.getElementById('saveButton').addEventListener('click', function () {
+                const updatedData = data.map((item, index) => {
+                    const percentage = document.getElementById(`percentage${index}`).value;
+                    return { ...item, percentage: parseInt(percentage) };
+                });
+
+                database.ref('percentages').set(updatedData)
+                    .then(() => {
+                        alert('تم حفظ التغييرات بنجاح!');
+                    })
+                    .catch((error) => {
+                        console.error('حدث خطأ أثناء الحفظ:', error);
+                    });
+            });
+        }).catch((error) => {
+            console.error('خطأ في جلب البيانات:', error);
+        });
+    </script>
+</body>
+</html>
