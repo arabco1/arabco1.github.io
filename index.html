@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نسب تحقيق الأهداف البيعية ثلاثية الأبعاد</title>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Almarai', sans-serif;
@@ -39,13 +40,18 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: transform 0.5s, box-shadow 0.5s;
+            text-align: center;
         }
         .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
         }
+        .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
         .percentage-box {
-            font-size: 5em;
+            font-size: 3em;
             font-weight: bold;
             color: #fff;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
@@ -62,20 +68,21 @@
     <div class="dashboard" id="cards-container"></div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 70 },
-            { title: 'المنزلية', percentage: 55 },
-            { title: 'العطور', percentage: 80 },
-            { title: 'الملابس الرجالية', percentage: 65 },
-            { title: 'الملابس النسائية', percentage: 75 },
-            { title: 'الملابس الولادي', percentage: 60 },
-            { title: 'المستلزمات المكتبية', percentage: 50 },
-            { title: 'سيفورا الوادي', percentage: 90 },
-            { title: 'التخفيضات', percentage: 40 }
+            { title: 'المفروشات', percentage: 70, icon: 'fa-couch' }, // أيقونة أريكة للمفروشات
+            { title: 'المنزلية', percentage: 55, icon: 'fa-home' }, // أيقونة منزل للمنزلية
+            { title: 'العطور', percentage: 80, icon: 'fa-spray-can' }, // أيقونة بخاخ للعطور
+            { title: 'الملابس الرجالية', percentage: 65, icon: 'fa-tshirt' }, // أيقونة قميص للملابس الرجالية
+            { title: 'الملابس النسائية', percentage: 75, icon: 'fa-female' }, // أيقونة سيدة للملابس النسائية
+            { title: 'الملابس الولادي', percentage: 60, icon: 'fa-child' }, // أيقونة طفل للملابس الولادي
+            { title: 'المستلزمات المكتبية', percentage: 50, icon: 'fa-pen' }, // أيقونة قلم للمستلزمات المكتبية
+            { title: 'سيفورا الوادي', percentage: 90, icon: 'fa-store' }, // أيقونة متجر لسيفورا الوادي
+            { title: 'التخفيضات', percentage: 40, icon: 'fa-tags' } // أيقونة تخفيضات للتخفيضات
         ];
 
         function createCard(cardData) {
             return `
                 <div class="card">
+                    <div class="icon"><i class="fas ${cardData.icon}"></i></div>
                     <div class="percentage-box">${cardData.percentage}%</div>
                     <div class="card-title">${cardData.title}</div>
                 </div>
