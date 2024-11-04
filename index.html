@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -35,33 +36,36 @@
         }
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
         }
         .card-title {
             margin-bottom: 20px;
-            font-size: 1.2em;
+            font-size: 1.5em;
             color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
         .percentage-box {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #fff;
-            color: #000;
-            font-size: 2em;
-            padding: 10px;
-            border-radius: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
         }
         canvas {
             max-height: 150px;
+            margin-top: 20px;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
@@ -71,38 +75,64 @@
         <div class="header">
             <h1>داشبورد التفاعل لعرض نسب تحقيق اهداف المبيعات</h1>
         </div>
-        <div class="grid-container">
-            <div class="card">
-                <div class="percentage-box">70%</div>
-                <div class="card-title">المفروشات</div>
-                <canvas id="furnitureChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">55%</div>
-                <div class="card-title">المنزلية</div>
-                <canvas id="homeChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">80%</div>
-                <div class="card-title">العطور</div>
-                <canvas id="perfumeChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">65%</div>
-                <div class="card-title">الملابس الرجالية</div>
-                <canvas id="mensClothingChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">75%</div>
-                <div class="card-title">الملابس النسائية</div>
-                <canvas id="womensClothingChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">60%</div>
-                <div class="card-title">الملابس الولادي</div>
-                <canvas id="kidsClothingChart"></canvas>
-            </div>
-            <div class="card">
-                <div class="percentage-box">50%</div>
-                <div class="card-title">المستلزمات المكتبية</div>
-     
+        <div class="grid-container" id="cards-container">
+            <!-- Cards will be generated here -->
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
+    <script>
+        const data = JSON.parse(localStorage.getItem('percentages')) || [
+            { title: 'المفروشات', percentage: 70 },
+            { title: 'المنزلية', percentage: 55 },
+            { title: 'العطور', percentage: 80 },
+            { title: 'الملابس الرجالية', percentage: 65 },
+            { title: 'الملابس النسائية', percentage: 75 },
+            { title: 'الملابس الولادي', percentage: 60 },
+            { title: 'المستلزمات المكتبية', percentage: 50 },
+            { title: 'سيفورا الوادي', percentage: 90 },
+            { title: 'التخفيضات', percentage: 40 }
+        ];
+
+        function createCard(cardData, chartId) {
+            return `
+                <div class="card">
+                    <div class="percentage-box">${cardData.percentage}%</div>
+                    <div class="card-title">${cardData.title}</div>
+                    <canvas id="${chartId}"></canvas>
+                </div>
+            `;
+        }
+
+        function createChart(chartId, percentage) {
+            new Chart(document.getElementById(chartId), {
+                type: 'doughnut',
+                data: {
+                    labels: ['تحقيق الهدف', 'المتبقي'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#4CAF50', '#FFC107'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('cards-container');
+            data.forEach((item, index) => {
+                const chartId = `chart${index}`;
+                container.innerHTML += createCard(item, chartId);
+                createChart(chartId, item.percentage);
+            });
+        });
+    </script>
+</body>
+</html>
