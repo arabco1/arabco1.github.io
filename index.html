@@ -1,89 +1,67 @@
-
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نسب تحقيق الأهداف البيعية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.css">
+    <title>نسب تحقيق الأهداف البيعية ثلاثية الأبعاد</title>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Almarai', sans-serif; /* تطبيق خط المراعي */
+            font-family: 'Almarai', sans-serif;
             font-weight: 900;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            margin: 0;
-            padding: 0;
-            direction: rtl;
+            background: linear-gradient(135deg, #1e3a8a, #6d28d9, #9333ea, #ec4899);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #fff;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            perspective: 1000px;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .dashboard {
             max-width: 1200px;
             margin: auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            color: #fff;
-        }
-        .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px); /* تأثير الزجاج */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.5s, box-shadow 0.5s;
         }
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
-        }
-        .card-title {
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
         }
         .percentage-box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5em; /* تكبير الأرقام */
+            font-size: 5em;
             font-weight: bold;
             color: #fff;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
         }
-        canvas {
-            max-height: 150px;
+        .card-title {
+            font-size: 1.5em;
             margin-top: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>نسب تحقيق الأهداف البيعية</h1>
-        </div>
-        <div class="grid-container" id="cards-container">
-            <!-- Cards will be generated here -->
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.0/chart.min.js"></script>
+    <div class="dashboard" id="cards-container"></div>
     <script>
-        const data = JSON.parse(localStorage.getItem('percentages')) || [
+        const data = [
             { title: 'المفروشات', percentage: 70 },
             { title: 'المنزلية', percentage: 55 },
             { title: 'العطور', percentage: 80 },
@@ -95,53 +73,25 @@
             { title: 'التخفيضات', percentage: 40 }
         ];
 
-        function createCard(cardData, chartId) {
+        function createCard(cardData) {
             return `
                 <div class="card">
                     <div class="percentage-box">${cardData.percentage}%</div>
                     <div class="card-title">${cardData.title}</div>
-                    <canvas id="${chartId}"></canvas>
                 </div>
             `;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('cards-container');
-            let cardsHTML = ''; // جمع محتوى جميع البطاقات
+            let cardsHTML = '';
 
-            data.forEach((item, index) => {
-                const chartId = `chart${index}`;
-                cardsHTML += createCard(item, chartId);
+            data.forEach(item => {
+                cardsHTML += createCard(item);
             });
 
-            container.innerHTML = cardsHTML; // تعيين جميع البطاقات دفعة واحدة
-
-            data.forEach((item, index) => {
-                createChart(`chart${index}`, item.percentage);
-            });
+            container.innerHTML = cardsHTML;
         });
-
-        function createChart(chartId, percentage) {
-            new Chart(document.getElementById(chartId), {
-                type: 'doughnut',
-                data: {
-                    labels: ['تحقيق الهدف', 'المتبقي'],
-                    datasets: [{
-                        data: [percentage, 100 - percentage],
-                        backgroundColor: ['#4CAF50', '#FFC107'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
-                }
-            });
-        }
     </script>
 </body>
 </html>
