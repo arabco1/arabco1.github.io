@@ -111,10 +111,10 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             database.ref('percentages').once('value').then((snapshot) => {
-                const data = snapshot.val() || [];
+                const data = snapshot.val();
                 const container = document.getElementById('cards-container');
 
-                if (data.length === 0) {
+                if (!data || data.length === 0) {
                     container.innerHTML = '<p>لا توجد بيانات متاحة حالياً.</p>';
                     return;
                 }
