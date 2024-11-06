@@ -68,7 +68,7 @@
             margin-bottom: 10px;
         }
         .card-front .percentage-box {
-            font-size: 3.5em; /* تكبير الأرقام بشكل متناسب */
+            font-size: 3.5em;
             font-weight: bold;
             color: #fff;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
@@ -108,8 +108,8 @@
             border-radius: 5px;
         }
         .card.golden {
-            border: 2px solid #ffd700; /* إطار ذهبي */
-            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); /* توهج خفيف */
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5);
         }
         .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); }
         .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); }
@@ -122,7 +122,7 @@
         .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); }
         .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); }
         .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); }
-        .card:nth-child(12) { background: rgba(255, 215, 0, 0.3); } /* لون مميز لصندوق "إجمالي المحقق من الأهداف" */
+        .card:nth-child(12) { background: rgba(255, 215, 0, 0.3); }
     </style>
 </head>
 <body>
@@ -132,21 +132,20 @@
     </div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 17.88, icon: 'fa-couch' },
-            { title: 'المنزلية', percentage: 7.80, icon: 'fa-home' },
-            { title: 'الملابس الرجالية', percentage: 6.55, icon: 'fa-tshirt' },
-            { title: 'الملابس النسائية', percentage: 8.97, icon: 'fa-female' },
-            { title: 'الملابس الولادي', percentage: 9.62, icon: 'fa-child' },
-            { title: 'العطور', percentage: 10.53, icon: 'fa-spray-can' },
+            { title: 'المفروشات', percentage: 21.05, icon: 'fa-couch' },
+            { title: 'المنزلية', percentage: 9.25, icon: 'fa-home' },
+            { title: 'الملابس الرجالية', percentage: 8.98, icon: 'fa-tshirt' },
+            { title: 'الملابس النسائية', percentage: 13.32, icon: 'fa-female' },
+            { title: 'الملابس الولادي', percentage: 12.05, icon: 'fa-child' },
+            { title: 'العطور', percentage: 13.93, icon: 'fa-spray-can' },
             { title: 'الأحذية', percentage: 7.31, icon: 'fa-shoe-prints' },
-            { title: 'الألعاب', percentage: 10.29, icon: 'fa-bicycle' },
-            { title: 'الرياضة', percentage: 8.13, icon: 'fa-futbol' },
-            { title: 'التخفيضات', percentage: 14.22, icon: 'fa-tags' },
-            { title: 'سيفورا الوادي', percentage: 4.49, icon: 'fa-store' },
-            { title: 'إجمالي المحقق من الأهداف', percentage: ((17.88 + 7.80 + 6.55 + 8.97 + 9.62 + 10.53 + 7.31 + 10.29 + 8.13 + 14.22 + 4.49) / 11).toFixed(2), icon: 'fa-chart-pie' }
+            { title: 'الألعاب', percentage: 12.32, icon: 'fa-bicycle' },
+            { title: 'الرياضة', percentage: 9.83, icon: 'fa-futbol' },
+            { title: 'التخفيضات', percentage: 16.43, icon: 'fa-tags' },
+            { title: 'سيفورا الوادي', percentage: 6.16, icon: 'fa-store' },
+            { title: 'إجمالي المحقق من الأهداف', percentage: ((21.05 + 9.25 + 8.98 + 13.32 + 12.05 + 13.93 + 7.31 + 12.32 + 9.83 + 16.43 + 6.16) / 11).toFixed(2), icon: 'fa-chart-pie' }
         ];
 
-        // تحديد الثلاثة أقسام الأعلى نسبة
         const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
 
         document.addEventListener('DOMContentLoaded', function () {
