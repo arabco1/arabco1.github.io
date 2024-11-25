@@ -111,18 +111,6 @@
             border: 2px solid #ffd700;
             box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5);
         }
-        .card:nth-child(1) { background: rgba(255, 99, 132, 0.3); }
-        .card:nth-child(2) { background: rgba(54, 162, 235, 0.3); }
-        .card:nth-child(3) { background: rgba(75, 192, 192, 0.3); }
-        .card:nth-child(4) { background: rgba(255, 206, 86, 0.3); }
-        .card:nth-child(5) { background: rgba(153, 102, 255, 0.3); }
-        .card:nth-child(6) { background: rgba(255, 159, 64, 0.3); }
-        .card:nth-child(7) { background: rgba(199, 199, 199, 0.3); }
-        .card:nth-child(8) { background: rgba(143, 188, 143, 0.3); }
-        .card:nth-child(9) { background: rgba(240, 128, 128, 0.3); }
-        .card:nth-child(10) { background: rgba(100, 149, 237, 0.3); }
-        .card:nth-child(11) { background: rgba(255, 182, 193, 0.3); }
-        .card:nth-child(12) { background: rgba(255, 215, 0, 0.3); }
     </style>
 </head>
 <body>
@@ -132,18 +120,18 @@
     </div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 71.70, icon: 'fa-couch' },
-            { title: 'المنزلية', percentage: 37.73, icon: 'fa-home' },
-            { title: 'الملابس الرجالية', percentage: 58.76, icon: 'fa-tshirt' },
-            { title: 'الملابس النسائية', percentage: 68.61, icon: 'fa-female' },
-            { title: 'الملابس الولادي', percentage: 50.20, icon: 'fa-child' },
-            { title: 'العطور', percentage: 61.84, icon: 'fa-spray-can' },
-            { title: 'الأحذية', percentage: 46.37, icon: 'fa-shoe-prints' },
-            { title: 'الألعاب', percentage: 42.72, icon: 'fa-bicycle' },
-            { title: 'الرياضة', percentage: 54.21, icon: 'fa-futbol' },
-            { title: 'التخفيضات', percentage: 74.19, icon: 'fa-tags' },
-            { title: 'سيفورا الوادي', percentage: 38.59, icon: 'fa-store' },
-            { title: 'إجمالي المحقق من الأهداف', percentage: 57.32, icon: 'fa-chart-pie' }
+            { title: 'المفروشات', percentage: 73.23, icon: 'fa-couch' },
+            { title: 'المنزلية', percentage: 39.11, icon: 'fa-home' },
+            { title: 'الملابس الرجالية', percentage: 61.30, icon: 'fa-tshirt' },
+            { title: 'الملابس النسائية', percentage: 69.63, icon: 'fa-female' },
+            { title: 'الملابس الولادي', percentage: 51.01, icon: 'fa-child' },
+            { title: 'العطور', percentage: 67.12, icon: 'fa-spray-can' },
+            { title: 'الأحذية', percentage: 48.07, icon: 'fa-shoe-prints' },
+            { title: 'الألعاب', percentage: 43.46, icon: 'fa-bicycle' },
+            { title: 'الرياضة', percentage: 56.33, icon: 'fa-futbol' },
+            { title: 'التخفيضات', percentage: 76.50, icon: 'fa-tags' },
+            { title: 'سيفورا الوادي', percentage: 39.69, icon: 'fa-store' },
+            { title: 'إجمالي المحقق من الأهداف', percentage: 59.08, icon: 'fa-chart-pie' }
         ];
 
         const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
