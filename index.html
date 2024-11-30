@@ -107,6 +107,11 @@
             justify-content: center;
             border-radius: 5px;
         }
+        .goal-box.checked {
+            background-color: #4caf50;
+            color: #fff;
+            font-weight: bold;
+        }
         .card.golden {
             border: 2px solid #ffd700;
             box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5);
@@ -132,18 +137,18 @@
     </div>
     <script>
         const data = [
-            { title: 'المفروشات', percentage: 89.64, icon: 'fa-couch' },
-            { title: 'المنزلية', percentage: 45.48, icon: 'fa-home' },
-            { title: 'الملابس الرجالية', percentage: 80.43, icon: 'fa-tshirt' },
-            { title: 'الملابس النسائية', percentage: 84.03, icon: 'fa-female' },
-            { title: 'الملابس الولادي', percentage: 66.71, icon: 'fa-child' },
-            { title: 'العطور', percentage: 77.20, icon: 'fa-spray-can' },
-            { title: 'الأحذية', percentage: 56.24, icon: 'fa-shoe-prints' },
-            { title: 'الألعاب', percentage: 54.81, icon: 'fa-bicycle' },
-            { title: 'الرياضة', percentage: 76.20, icon: 'fa-futbol' },
-            { title: 'التخفيضات', percentage: 95.28, icon: 'fa-tags' },
-            { title: 'سيفورا الوادي', percentage: 46.73, icon: 'fa-store' },
-            { title: 'إجمالي المحقق من الأهداف', percentage: 73.09, icon: 'fa-chart-pie' }
+            { title: 'المفروشات', percentage: 100.37, icon: 'fa-couch', checked: true },
+            { title: 'المنزلية', percentage: 47.01, icon: 'fa-home', checked: false },
+            { title: 'الملابس الرجالية', percentage: 88.20, icon: 'fa-tshirt', checked: false },
+            { title: 'الملابس النسائية', percentage: 91.16, icon: 'fa-female', checked: false },
+            { title: 'الملابس الولادي', percentage: 77.82, icon: 'fa-child', checked: false },
+            { title: 'العطور', percentage: 89.73, icon: 'fa-spray-can', checked: false },
+            { title: 'الأحذية', percentage: 65.24, icon: 'fa-shoe-prints', checked: false },
+            { title: 'الألعاب', percentage: 61.14, icon: 'fa-bicycle', checked: false },
+            { title: 'الرياضة', percentage: 93.10, icon: 'fa-futbol', checked: false },
+            { title: 'التخفيضات', percentage: 105.23, icon: 'fa-tags', checked: true },
+            { title: 'سيفورا الوادي', percentage: 49.40, icon: 'fa-store', checked: false },
+            { title: 'إجمالي المحقق من الأهداف', percentage: 81.89, icon: 'fa-chart-pie', checked: false }
         ];
 
         const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
@@ -166,7 +171,7 @@
                             <div class="card-title">حافز المبيعات</div>
                             <div class="goal">
                                 <span>الهدف الأول</span>
-                                <div class="goal-box"></div>
+                                <div class="goal-box ${item.checked ? 'checked' : ''}">${item.checked ? '✔' : ''}</div>
                             </div>
                             <div class="goal">
                                 <span>الهدف الثاني</span>
