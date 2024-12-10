@@ -3,7 +3,7 @@
 <head>
     <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>نسب تحقيق الأهداف البيعية</title>
+    <title>مؤشرات الأداء</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -131,24 +131,24 @@
     </style>
 </head>
 <body>
-    <div class="header">نسب تحقيق الأهداف البيعية - ديسمبر 2024</div>
+    <div class="header">مؤشرات الأداء لشهر ديسمبر 2024</div>
     <div class="dashboard" id="cards-container">
         <!-- صناديق البيانات -->
     </div>
 <script>
     const data = [
-        { title: 'المفروشات', percentage: 37.85, icon: 'fa-couch', checked: false },
-        { title: 'المنزلية', percentage: 21.95, icon: 'fa-home', checked: false },
-        { title: 'الملابس الرجالية', percentage: 32.25, icon: 'fa-tshirt', checked: false },
-        { title: 'الملابس النسائية', percentage: 30.21, icon: 'fa-female', checked: false },
-        { title: 'الملابس الولادي', percentage: 29.38, icon: 'fa-child', checked: false },
-        { title: 'العطور', percentage: 25.87, icon: 'fa-spray-can', checked: false },
-        { title: 'الأحذية', percentage: 24.45, icon: 'fa-shoe-prints', checked: false },
-        { title: 'الألعاب', percentage: 20.01, icon: 'fa-bicycle', checked: false },
-        { title: 'الرياضة', percentage: 35.28, icon: 'fa-futbol', checked: false },
-        { title: 'التخفيضات', percentage: 38.73, icon: 'fa-tags', checked: true },
+        { title: 'المفروشات', percentage: 42.62, icon: 'fa-couch', checked: false },
+        { title: 'المنزلية', percentage: 25.11, icon: 'fa-home', checked: false },
+        { title: 'الملابس الرجالية', percentage: 35.53, icon: 'fa-tshirt', checked: false },
+        { title: 'الملابس النسائية', percentage: 33.84, icon: 'fa-female', checked: false },
+        { title: 'الملابس الولادي', percentage: 32.09, icon: 'fa-child', checked: false },
+        { title: 'العطور', percentage: 29.11, icon: 'fa-spray-can', checked: false },
+        { title: 'الأحذية', percentage: 26.85, icon: 'fa-shoe-prints', checked: false },
+        { title: 'الألعاب', percentage: 23.27, icon: 'fa-bicycle', checked: false },
+        { title: 'الرياضة والجاكت', percentage: 38.75, icon: 'fa-futbol', checked: false },
+        { title: 'التخفيضات', percentage: 41.77, icon: 'fa-tags', checked: true },
         { title: 'سيفورا الوادي', percentage: 23.28, icon: 'fa-store', checked: false },
-        { title: 'إجمالي المحقق من الأهداف', percentage: 30.45, icon: 'fa-chart-pie', checked: false }
+        { title: 'الإجمالي العام ', percentage: 33.72, icon: 'fa-chart-pie', checked: false }
     ];
 
     const topThree = [...data].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
@@ -171,7 +171,7 @@
                         <div class="card-title">حافز المبيعات</div>
                         <div class="goal">
                             <span>الهدف الأول</span>
-                             <div class="goal-box"></div>
+                            <div class="goal-box"></div>
                         </div>
                         <div class="goal">
                             <span>الهدف الثاني</span>
@@ -189,4 +189,3 @@
         container.innerHTML += cardsHTML;
     });
 </script>
-
