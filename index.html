@@ -198,16 +198,19 @@
             { title: 'العطور', percentage: 31.82, icon: 'fa-spray-can', checked: false },
             { title: 'الأحذية', percentage: 28.79, icon: 'fa-shoe-prints', checked: false },
             { title: 'الألعاب', percentage: 24.62, icon: 'fa-bicycle', checked: false },
-            { title: 'الرياضة', percentage: 41.26, icon: 'fa-futbol', checked: false },
-            { title: 'التخفيضات', percentage: 47.08, icon: 'fa-tags', checked: true },
-            { title: 'إجمالي المحقق من الأهداف', percentage: 37.38, icon: 'fa-chart-pie', checked: false }
+            { title: 'الرياضة و الجاكت', percentage: 41.26, icon: 'fa-futbol', checked: false },
+            { title: 'التخفيضات', percentage: 47.08, icon: 'fa-tags', checked: false },
+            { title: 'سيفورا', percentage: 30.09, icon: 'fa-spray-can', checked: false },
+            { title: 'المكتبة والشنط', percentage: 0, icon: 'fa-pen', checked: false },
+
+            { title: 'الإجمالي', percentage: 37.38, icon: 'fa-chart-pie', checked: false }
         ];
 
         // بيانات فور بارك
         const fourParkData = [
             { title: 'المفروشات', percentage: 0, icon: 'fa-couch', checked: false },
             { title: 'المنزلية', percentage: 0, icon: 'fa-home', checked: false },
-            { title: 'إجمالي المحقق من الأهداف', percentage: 0, icon: 'fa-chart-pie', checked: false }
+            { title: 'الإجمالي', percentage: 0, icon: 'fa-chart-pie', checked: false }
         ];
 
         // إنشاء صناديق الأنصار مول
@@ -235,7 +238,7 @@
                         <div class="card-title">حافز المبيعات</div>
                         <div class="goal">
                             <span>الهدف الأول</span>
-                            <div class="goal-box ${item.checked ? 'checked' : ''}">${item.checked ? '✔' : ''}</div>
+ <div class="goal-box"></div>
                         </div>
                         <div class="goal">
                             <span>الهدف الثاني</span>
@@ -295,10 +298,10 @@
         arabPlazaContainer.innerHTML += createCardHTML(item);
     });
 // إضافة إجمالي المحقق من الأهداف لأبيات عسير
-abyatData.push({ title: 'إجمالي المحقق من الأهداف', percentage: 0, icon: 'fa-chart-pie', checked: false });
+abyatData.push({ title: 'الإجمالي', percentage: 0, icon: 'fa-chart-pie', checked: false });
 
 // إضافة إجمالي المحقق من الأهداف للعرب بلازا
-arabPlazaData.push({ title: 'إجمالي المحقق من الأهداف', percentage: 0, icon: 'fa-chart-pie', checked: false });
+arabPlazaData.push({ title: 'الإجمالي', percentage: 0, icon: 'fa-chart-pie', checked: false });
 
 // تحديث الصناديق بعد إضافة الإجمالي
 abyatContainer.innerHTML += createCardHTML(abyatData[abyatData.length - 1]);
