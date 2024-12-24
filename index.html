@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -333,20 +334,20 @@
     <script>
         // بيانات الأنصار مول
         const ansarData = [
-            { title: 'المفروشات', percentage: 95.02, icon: 'fa-couch', checked: false },
-            { title: 'المنزلية', percentage: 95.85, icon: 'fa-home', checked: false },
-            { title: 'الملابس الرجالية', percentage: 91.92, icon: 'fa-tshirt', checked: false },
-            { title: 'الملابس النسائية', percentage: 78.49, icon: 'fa-female', checked: false },
-            { title: 'الملابس الولادي', percentage: 73.87, icon: 'fa-child', checked: false },
-            { title: 'العطور', percentage: 58.70, icon: 'fa-spray-can', checked: false },
-            { title: 'الأحذية', percentage: 59.37, icon: 'fa-shoe-prints', checked: false },
-            { title: 'الألعاب', percentage: 44.81, icon: 'fa-bicycle', checked: false },
-            { title: 'الرياضة و الجاكت', percentage: 95.50, icon: 'fa-futbol', checked: false },
-            { title: 'التخفيضات', percentage: 94.23, icon: 'fa-tags', checked: false },
-            { title: 'سيفورا', percentage: 55.02, icon: 'fa-spray-can', checked: false },
-            { title: 'المكتبة والشنط', percentage: 38.12, icon: 'fa-pen', checked: false },
+            { title: 'المفروشات', percentage: 98.54, icon: 'fa-couch', checked: false },
+            { title: 'المنزلية', percentage: 102.37, icon: 'fa-home', checked: true },
+            { title: 'الملابس الرجالية', percentage: 95.60, icon: 'fa-tshirt', checked: false },
+            { title: 'الملابس النسائية', percentage: 80.96, icon: 'fa-female', checked: false },
+            { title: 'الملابس الولادي', percentage: 74.83, icon: 'fa-child', checked: false },
+            { title: 'العطور', percentage: 60.75, icon: 'fa-spray-can', checked: false },
+            { title: 'الأحذية', percentage: 60.42, icon: 'fa-shoe-prints', checked: false },
+            { title: 'الألعاب', percentage: 47.58, icon: 'fa-bicycle', checked: false },
+            { title: 'الرياضة و الجاكت', percentage: 99.15, icon: 'fa-futbol', checked: false },
+            { title: 'التخفيضات', percentage: 95.45, icon: 'fa-tags', checked: false },
+            { title: 'سيفورا', percentage: 57.45, icon: 'fa-spray-can', checked: false },
+            { title: 'المكتبة والشنط', percentage: 39.69, icon: 'fa-pen', checked: false },
 
-            { title: 'الإجمالي', percentage: 78.81, icon: 'fa-chart-pie', checked: false }
+            { title: 'الإجمالي', percentage: 81.57, icon: 'fa-chart-pie', checked: false }
         ];
 
         // بيانات فور بارك
@@ -368,7 +369,7 @@
             fourParkContainer.innerHTML += createCardHTML(item);
         });
 
-        // دالة لإنشاء الكروت
+                // دالة لإنشاء الكروت
         function createCardHTML(item) {
             return `
                 <div class="card" onclick="this.classList.toggle('is-flipped')">
@@ -378,10 +379,10 @@
                         <div class="card-title">${item.title}</div>
                     </div>
                     <div class="card-inner card-back">
-                        <div class="card-title">الحوافز </div>
+                        <div class="card-title">الحوافز</div>
                         <div class="goal">
                             <span>المستوى الأول</span>
- <div class="goal-box"></div>
+                            <div class="goal-box ${item.checked ? 'checked' : ''}">${item.checked ? '✔' : ''}</div>
                         </div>
                         <div class="goal">
                             <span>المستوى الثاني</span>
@@ -395,6 +396,8 @@
                 </div>
             `;
         }
+
+
     </script>
 <!-- أبيات عسير -->
 <div class="sub-header">أبيات عسير</div>
