@@ -416,23 +416,23 @@ background: linear-gradient(135deg, #1e3a8a, #6a5acd);
 <script>
     // بيانات أبيات عسير
     const abyatData = [
-        { title: 'الملابس الرجالية', percentage: 15.99, icon: 'fa-tshirt', checked: false },
-        { title: 'الملابس النسائية', percentage: 14.87, icon: 'fa-female', checked: false },
-        { title: 'الملابس الولادي', percentage: 9.03, icon: 'fa-child', checked: false },
-        { title: 'الملابس البناتي', percentage: 11.67, icon: 'fa-female', checked: false },
-        { title: 'الاحذية', percentage: 12.45, icon: 'fa-shoe-prints', checked: false },
-        { title: 'الالعاب', percentage: 15.33, icon: 'fa-bicycle', checked: false },
-        { title: 'العطور', percentage: 11.42, icon: 'fa-spray-can', checked: false },
-        { title: 'المواليد', percentage: 18.96, icon: 'fa-child', checked: false },
+        { title: 'الملابس الرجالية', percentage: 18.27, icon: 'fa-tshirt', checked: false },
+        { title: 'الملابس النسائية', percentage: 17.81, icon: 'fa-female', checked: false },
+        { title: 'الملابس الولادي', percentage: 49.58, icon: 'fa-child', checked: false },
+        { title: 'الملابس البناتي', percentage: 13.27, icon: 'fa-female', checked: false },
+        { title: 'الاحذية', percentage: 15.13, icon: 'fa-shoe-prints', checked: false },
+        { title: 'الالعاب', percentage: 18.54, icon: 'fa-bicycle', checked: false },
+        { title: 'العطور', percentage: 12.67, icon: 'fa-spray-can', checked: false },
+        { title: 'المواليد', percentage: 22.37, icon: 'fa-child', checked: false },
        
 
     ];
 
     // بيانات العرب بلازا
     const arabPlazaData = [
-        { title: 'المفروشات', percentage: 0, icon: 'fa-couch', checked: false },
-        { title: 'المنزلية', percentage: 0, icon: 'fa-home', checked: false },
-        { title: 'ألعاب ', percentage: 0, icon: 'fa-bicycle', checked: false },
+        { title: 'المفروشات', percentage: 20.20, icon: 'fa-couch', checked: false },
+        { title: 'المنزلية', percentage: 12.24, icon: 'fa-home', checked: false },
+        { title: 'ألعاب ', percentage: 5.06, icon: 'fa-bicycle', checked: false },
     ];
 
     // إنشاء صناديق أبيات عسير
@@ -447,10 +447,10 @@ background: linear-gradient(135deg, #1e3a8a, #6a5acd);
         arabPlazaContainer.innerHTML += createCardHTML(item);
     });
 // إضافة إجمالي المحقق من الأهداف لأبيات عسير
-abyatData.push({ title: 'الإجمالي', percentage: 14.18, icon: 'fa-chart-pie', checked: false });
+abyatData.push({ title: 'الإجمالي', percentage: 17.64, icon: 'fa-chart-pie', checked: false });
 
 // إضافة إجمالي المحقق من الأهداف للعرب بلازا
-arabPlazaData.push({ title: 'الإجمالي', percentage: 0, icon: 'fa-chart-pie', checked: false });
+arabPlazaData.push({ title: 'الإجمالي', percentage: 21.72, icon: 'fa-chart-pie', checked: false });
 
 // تحديث الصناديق بعد إضافة الإجمالي
 abyatContainer.innerHTML += createCardHTML(abyatData[abyatData.length - 1]);
