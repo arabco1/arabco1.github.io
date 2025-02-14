@@ -1,458 +1,409 @@
-  <!DOCTYPE html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>مؤشرات الأداء</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>لوحة أداء المراكز التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-dark: #0f172a;
+            --primary-blue: #1d4ed8;
+            --accent-blue: #60a5fa;
+            --gradient: linear-gradient(160deg, #1e3a8a, #0f172a);
+            --glass: rgba(255, 255, 255, 0.08);
+            --radius: 1rem;
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-background: linear-gradient(135deg, #1e3a8a, #6a5acd);
-            background-size: 400% 200%;
-            animation: gradientBG 15s ease infinite;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
+            min-height: 100vh;
+            background: var(--gradient);
+            color: white;
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-font-smoothing: antialiased;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 70% 20%; }
-            100% { background-position: 0% 50%; }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+            padding-bottom: env(safe-area-inset-bottom);
         }
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            padding: 1rem 0;
+            padding-top: max(1rem, env(safe-area-inset-top));
         }
-        .sub-header {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 2em;
+
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            background: linear-gradient(to right, var(--accent-blue), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 1rem 0;
+            line-height: 1.3;
+            padding: 0 0.5rem;
         }
-        .dashboard {
-            max-width: 1200px;
-            margin: auto;
+
+        .malls-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            perspective: 1000px;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: 1rem;
+            padding: 0.5rem 0;
         }
-        .card {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            transform-style: preserve-3d;
-            transform-origin: center;
-            transition: transform 0.6s;
+
+        .mall-card {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: var(--transition);
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            break-inside: avoid;
         }
-        .card.is-flipped {
-            transform: rotateY(180deg);
+
+        .mall-card:active {
+            transform: scale(0.98);
         }
-        .card-inner {
-            position: absolute;
+
+        .mall-icon {
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            pointer-events: none;
+        }
+
+        .metric-value {
+            font-size: clamp(1.8rem, 6vw, 2.4rem);
+            font-weight: 700;
+            background: linear-gradient(to bottom, var(--accent-blue), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        /* نافذة التفاصيل */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            display: none;
+            place-items: center;
+            z-index: 1000;
+            padding: 0.5rem;
+            padding-top: env(safe-area-inset-top);
         }
-        .card-front .icon {
-            font-size: 4em;
-            margin-bottom: 10px;
+
+        .detail-panel {
+            background: var(--glass);
+            width: min(95%, 800px);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            position: relative;
+            animation: panelIn 0.4s ease-out;
+            max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
-        .card-front .percentage-box {
-            font-size: 3.5em;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-            margin: 10px 0;
+
+        @keyframes panelIn {
+            from { transform: scale(0.98); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .card-title {
-            font-size: 1.5em;
-            margin-top: 10px;
-            color: #fff;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-        .card-back {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotateY(180deg);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .goal {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        .goal-box {
+
+        .close-btn {
+            position: absolute;
+            top: max(0.8rem, env(safe-area-inset-top));
+            left: 0.8rem;
+            background: var(--primary-blue);
             width: 40px;
             height: 40px;
-            border: 2px solid #fff;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .department-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 0.8rem;
+            text-align: center;
+            transition: var(--transition);
+            touch-action: manipulation;
+            min-height: 120px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            border-radius: 5px;
-        }
-        .goal-box.checked {
-            background-color: #4caf50;
-            color: #fff;
-            font-weight: bold;
-        }
-        .card.golden {
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5);
-        }
-<style>
-    /* الشبكة الافتراضية */
-    .dashboard {
-        max-width: 1200px;
-        margin: auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-    }
-
-    /* تحسين العرض على الهواتف المحمولة */
-    @media screen and (max-width: 768px) {
-        .dashboard {
-            grid-template-columns: repeat(3, 1fr); /* 3 بطاقات في الصف */
-            gap: 10px; /* تقليل المسافات بين البطاقات */
         }
 
-        .card {
-            height: 250px; /* تقليل ارتفاع البطاقات */
+        .department-icon {
+            font-size: clamp(2.5rem, 8vw, 3rem);
+            color: var(--accent-blue);
+            margin-bottom: 0.8rem;
+            pointer-events: none;
         }
 
-        .card-inner {
-            padding: 10px;
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 0.5rem;
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+
+            .mall-card {
+                padding: 1rem;
+                min-height: 150px;
+                border-radius: 0.8rem;
+            }
+
+            .detail-panel {
+                padding: 1rem;
+                border-radius: 0.8rem;
+            }
+
+            .close-btn {
+                width: 35px;
+                height: 35px;
+                top: max(0.5rem, env(safe-area-inset-top));
+                left: 0.5rem;
+            }
+
+            .departments-grid {
+                gap: 0.8rem;
+            }
+
+            .department-card {
+                padding: 0.8rem;
+                min-height: 100px;
+            }
         }
 
-        .card-front .icon {
-            font-size: 2.5em; /* تقليل حجم الأيقونات */
+        @media (hover: hover) {
+            .mall-card:hover {
+                transform: translateY(-3px);
+                box-shadow: var(--shadow);
+            }
+            
+            .department-card:hover {
+                transform: translateY(-2px);
+                background: rgba(255, 255, 255, 0.1);
+            }
         }
-
-        .card-front .percentage-box {
-            font-size: 1.8em; /* تصغير النص */
-        }
-
-        .card-title {
-            font-size: 1em; /* تصغير حجم النص */
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .dashboard {
-            grid-template-columns: repeat(3, 1fr); /* 3 بطاقات في الصف حتى في الشاشات الأصغر */
-            gap: 5px; /* تقليل المسافات بشكل إضافي */
-        }
-
-        .card {
-            height: 200px; /* تقليل ارتفاع البطاقات أكثر */
-        }
-
-        .card-front .icon {
-            font-size: 2em;
-        }
-
-        .card-front .percentage-box {
-            font-size: 1.5em;
-        }
-
-        .card-title {
-            font-size: 0.8em;
-        }
-    }
-</style>
-
-<style>
-    /* تحسين التصميم ليكون متجاوبًا مع الهواتف المحمولة */
-    @media screen and (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
-
-        .header {
-            font-size: 2em;
-        }
-
-        .sub-header {
-            font-size: 1.5em;
-            text-align: right;
-        }
-
-        .dashboard {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .card {
-            height: 280px; /* تقليل ارتفاع البطاقات */
-        }
-
-        .card-inner {
-            padding: 15px; /* تقليل المسافات الداخلية */
-        }
-
-        .card-front .icon {
-            font-size: 2.5em; /* تصغير حجم الأيقونات */
-        }
-
-        .card-front .percentage-box {
-            font-size: 2em; /* تصغير حجم النسبة */
-        }
-
-        .card-title {
-            font-size: 1.2em; /* تصغير عناوين البطاقات */
-        }
-
-        .goal-box {
-            width: 30px;
-            height: 30px;
-            font-size: 0.9em;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .header {
-            font-size: 1.8em;
-        }
-
-        .sub-header {
-            font-size: 1.3em;
-            text-align: right;
-        }
-
-        .dashboard {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* بطاقات أصغر */
-            gap: 10px;
-        }
-
-        .card {
-            height: 240px;
-        }
-
-        .card-front .icon {
-            font-size: 2em;
-        }
-
-        .card-front .percentage-box {
-            font-size: 1.8em;
-        }
-
-        .card-title {
-            font-size: 1em;
-        }
-    }
-</style>
-
-<style>
-    /* الأكواد الأخرى لتنسيق الصفحة */
-
-    .card:nth-child(1) {
-        background: rgba(255, 99, 71, 0.7); /* لون أحمر شفاف */
-    }
-
-    .card:nth-child(2) {
-        background: rgba(135, 206, 235, 0.7); /* لون أزرق سماوي شفاف */
-    }
-
-    .card:nth-child(3) {
-        background: rgba(144, 238, 144, 0.7); /* لون أخضر فاتح شفاف */
-    }
-
-    .card:nth-child(4) {
-        background: rgba(255, 182, 193, 0.7); /* لون وردي شفاف */
-    }
-
-    .card:nth-child(5) {
-        background: rgba(255, 255, 102, 0.3); /* لون أصفر شفاف */
-    }
-
-    .card:nth-child(6) {
-        background: rgba(221, 140, 105, 0.7); /* لون بنفسجي فاتح شفاف */
-    }
-
-    .card:nth-child(7) {
-        background: rgba(173, 216, 105, 0.7); /* لون أزرق فاتح شفاف */
-    }
-
-    .card:nth-child(8) {
-        background: rgba(240, 128, 105, 0.7); /* لون سلموني شفاف */
-    }
-
-    .card:nth-child(9) {
-        background: rgba(152, 251, 105, 0.7); /* لون أخضر باهت شفاف */
-    }
-
-    .card:nth-child(10) {
-        background: rgba(250, 128, 105, 0.7); /* لون أحمر سلموني شفاف */
-    }
-
-    .card:nth-child(11) {
-        background: rgba(245, 222, 179, 0.7); /* لون بيج شفاف */
-    }
-</style>
-
     </style>
 </head>
-
 <body>
-    <div class="header">مؤشرات الأداء لشهر فبراير 2025</div>
+    <div class="dashboard-container">
+        <header class="header">
+            <h1 class="main-title">تقارير أداء المراكز التجارية<br>فبراير 2025</h1>
+        </header>
 
-    <!-- الأنصار مول -->
-    <div class="sub-header">الأنصار مول</div>
-    <div class="dashboard" id="ansar-cards">
-        <!-- صناديق بيانات الأنصار مول -->
+        <div class="malls-grid">
+            <div class="mall-card" data-mall="ansar">
+                <i class="fas fa-city mall-icon"></i>
+                <h2>الأنصار مول</h2>
+                <div class="metric-value">19.4%</div>
+            </div>
+
+            <div class="mall-card" data-mall="fourpark">
+                <i class="fas fa-parking mall-icon"></i>
+                <h2>فور بارك</h2>
+                <div class="metric-value">43.76%</div>
+            </div>
+
+            <div class="mall-card" data-mall="abyat">
+                <i class="fas fa-home mall-icon"></i>
+                <h2>أبيات عسير</h2>
+                <div class="metric-value">17.64%</div>
+            </div>
+
+            <div class="mall-card" data-mall="arabplaza">
+                <i class="fas fa-building mall-icon"></i>
+                <h2>العرب بلازا</h2>
+                <div class="metric-value">24.67%</div>
+            </div>
+        </div>
     </div>
 
-    <!-- فور بارك -->
-    <div class="sub-header">فور بارك</div>
-    <div class="dashboard" id="fourpark-cards">
-        <!-- صناديق بيانات فور بارك -->
+    <div class="overlay" id="overlay">
+        <div class="detail-panel">
+            <button class="close-btn" onclick="closeDetails()" aria-label="إغلاق">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 id="mallTitle"></h2>
+            <div class="departments-grid" id="departmentsContainer"></div>
+        </div>
     </div>
 
     <script>
-        // بيانات الأنصار مول
-        const ansarData = [
-            { title: 'المفروشات', percentage: 22.35, icon: 'fa-couch', checked: false },
-            { title: 'المنزلية', percentage: 21.10, icon: 'fa-home', checked: false },
-            { title: 'الملابس الرجالية', percentage: 27.56, icon: 'fa-tshirt', checked: false },
-            { title: 'الملابس النسائية', percentage: 28.87, icon: 'fa-female', checked: false },
-            { title: 'الملابس الولادي', percentage: 22.94, icon: 'fa-child', checked: false },
-            { title: 'العطور', percentage: 30.25, icon: 'fa-spray-can', checked: false },
-            { title: 'الأحذية', percentage: 19.48, icon: 'fa-shoe-prints', checked: false },
-            { title: 'الألعاب', percentage: 24.01, icon: 'fa-bicycle', checked: false },
-            { title: 'الرياضة و الجاكت', percentage: 13.97, icon: 'fa-futbol', checked: false },
-            { title: 'التخفيضات', percentage: 14.04, icon: 'fa-tags', checked: false },
-            { title: 'سيفورا', percentage: 27.01, icon: 'fa-spray-can', checked: false },
-            { title: 'المكتبة والشنط', percentage: 22.43, icon: 'fa-pen', checked: false },
-            { title: 'الإجمالي', percentage: 22.44, icon: 'fa-chart-pie', checked: false }
-        ];
+        const mallsData = {
+            ansar: {
+                title: "الأنصار مول",
+                departments: [
+                    { name: "المفروشات", percentage: "19.07%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "17.14%", icon: "fa-home" },
+                    { name: "الملابس الرجالية", percentage: "24.95%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "25.14%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "20.45%", icon: "fa-child" },
+                    { name: "العطور", percentage: "27.18%", icon: "fa-spray-can" },
+                    { name: "الأحذية", percentage: "17.57%", icon: "fa-shoe-prints" },
+                    { name: "الألعاب", percentage: "21.26%", icon: "fa-bicycle" },
+                    { name: "الرياضة و الجاكت", percentage: "12.27%", icon: "fa-futbol" },
+                    { name: "التخفيضات", percentage: "11.62%", icon: "fa-tags" },
+                    { name: "سيفورا", percentage: "20.07%", icon: "fa-spray-can" },
+                    { name: "المكتبة والشنط", percentage: "19.29%", icon: "fa-pen" }
+                ]
+            },
+            fourpark: {
+                title: "فور بارك",
+                departments: [
+                    { name: "المفروشات", percentage: "47.33%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "25.89%", icon: "fa-home" },
+                    { name: "الإجمالي", percentage: "43.76%", icon: "fa-chart-pie" }
+                ]
+            },
+            abyat: {
+                title: "أبيات عسير",
+                departments: [
+                    { name: "الملابس الرجالية", percentage: "18.27%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "17.81%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "49.58%", icon: "fa-child" },
+                    { name: "الملابس البناتي", percentage: "13.27%", icon: "fa-female" },
+                    { name: "الاحذية", percentage: "15.13%", icon: "fa-shoe-prints" },
+                    { name: "الالعاب", percentage: "18.54%", icon: "fa-bicycle" },
+                    { name: "العطور", percentage: "12.67%", icon: "fa-spray-can" },
+                    { name: "المواليد", percentage: "22.37%", icon: "fa-child" }
+                ]
+            },
+            arabplaza: {
+                title: "العرب بلازا",
+                departments: [
+                    { name: "المفروشات", percentage: "24.47%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "14.47%", icon: "fa-home" },
+                    { name: "ألعاب", percentage: "6.09%", icon: "fa-bicycle" }
+                ]
+            }
+        };
 
-        // بيانات فور بارك
-        const fourParkData = [
-            { title: 'المفروشات', percentage: 58.51, icon: 'fa-couch', checked: false },
-            { title: 'المنزلية', percentage: 32.48, icon: 'fa-home', checked: false },
-            { title: 'الإجمالي', percentage: 54.17, icon: 'fa-chart-pie', checked: false }
-        ];
-
-        // إنشاء صناديق الأنصار مول
-        const ansarContainer = document.getElementById('ansar-cards');
-        ansarData.forEach(item => {
-            ansarContainer.innerHTML += createCardHTML(item);
-        });
-
-        // إنشاء صناديق فور بارك
-        const fourParkContainer = document.getElementById('fourpark-cards');
-        fourParkData.forEach(item => {
-            fourParkContainer.innerHTML += createCardHTML(item);
-        });
-
-                // دالة لإنشاء الكروت
-        function createCardHTML(item) {
-            return `
-                <div class="card" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner card-front">
-                        <div class="icon"><i class="fas ${item.icon}"></i></div>
-                        <div class="percentage-box">${item.percentage}%</div>
-                        <div class="card-title">${item.title}</div>
-                    </div>
-                    <div class="card-inner card-back">
-                        <div class="card-title">الحوافز</div>
-                        <div class="goal">
-                            <span> يقابل التوقعات</span>
-                            <div class="goal-box ${item.checked ? 'checked' : ''}">${item.checked ? '✔' : ''}</div>
-                        </div>
-                        <div class="goal">
-                            <span>  يفوق التوقعات</span>
-                            <div class="goal-box"></div>
-                        </div>
-                        <div class="goal">
-                            <span>  إستثنائي </span>
-                            <div class="goal-box"></div>
-                        </div>
-                    </div>
+        function showDetails(mallId) {
+            const mall = mallsData[mallId];
+            const overlay = document.getElementById('overlay');
+            
+            document.getElementById('mallTitle').textContent = mall.title;
+            
+            const departmentsHTML = mall.departments.map(dept => `
+                <div class="department-card" role="button" tabindex="0">
+                    <i class="fas ${dept.icon} department-icon"></i>
+                    <h3>${dept.name}</h3>
+                    <div class="metric-value">${dept.percentage}</div>
                 </div>
-            `;
+            `).join('');
+            
+            document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
+            overlay.style.display = 'grid';
+            
+            // إضافة event listeners للأقسام
+            document.querySelectorAll('.department-card').forEach(card => {
+                card.addEventListener('click', handleDepartmentClick);
+                card.addEventListener('keypress', handleDepartmentKeypress);
+            });
         }
 
+        function closeDetails() {
+            document.getElementById('overlay').style.display = 'none';
+        }
 
+        function handleDepartmentClick(e) {
+            // يمكن إضافة تفاعل خاص عند النقر على القسم هنا
+            e.stopPropagation();
+        }
+
+        function handleDepartmentKeypress(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                handleDepartmentClick(e);
+            }
+        }
+
+        // Event Handling
+        document.querySelectorAll('.mall-card').forEach(card => {
+            card.addEventListener('click', () => showDetails(card.dataset.mall));
+            card.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    showDetails(card.dataset.mall);
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if(e.target.closest('.overlay') && !e.target.closest('.detail-panel')) {
+                closeDetails();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') closeDetails();
+        });
+
+        // تحسينات اللمس للسحب للإغلاق
+        let touchStartY = 0;
+        const overlay = document.getElementById('overlay');
+        
+        overlay.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].clientY;
+        }, { passive: true });
+
+        overlay.addEventListener('touchmove', (e) => {
+            const touch = e.changedTouches[0];
+            const deltaY = touch.clientY - touchStartY;
+            
+            if (deltaY > 100) {
+                closeDetails();
+            }
+        }, { passive: true });
+
+        // منع التمرير خلف النافذة المنبثقة
+        document.body.addEventListener('touchmove', (e) => {
+            if (overlay.style.display === 'grid') {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
-<!-- أبيات عسير -->
-<div class="sub-header">أبيات عسير</div>
-<div class="dashboard" id="abyat-cards">
-    <!-- صناديق بيانات أبيات عسير -->
-</div>
-
-<!-- العرب بلازا -->
-<div class="sub-header">العرب بلازا</div>
-<div class="dashboard" id="arabplaza-cards">
-    <!-- صناديق بيانات العرب بلازا -->
-</div>
-
-<script>
-    // بيانات أبيات عسير
-    const abyatData = [
-        { title: 'الملابس الرجالية', percentage: 20.74, icon: 'fa-tshirt', checked: false },
-        { title: 'الملابس النسائية', percentage: 20.57, icon: 'fa-female', checked: false },
-        { title: 'الملابس الولادي', percentage: 50.07, icon: 'fa-child', checked: false },
-        { title: 'الملابس البناتي', percentage: 16.73, icon: 'fa-female', checked: false },
-        { title: 'الاحذية', percentage: 17.23, icon: 'fa-shoe-prints', checked: false },
-        { title: 'الالعاب', percentage: 21.83, icon: 'fa-bicycle', checked: false },
-        { title: 'العطور', percentage: 14.24, icon: 'fa-spray-can', checked: false },
-        { title: 'المواليد', percentage: 25.35, icon: 'fa-child', checked: false },
-       
-
-    ];
-
-    // بيانات العرب بلازا
-    const arabPlazaData = [
-        { title: 'المفروشات', percentage: 31.14, icon: 'fa-couch', checked: false },
-        { title: 'المنزلية', percentage: 19.55, icon: 'fa-home', checked: false },
-        { title: 'ألعاب ', percentage: 8.77, icon: 'fa-bicycle', checked: false },
-    ];
-
-    // إنشاء صناديق أبيات عسير
-    const abyatContainer = document.getElementById('abyat-cards');
-    abyatData.forEach(item => {
-        abyatContainer.innerHTML += createCardHTML(item);
-    });
-
-    // إنشاء صناديق العرب بلازا
-    const arabPlazaContainer = document.getElementById('arabplaza-cards');
-    arabPlazaData.forEach(item => {
-        arabPlazaContainer.innerHTML += createCardHTML(item);
-    });
-// إضافة إجمالي المحقق من الأهداف لأبيات عسير
-abyatData.push({ title: 'الإجمالي', percentage: 20.22, icon: 'fa-chart-pie', checked: false });
-
-// إضافة إجمالي المحقق من الأهداف للعرب بلازا
-arabPlazaData.push({ title: 'الإجمالي', percentage: 27.14, icon: 'fa-chart-pie', checked: false });
-
-// تحديث الصناديق بعد إضافة الإجمالي
-abyatContainer.innerHTML += createCardHTML(abyatData[abyatData.length - 1]);
-arabPlazaContainer.innerHTML += createCardHTML(arabPlazaData[arabPlazaData.length - 1]);
-
-</script>
-
 </body>
 </html>
