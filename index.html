@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>أداء المراكز التجارية - الأقسام</title>
+    <title>مؤشرات الأداء الشهرية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary-color: #8AA8FF;
-            --accent-color: #FFB30D, #FFFFFF;
+            --accent-color: #ffde59;
             --bg-gradient: linear-gradient(44deg, #001542, #001542);
-            --card-bg: rgba(255, 255, 255, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.25);
         }
 
         * {
@@ -161,28 +161,28 @@
             <div class="mall-card" data-mall="ansar">
                 <i class="fas fa-city mall-icon"></i>
                 <h2>الأنصار مول</h2>
-                <div class="mall-percentage">19.4%</div>
+                <h1> <div class="mall-percentage">23.77%</div> <h1>
             </div>
 
             <!-- فور بارك -->
             <div class="mall-card" data-mall="fourpark">
                 <i class="fas fa-parking mall-icon"></i>
                 <h2>فور بارك</h2>
-                <div class="mall-percentage">43.76%</div>
+                <h1> <div class="mall-percentage">56.88%</div> <h1>
             </div>
 
             <!-- أبيات عسير -->
             <div class="mall-card" data-mall="abyat">
                 <i class="fas fa-home mall-icon"></i>
                 <h2>أبيات عسير</h2>
-                <div class="mall-percentage">17.64%</div>
+                <h1> <div class="mall-percentage">20.22%</div> <h1>
             </div>
 
             <!-- العرب بلازا -->
             <div class="mall-card" data-mall="arabplaza">
                 <i class="fas fa-building mall-icon"></i>
                 <h2>العرب بلازا</h2>
-                <div class="mall-percentage">24.67%</div>
+                <h1> <div class="mall-percentage">29.02%</div> <h1>
             </div>
         </div>
     </div>
@@ -203,47 +203,46 @@
             ansar: {
                 title: "الأنصار مول",
                 departments: [
-                    { name: "المفروشات", percentage: "19.07%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "17.14%", icon: "fa-home" },
-                    { name: "الملابس الرجالية", percentage: "24.95%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "25.14%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "20.45%", icon: "fa-child" },
-                    { name: "العطور", percentage: "27.18%", icon: "fa-spray-can" },
-                    { name: "الأحذية", percentage: "17.57%", icon: "fa-shoe-prints" },
-                    { name: "الألعاب", percentage: "21.26%", icon: "fa-bicycle" },
-                    { name: "الرياضة و الجاكت", percentage: "12.27%", icon: "fa-futbol" },
-                    { name: "التخفيضات", percentage: "11.62%", icon: "fa-tags" },
-                    { name: "سيفورا", percentage: "20.07%", icon: "fa-spray-can" },
-                    { name: "المكتبة والشنط", percentage: "19.29%", icon: "fa-pen" }
+                    { name: "المفروشات", percentage: "23.70%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "22.14%", icon: "fa-home" },
+                    { name: "الملابس الرجالية", percentage: "28.57%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "29.49%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "24.19%", icon: "fa-child" },
+                    { name: "العطور", percentage: "31.83%", icon: "fa-spray-can" },
+                    { name: "الأحذية", percentage: "20.68%", icon: "fa-shoe-prints" },
+                    { name: "الألعاب", percentage: "26.45%", icon: "fa-bicycle" },
+                    { name: "الرياضة و الجاكت", percentage: "14.25%", icon: "fa-futbol" },
+                    { name: "التخفيضات", percentage: "15.56%", icon: "fa-tags" },
+                    { name: "سيفورا", percentage: "28.09%", icon: "fa-spray-can" },
+                    { name: "المكتبة والشنط", percentage: "24.59%", icon: "fa-pen" }
                 ]
             },
             fourpark: {
                 title: "فور بارك",
                 departments: [
-                    { name: "المفروشات", percentage: "47.33%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "25.89%", icon: "fa-home" },
-                    { name: "الإجمالي", percentage: "43.76%", icon: "fa-chart-pie" }
+                    { name: "المفروشات", percentage: "61.36%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "34.47%", icon: "fa-home" },
                 ]
             },
             abyat: {
                 title: "أبيات عسير",
                 departments: [
-                    { name: "الملابس الرجالية", percentage: "18.27%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "17.81%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "49.58%", icon: "fa-child" },
-                    { name: "الملابس البناتي", percentage: "13.27%", icon: "fa-female" },
-                    { name: "الاحذية", percentage: "15.13%", icon: "fa-shoe-prints" },
-                    { name: "الالعاب", percentage: "18.54%", icon: "fa-bicycle" },
-                    { name: "العطور", percentage: "12.67%", icon: "fa-spray-can" },
-                    { name: "المواليد", percentage: "22.37%", icon: "fa-child" }
+                    { name: "الملابس الرجالية", percentage: "20.74%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "20.57%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "50.07%", icon: "fa-child" },
+                    { name: "الملابس البناتي", percentage: "16.73%", icon: "fa-female" },
+                    { name: "الاحذية", percentage: "17.23%", icon: "fa-shoe-prints" },
+                    { name: "الالعاب", percentage: "21.83%", icon: "fa-bicycle" },
+                    { name: "العطور", percentage: "14.24%", icon: "fa-spray-can" },
+                    { name: "المواليد", percentage: "25.35%", icon: "fa-child" }
                 ]
             },
             arabplaza: {
                 title: "العرب بلازا",
                 departments: [
-                    { name: "المفروشات", percentage: "24.47%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "14.47%", icon: "fa-home" },
-                    { name: "ألعاب", percentage: "6.09%", icon: "fa-bicycle" }
+                    { name: "المفروشات", percentage: "33.08%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "20.21%", icon: "fa-home" },
+                    { name: "ألعاب", percentage: "8.77%", icon: "fa-bicycle" }
                 ]
             }
         };
