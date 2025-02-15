@@ -1,458 +1,300 @@
-  <!DOCTYPE html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>مؤشرات الأداء</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أداء المراكز التجارية - الأقسام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #002A54;
+            --accent-color: #FF9800;
+            --bg-gradient: linear-gradient(160deg, #002A54, #0f172a);
+            --card-bg: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-background: linear-gradient(135deg, #1e3a8a, #6a5acd);
-            background-size: 400% 200%;
-            animation: gradientBG 15s ease infinite;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
+            background: var(--bg-gradient);
+            color: white;
+            min-height: 100vh;
+            touch-action: manipulation;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 70% 20%; }
-            100% { background-position: 0% 50%; }
+
+        .container {
+            padding: 1rem;
+            max-width: 1600px;
+            margin: 0 auto;
         }
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            padding: 1.5rem 0;
         }
-        .sub-header {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 2em;
+
+        .main-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
         }
-        .dashboard {
-            max-width: 1200px;
-            margin: auto;
+
+        .malls-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            perspective: 1000px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            padding: 0.5rem;
         }
-        .card {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            transform-style: preserve-3d;
-            transform-origin: center;
-            transition: transform 0.6s;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
+
+        .mall-card {
+            background: var(--card-bg);
             border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-        .card.is-flipped {
-            transform: rotateY(180deg);
-        }
-        .card-inner {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .card-front .icon {
-            font-size: 4em;
-            margin-bottom: 10px;
-        }
-        .card-front .percentage-box {
-            font-size: 3.5em;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-            margin: 10px 0;
-        }
-        .card-title {
-            font-size: 1.5em;
-            margin-top: 10px;
-            color: #fff;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
         }
-        .card-back {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotateY(180deg);
+
+        .mall-card:active {
+            transform: scale(0.98);
+        }
+
+        .mall-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
             border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
         }
-        .goal {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        .goal-box {
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary-color);
             width: 40px;
             height: 40px;
-            border: 2px solid #fff;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
+            cursor: pointer;
         }
-        .goal-box.checked {
-            background-color: #4caf50;
-            color: #fff;
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .department-card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .department-icon {
+            font-size: 2.2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .department-percentage {
+            font-size: 1.5rem;
+            color: var(--accent-color);
             font-weight: bold;
         }
-        .card.golden {
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5);
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+            .malls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .department-card {
+                padding: 1rem;
+            }
         }
-<style>
-    /* الشبكة الافتراضية */
-    .dashboard {
-        max-width: 1200px;
-        margin: auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-    }
-
-    /* تحسين العرض على الهواتف المحمولة */
-    @media screen and (max-width: 768px) {
-        .dashboard {
-            grid-template-columns: repeat(3, 1fr); /* 3 بطاقات في الصف */
-            gap: 10px; /* تقليل المسافات بين البطاقات */
-        }
-
-        .card {
-            height: 250px; /* تقليل ارتفاع البطاقات */
-        }
-
-        .card-inner {
-            padding: 10px;
-        }
-
-        .card-front .icon {
-            font-size: 2.5em; /* تقليل حجم الأيقونات */
-        }
-
-        .card-front .percentage-box {
-            font-size: 1.8em; /* تصغير النص */
-        }
-
-        .card-title {
-            font-size: 1em; /* تصغير حجم النص */
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .dashboard {
-            grid-template-columns: repeat(3, 1fr); /* 3 بطاقات في الصف حتى في الشاشات الأصغر */
-            gap: 5px; /* تقليل المسافات بشكل إضافي */
-        }
-
-        .card {
-            height: 200px; /* تقليل ارتفاع البطاقات أكثر */
-        }
-
-        .card-front .icon {
-            font-size: 2em;
-        }
-
-        .card-front .percentage-box {
-            font-size: 1.5em;
-        }
-
-        .card-title {
-            font-size: 0.8em;
-        }
-    }
-</style>
-
-<style>
-    /* تحسين التصميم ليكون متجاوبًا مع الهواتف المحمولة */
-    @media screen and (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
-
-        .header {
-            font-size: 2em;
-        }
-
-        .sub-header {
-            font-size: 1.5em;
-            text-align: right;
-        }
-
-        .dashboard {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .card {
-            height: 280px; /* تقليل ارتفاع البطاقات */
-        }
-
-        .card-inner {
-            padding: 15px; /* تقليل المسافات الداخلية */
-        }
-
-        .card-front .icon {
-            font-size: 2.5em; /* تصغير حجم الأيقونات */
-        }
-
-        .card-front .percentage-box {
-            font-size: 2em; /* تصغير حجم النسبة */
-        }
-
-        .card-title {
-            font-size: 1.2em; /* تصغير عناوين البطاقات */
-        }
-
-        .goal-box {
-            width: 30px;
-            height: 30px;
-            font-size: 0.9em;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .header {
-            font-size: 1.8em;
-        }
-
-        .sub-header {
-            font-size: 1.3em;
-            text-align: right;
-        }
-
-        .dashboard {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* بطاقات أصغر */
-            gap: 10px;
-        }
-
-        .card {
-            height: 240px;
-        }
-
-        .card-front .icon {
-            font-size: 2em;
-        }
-
-        .card-front .percentage-box {
-            font-size: 1.8em;
-        }
-
-        .card-title {
-            font-size: 1em;
-        }
-    }
-</style>
-
-<style>
-    /* الأكواد الأخرى لتنسيق الصفحة */
-
-    .card:nth-child(1) {
-        background: rgba(255, 99, 71, 0.7); /* لون أحمر شفاف */
-    }
-
-    .card:nth-child(2) {
-        background: rgba(135, 206, 235, 0.7); /* لون أزرق سماوي شفاف */
-    }
-
-    .card:nth-child(3) {
-        background: rgba(144, 238, 144, 0.7); /* لون أخضر فاتح شفاف */
-    }
-
-    .card:nth-child(4) {
-        background: rgba(255, 182, 193, 0.7); /* لون وردي شفاف */
-    }
-
-    .card:nth-child(5) {
-        background: rgba(255, 255, 102, 0.3); /* لون أصفر شفاف */
-    }
-
-    .card:nth-child(6) {
-        background: rgba(221, 140, 105, 0.7); /* لون بنفسجي فاتح شفاف */
-    }
-
-    .card:nth-child(7) {
-        background: rgba(173, 216, 105, 0.7); /* لون أزرق فاتح شفاف */
-    }
-
-    .card:nth-child(8) {
-        background: rgba(240, 128, 105, 0.7); /* لون سلموني شفاف */
-    }
-
-    .card:nth-child(9) {
-        background: rgba(152, 251, 105, 0.7); /* لون أخضر باهت شفاف */
-    }
-
-    .card:nth-child(10) {
-        background: rgba(250, 128, 105, 0.7); /* لون أحمر سلموني شفاف */
-    }
-
-    .card:nth-child(11) {
-        background: rgba(245, 222, 179, 0.7); /* لون بيج شفاف */
-    }
-</style>
-
     </style>
 </head>
-
 <body>
-    <div class="header">مؤشرات الأداء لشهر فبراير 2025</div>
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">الأقسام الداخلية للمراكز التجارية</h1>
+        </header>
 
-    <!-- الأنصار مول -->
-    <div class="sub-header">الأنصار مول</div>
-    <div class="dashboard" id="ansar-cards">
-        <!-- صناديق بيانات الأنصار مول -->
+        <div class="malls-grid">
+            <!-- الأنصار مول -->
+            <div class="mall-card" data-mall="ansar">
+                <i class="fas fa-city mall-icon"></i>
+                <h2>الأنصار مول</h2>
+                <div class="mall-percentage">19.4%</div>
+            </div>
+
+            <!-- فور بارك -->
+            <div class="mall-card" data-mall="fourpark">
+                <i class="fas fa-parking mall-icon"></i>
+                <h2>فور بارك</h2>
+                <div class="mall-percentage">43.76%</div>
+            </div>
+
+            <!-- أبيات عسير -->
+            <div class="mall-card" data-mall="abyat">
+                <i class="fas fa-home mall-icon"></i>
+                <h2>أبيات عسير</h2>
+                <div class="mall-percentage">17.64%</div>
+            </div>
+
+            <!-- العرب بلازا -->
+            <div class="mall-card" data-mall="arabplaza">
+                <i class="fas fa-building mall-icon"></i>
+                <h2>العرب بلازا</h2>
+                <div class="mall-percentage">24.67%</div>
+            </div>
+        </div>
     </div>
 
-    <!-- فور بارك -->
-    <div class="sub-header">فور بارك</div>
-    <div class="dashboard" id="fourpark-cards">
-        <!-- صناديق بيانات فور بارك -->
+    <!-- نافذة الأقسام -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 id="modalTitle" class="main-title"></h2>
+            <div class="departments-grid" id="departmentsContainer"></div>
+        </div>
     </div>
 
     <script>
-        // بيانات الأنصار مول
-        const ansarData = [
-            { title: 'المفروشات', percentage: 23.70, icon: 'fa-couch', checked: false },
-            { title: 'المنزلية', percentage: 22.14, icon: 'fa-home', checked: false },
-            { title: 'الملابس الرجالية', percentage: 28.57, icon: 'fa-tshirt', checked: false },
-            { title: 'الملابس النسائية', percentage: 29.49, icon: 'fa-female', checked: false },
-            { title: 'الملابس الولادي', percentage: 24.19, icon: 'fa-child', checked: false },
-            { title: 'العطور', percentage: 31.83, icon: 'fa-spray-can', checked: false },
-            { title: 'الأحذية', percentage: 20.68, icon: 'fa-shoe-prints', checked: false },
-            { title: 'الألعاب', percentage: 26.45, icon: 'fa-bicycle', checked: false },
-            { title: 'الرياضة و الجاكت', percentage: 14.25, icon: 'fa-futbol', checked: false },
-            { title: 'التخفيضات', percentage: 15.56, icon: 'fa-tags', checked: false },
-            { title: 'سيفورا', percentage: 28.09, icon: 'fa-spray-can', checked: false },
-            { title: 'المكتبة والشنط', percentage: 24.59, icon: 'fa-pen', checked: false },
-            { title: 'الإجمالي', percentage: 23.77, icon: 'fa-chart-pie', checked: false }
-        ];
+        const mallsData = {
+            ansar: {
+                title: "الأنصار مول",
+                departments: [
+                    { name: "المفروشات", percentage: "19.07%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "17.14%", icon: "fa-home" },
+                    { name: "الملابس الرجالية", percentage: "24.95%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "25.14%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "20.45%", icon: "fa-child" },
+                    { name: "العطور", percentage: "27.18%", icon: "fa-spray-can" },
+                    { name: "الأحذية", percentage: "17.57%", icon: "fa-shoe-prints" },
+                    { name: "الألعاب", percentage: "21.26%", icon: "fa-bicycle" },
+                    { name: "الرياضة و الجاكت", percentage: "12.27%", icon: "fa-futbol" },
+                    { name: "التخفيضات", percentage: "11.62%", icon: "fa-tags" },
+                    { name: "سيفورا", percentage: "20.07%", icon: "fa-spray-can" },
+                    { name: "المكتبة والشنط", percentage: "19.29%", icon: "fa-pen" }
+                ]
+            },
+            fourpark: {
+                title: "فور بارك",
+                departments: [
+                    { name: "المفروشات", percentage: "47.33%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "25.89%", icon: "fa-home" },
+                    { name: "الإجمالي", percentage: "43.76%", icon: "fa-chart-pie" }
+                ]
+            },
+            abyat: {
+                title: "أبيات عسير",
+                departments: [
+                    { name: "الملابس الرجالية", percentage: "18.27%", icon: "fa-tshirt" },
+                    { name: "الملابس النسائية", percentage: "17.81%", icon: "fa-female" },
+                    { name: "الملابس الولادي", percentage: "49.58%", icon: "fa-child" },
+                    { name: "الملابس البناتي", percentage: "13.27%", icon: "fa-female" },
+                    { name: "الاحذية", percentage: "15.13%", icon: "fa-shoe-prints" },
+                    { name: "الالعاب", percentage: "18.54%", icon: "fa-bicycle" },
+                    { name: "العطور", percentage: "12.67%", icon: "fa-spray-can" },
+                    { name: "المواليد", percentage: "22.37%", icon: "fa-child" }
+                ]
+            },
+            arabplaza: {
+                title: "العرب بلازا",
+                departments: [
+                    { name: "المفروشات", percentage: "24.47%", icon: "fa-couch" },
+                    { name: "المنزلية", percentage: "14.47%", icon: "fa-home" },
+                    { name: "ألعاب", percentage: "6.09%", icon: "fa-bicycle" }
+                ]
+            }
+        };
 
-        // بيانات فور بارك
-        const fourParkData = [
-            { title: 'المفروشات', percentage: 61.36, icon: 'fa-couch', checked: false },
-            { title: 'المنزلية', percentage: 34.47, icon: 'fa-home', checked: false },
-            { title: 'الإجمالي', percentage: 56.88, icon: 'fa-chart-pie', checked: false }
-        ];
-
-        // إنشاء صناديق الأنصار مول
-        const ansarContainer = document.getElementById('ansar-cards');
-        ansarData.forEach(item => {
-            ansarContainer.innerHTML += createCardHTML(item);
-        });
-
-        // إنشاء صناديق فور بارك
-        const fourParkContainer = document.getElementById('fourpark-cards');
-        fourParkData.forEach(item => {
-            fourParkContainer.innerHTML += createCardHTML(item);
-        });
-
-                // دالة لإنشاء الكروت
-        function createCardHTML(item) {
-            return `
-                <div class="card" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner card-front">
-                        <div class="icon"><i class="fas ${item.icon}"></i></div>
-                        <div class="percentage-box">${item.percentage}%</div>
-                        <div class="card-title">${item.title}</div>
-                    </div>
-                    <div class="card-inner card-back">
-                        <div class="card-title">الحوافز</div>
-                        <div class="goal">
-                            <span> يقابل التوقعات</span>
-                            <div class="goal-box ${item.checked ? 'checked' : ''}">${item.checked ? '✔' : ''}</div>
-                        </div>
-                        <div class="goal">
-                            <span>  يفوق التوقعات</span>
-                            <div class="goal-box"></div>
-                        </div>
-                        <div class="goal">
-                            <span>  إستثنائي </span>
-                            <div class="goal-box"></div>
-                        </div>
-                    </div>
+        function openModal(mallId) {
+            const mall = mallsData[mallId];
+            const modal = document.getElementById('modal');
+            
+            document.getElementById('modalTitle').textContent = mall.title;
+            
+            const departmentsHTML = mall.departments.map(dept => `
+                <div class="department-card">
+                    <i class="fas ${dept.icon} department-icon"></i>
+                    <h3>${dept.name}</h3>
+                    <div class="department-percentage">${dept.percentage}</div>
                 </div>
-            `;
+            `).join('');
+            
+            document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
+            modal.style.display = 'block';
         }
 
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
 
+        // Event Listeners
+        document.querySelectorAll('.mall-card').forEach(card => {
+            card.addEventListener('click', () => openModal(card.dataset.mall));
+        });
+
+        document.addEventListener('click', (e) => {
+            if(e.target.closest('.modal-overlay')) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if(e.key === 'Escape') closeModal();
+        });
+
+        // تحسينات اللمس
+        document.querySelectorAll('.mall-card').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            
+            card.addEventListener('touchend', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
     </script>
-<!-- أبيات عسير -->
-<div class="sub-header">أبيات عسير</div>
-<div class="dashboard" id="abyat-cards">
-    <!-- صناديق بيانات أبيات عسير -->
-</div>
-
-<!-- العرب بلازا -->
-<div class="sub-header">العرب بلازا</div>
-<div class="dashboard" id="arabplaza-cards">
-    <!-- صناديق بيانات العرب بلازا -->
-</div>
-
-<script>
-    // بيانات أبيات عسير
-    const abyatData = [
-        { title: 'الملابس الرجالية', percentage: 20.74, icon: 'fa-tshirt', checked: false },
-        { title: 'الملابس النسائية', percentage: 20.57, icon: 'fa-female', checked: false },
-        { title: 'الملابس الولادي', percentage: 50.07, icon: 'fa-child', checked: false },
-        { title: 'الملابس البناتي', percentage: 16.73, icon: 'fa-female', checked: false },
-        { title: 'الاحذية', percentage: 17.23, icon: 'fa-shoe-prints', checked: false },
-        { title: 'الالعاب', percentage: 21.83, icon: 'fa-bicycle', checked: false },
-        { title: 'العطور', percentage: 14.24, icon: 'fa-spray-can', checked: false },
-        { title: 'المواليد', percentage: 25.35, icon: 'fa-child', checked: false },
-       
-
-    ];
-
-    // بيانات العرب بلازا
-    const arabPlazaData = [
-        { title: 'المفروشات', percentage: 33.08, icon: 'fa-couch', checked: false },
-        { title: 'المنزلية', percentage: 20.21, icon: 'fa-home', checked: false },
-        { title: 'ألعاب ', percentage: 8.77, icon: 'fa-bicycle', checked: false },
-    ];
-
-    // إنشاء صناديق أبيات عسير
-    const abyatContainer = document.getElementById('abyat-cards');
-    abyatData.forEach(item => {
-        abyatContainer.innerHTML += createCardHTML(item);
-    });
-
-    // إنشاء صناديق العرب بلازا
-    const arabPlazaContainer = document.getElementById('arabplaza-cards');
-    arabPlazaData.forEach(item => {
-        arabPlazaContainer.innerHTML += createCardHTML(item);
-    });
-// إضافة إجمالي المحقق من الأهداف لأبيات عسير
-abyatData.push({ title: 'الإجمالي', percentage: 20.22, icon: 'fa-chart-pie', checked: false });
-
-// إضافة إجمالي المحقق من الأهداف للعرب بلازا
-arabPlazaData.push({ title: 'الإجمالي', percentage: 29.02, icon: 'fa-chart-pie', checked: false });
-
-// تحديث الصناديق بعد إضافة الإجمالي
-abyatContainer.innerHTML += createCardHTML(abyatData[abyatData.length - 1]);
-arabPlazaContainer.innerHTML += createCardHTML(arabPlazaData[arabPlazaData.length - 1]);
-
-</script>
-
 </body>
 </html>
