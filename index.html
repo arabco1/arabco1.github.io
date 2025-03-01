@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -61,7 +62,6 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.2s;
             cursor: pointer;
-            position: relative;
         }
 
         .mall-card:active {
@@ -72,20 +72,6 @@
             font-size: 2.5rem;
             color: var(--accent-color);
             margin-bottom: 1rem;
-        
-        }
-
-        .performance-status {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .above-target {
-            color: #ffffff;
-        }
-
-        .below-target {
-            color: #ffd83a;
         }
 
         .modal-overlay {
@@ -136,7 +122,6 @@
             padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
-            position: relative;
         }
 
         .department-icon {
@@ -149,11 +134,6 @@
             font-size: 1.5rem;
             color: var(--accent-color);
             font-weight: bold;
-        }
-
-        .department-performance {
-            font-size: 0.9rem;
-            margin-top: 5px;
         }
 
         @media (max-width: 768px) {
@@ -178,57 +158,32 @@
         </header>
 
         <div class="malls-grid">
-            <!-- الأنصار مول -->
             <div class="mall-card" data-mall="ansar">
-                <div class="active-badge">
-                    <span></span>
-                    <div class="active-dots" data-dots="4"></div>
-                </div>
                 <i class="fas fa-city mall-icon"></i>
                 <h2>الأنصار مول</h2>
-                <h1><div class="mall-percentage">71.20%</div></h1>
-                <div class="performance-status"></div>
+                <h1>71.20%</h1>
             </div>
 
-            <!-- أبيات عسير -->
             <div class="mall-card" data-mall="abyat">
-                <div class="active-badge">
-                    <span></span>
-                    <div class="active-dots" data-dots="3"></div>
-                </div>
                 <i class="fas fa-home mall-icon"></i>
                 <h2>أبيات عسير</h2>
-                <h1><div class="mall-percentage">65.82%</div></h1>
-                <div class="performance-status"></div>
+                <h1>65.82%</h1>
             </div>
 
-            <!-- فور بارك -->
             <div class="mall-card" data-mall="fourpark">
-                <div class="active-badge">
-                    <span></span>
-                    <div class="active-dots" data-dots="2"></div>
-                </div>
                 <i class="fas fa-parking mall-icon"></i>
                 <h2>فور بارك</h2>
-                <h1><div class="mall-percentage">138.51%</div></h1>
-                <div class="performance-status"></div>
+                <h1>138.51%</h1>
             </div>
 
-            <!-- العرب بلازا -->
             <div class="mall-card" data-mall="arabplaza">
-                <div class="active-badge">
-                    <span></span>
-                    <div class="active-dots" data-dots="1"></div>
-                </div>
                 <i class="fas fa-building mall-icon"></i>
                 <h2>العرب بلازا</h2>
-                <h1><div class="mall-percentage">99.08%</div></h1>
-                <div class="performance-status"></div>
+                <h1>99.08%</h1>
             </div>
         </div>
     </div>
 
-    <!-- نافذة الأقسام -->
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">
@@ -265,7 +220,7 @@
                     { name: "المنزلية", percentage: "101.35%", icon: "fa-home" },
                 ]
             },
-                  abyat: {
+            abyat: {
                 title: "أبيات عسير",
                 departments: [
                     { name: "المفروشات", percentage: "118.25%", icon: "fa-couch" },
@@ -290,63 +245,26 @@
             }
         };
 
-        function calculateTarget() {
-            const now = new Date();
-            return (3.33 * now.getDate()).toFixed(2);
-        }
-
         function updatePerformance() {
             const dateElement = document.getElementById('currentDate');
             const now = new Date();
             const options = { month: 'long', day: 'numeric', year: 'numeric' };
             dateElement.textContent = new Intl.DateTimeFormat('ar-EG', options).format(now);
-
-            const targetPercentage = calculateTarget();
-            const malls = Array.from(document.querySelectorAll('.mall-card'));
-            
-            // ترتيب المراكز حسب الأداء
-            malls.sort((a, b) => {
-                const aVal = parseFloat(a.querySelector('.mall-percentage').textContent);
-                const bVal = parseFloat(b.querySelector('.mall-percentage').textContent);
-                return bVal - aVal;
-            });
-
-            // تحديث النقاط وحالة الأداء
-            malls.forEach((mall, index) => {
-                const dots = mall.querySelector('.active-dots');
-                dots.innerHTML = Array(4 - index).fill('<div class="dot"></div>').join('');
-                
-                const current = parseFloat(mall.querySelector('.mall-percentage').textContent);
-                const diff = (current - targetPercentage).toFixed(2);
-                const statusElement = mall.querySelector('.performance-status');
-                
-                statusElement.textContent = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                statusElement.className = `performance-status ${diff >= 0 ? 'above-target' : 'below-target'}`;
-            });
         }
 
         function openModal(mallId) {
             const mall = mallsData[mallId];
             const modal = document.getElementById('modal');
-            const target = calculateTarget();
             
             document.getElementById('modalTitle').textContent = mall.title;
             
-            const departmentsHTML = mall.departments.map(dept => {
-                const percentage = parseFloat(dept.percentage);
-                const diff = (percentage - target).toFixed(2);
-                const statusClass = diff >= 0 ? 'above-target' : 'below-target';
-                const statusText = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                
-                return `
+            const departmentsHTML = mall.departments.map(dept => `
                 <div class="department-card">
                     <i class="fas ${dept.icon} department-icon"></i>
                     <h3>${dept.name}</h3>
                     <div class="department-percentage">${dept.percentage}</div>
-                    <div class="department-performance ${statusClass}">${statusText}</div>
                 </div>
-                `;
-            }).join('');
+            `).join('');
             
             document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
             modal.style.display = 'block';
@@ -356,7 +274,6 @@
             document.getElementById('modal').style.display = 'none';
         }
 
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', updatePerformance);
 
         document.querySelectorAll('.mall-card').forEach(card => {
@@ -371,17 +288,6 @@
 
         document.addEventListener('keyup', (e) => {
             if(e.key === 'Escape') closeModal();
-        });
-
-        // تحسينات اللمس
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('touchstart', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            
-            card.addEventListener('touchend', () => {
-                card.style.transform = 'scale(1)';
-            });
         });
     </script>
 </body>
