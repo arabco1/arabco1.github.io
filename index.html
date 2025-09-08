@@ -1,366 +1,279 @@
-ب
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scaleبب=1.0, user-scalable=no">
-    <title>مؤشرات الأداء الشهرية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #144dcb;
-            --accent-color: #ffd83a;
-            --bg-gradient: linear-gradient(88deg, #144dcb, #001542);
-            --card-bg: rgba(255, 255, 255, 0.35);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مؤشرات أداء المراكز - لوحة تحكم</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+  <!-- خط المراعي -->
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <!-- أيقونات -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-gradient);
-            color: white;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+  <style>
+    :root {
+      --bg-main: #f3f4f6;
+      --card-bg: rgba(255, 255, 255, 0.65);
+      --text-dark: #111827;
+      --accent: #2563eb;
+      --success: #22c55e;
+      --warn: #facc15;
+      --danger: #ef4444;
+      --font: 'Almarai', sans-serif;
+      --shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
 
-        .container {
-            padding: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+    * {box-sizing: border-box; margin: 0; padding: 0;}
+    body {
+      font-family: var(--font);
+      background: linear-gradient(135deg, #dbeafe, #f9fafb);
+      min-height: 100vh;
+      color: var(--text-dark);
+      padding: 1rem;
+    }
 
-        .header {
-            text-align: center;
-            padding: 1.0rem 0;
-        }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
 
-        .main-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-        .malls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1rem;
-            padding: 0.5rem;
-        }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
 
-        .mall-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
+    .badges {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-        .mall-card:active {
-            transform: scale(0.98);
-        }
+    .badge {
+      background: var(--card-bg);
+      padding: .5rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .9rem;
+      box-shadow: var(--shadow);
+    }
 
-        .mall-icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        
-        }
+    /* summary cards */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      transition: .3s;
+    }
+    .summary-card:hover {transform: translateY(-4px);}
+    .summary-card h3 {font-size: 1rem; opacity: .8;}
+    .summary-card .val {font-size: 1.6rem; font-weight: 800; margin-top: .4rem; color: var(--accent);}
 
-        .performance-status {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
+    /* malls grid */
+    .malls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+      gap: 1rem;
+    }
+    .mall-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: .3s;
+    }
+    .mall-card:hover {transform: translateY(-6px); background: rgba(255,255,255,.8);}
+    .mall-info h3 {font-size: 1.1rem; font-weight: 700; margin-bottom: .4rem;}
+    .mall-percentage {font-weight: 800; font-size: 1.4rem; color: var(--accent);}
+    .progress {height: 8px; border-radius: 6px; background: #e5e7eb; overflow: hidden;}
+    .progress span {display:block;height:100%}
 
-        .above-target {
-            color: #ffffff;
-        }
+    /* modal */
+    .modal {position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.5); z-index:999;}
+    .modal.show {display:flex;}
+    .modal-panel {
+      max-width: 1000px;
+      width: 95%;
+      background: #fff;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,.3);
+      animation: scaleIn .3s ease;
+    }
+    @keyframes scaleIn {from{transform:scale(.9);opacity:0} to{transform:scale(1);opacity:1}}
 
-        .below-target {
-            color: #ffd83a;
-        }
+    .modal-head {display:flex; justify-content:space-between; align-items:center;}
+    .modal-head h2 {font-size: 1.4rem; font-weight: 800;}
+    .modal-head button {
+      border: none; background: var(--danger); color: #fff; padding: .5rem 1rem;
+      border-radius: 8px; cursor: pointer; font-weight: 700;
+    }
+    .modal-body {display:grid; grid-template-columns: 300px 1fr; gap:1rem; margin-top:1rem;}
+    @media(max-width:800px){.modal-body{grid-template-columns:1fr}}
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--primary-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .departments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .department-card {
-            background: rgba(255,255,255,0.05);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            position: relative;
-        }
-
-        .department-icon {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .department-percentage {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .department-performance {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 1.5rem;
-            }
-
-            .malls-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .department-card {
-                padding: 1rem;
-            }
-        }
-    </style>
+    .dept-card {
+      background: #f9fafb;
+      padding: .6rem .8rem;
+      border-radius: 10px;
+      margin-bottom: .5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+    .dept-card i {color: var(--accent); margin-left:.5rem;}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">مؤشرات اداء المراكز التجارية | <span id="currentDate"></span></h1>
-        </header>
+  <div class="container">
+    <header>
+      <h1>مؤشرات أداء المراكز التجارية</h1>
+      <div class="badges">
+        <div id="targetBadge" class="badge">هدف اليوم: --%</div>
+        <div id="monthTarget" class="badge">هدف الشهر: 100%</div>
+        <div id="currentDate" class="badge">--</div>
+      </div>
+    </header>
 
-         <div class="malls-grid">
-            <div class="mall-card" data-mall="ansar">
-                <i class="fas fa-city mall-icon"></i>
-                <h2>الأنصار مول</h2>
-                <h1>18.38%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="abyat">
-                <i class="fas fa-home mall-icon"></i>
-                <h2>أبيات عسير</h2>
-                <h1>14.75%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="fourpark">
-                <i class="fas fa-parking mall-icon"></i>
-                <h2>فور بارك</h2>
-                    <h1>15.73%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="arabplaza">
-                <i class="fas fa-building mall-icon"></i>
-                <h2>العرب بلازا</h2>
-                <h1>15.05%</h1>
-            </div>
-        </div>
+    <div class="summary">
+      <div class="summary-card"><h3>المعدل العام</h3><div class="val" id="avgVal">--%</div></div>
+      <div class="summary-card"><h3>أعلى مركز</h3><div class="val" id="topMall">--</div></div>
+      <div class="summary-card"><h3>أقل مركز</h3><div class="val" id="lowMall">--</div></div>
     </div>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 id="modalTitle" class="main-title"></h2>
-            <div class="departments-grid" id="departmentsContainer"></div>
-        </div>
+    <section class="malls" id="mallsGrid"></section>
+  </div>
+
+  <!-- modal -->
+  <div id="modal" class="modal">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2 id="modalTitle"></h2>
+        <button onclick="closeModal()">إغلاق</button>
+      </div>
+      <div class="modal-body">
+        <div id="departmentsContainer"></div>
+        <div><canvas id="deptChart"></canvas></div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const mallsData = {
-            ansar: {
-                title: "الأنصار مول",
-                departments: [
-                    { name: "المفروشات", percentage: "12.84%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "12.55%", icon: "fa-home" },
-                    { name: "الملابس الرجالية", percentage: "24.04%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "24.63%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "20.36%", icon: "fa-child" },
-                    { name: "العطور", percentage: "20.66%", icon: "fa-spray-can" },
-                    { name: "الأحذية", percentage: "19.24%", icon: "fa-shoe-prints" },
-                    { name: "الألعاب", percentage: "12.61%", icon: "fa-bicycle" },
-                    { name: "الرياضة و الجاكت", percentage: "25.47%", icon: "fa-futbol" },
-                    { name: "التخفيضات", percentage: "11.29%", icon: "fa-tags" },
-                    { name: "سيفورا", percentage: "17.89%", icon: "fa-spray-can" },
-                    { name: "المكتبة والشنط", percentage: "25.11%", icon: "fa-pen" }
-                ]
-            },
-            fourpark: {
-                title: "فور بارك",
-                departments: [
-                    { name: "المفروشات", percentage: "16.26%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "11.71%", icon: "fa-home" },
-                ]
-            },
-            abyat: {
-                title: "أبيات عسير",
-                departments: [
-                    { name: "المفروشات", percentage: "13.76%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "3.30%", icon: "fa-couch" },
-                    { name: "الملابس الرجالية", percentage: "19.98%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "17.90%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "11.05%", icon: "fa-child" },
-                    { name: "الملابس البناتي", percentage: "6.60%", icon: "fa-female" },
-                    { name: "الاحذية", percentage: "16.14%", icon: "fa-shoe-prints" },
-                    { name: "الالعاب", percentage: "17.43%", icon: "fa-bicycle" },
-                    { name: "العطور", percentage: "12.50%", icon: "fa-spray-can" },
-                    { name: "المواليد", percentage: "18.57%", icon: "fa-child" }
-                ]
-            },
-            arabplaza: {
-                title: "العرب بلازا",
-                departments: [
-                    { name: "المفروشات", percentage: "18.88%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "5.88%", icon: "fa-home" },
-                    { name: "ألعاب", percentage: "11.86%", icon: "fa-bicycle" }
-                ]
-            }
-        };
+<script>
+const mallsData = {
+  ansar:{title:"الأنصار مول",percentage:18.38,departments:[
+     { name: "المفروشات", percentage: "12.84", icon: "fa-couch" },
+     { name: "المنزلية", percentage: "12.55", icon: "fa-home" },
+     { name: "الملابس الرجالية", percentage: "24.04", icon: "fa-shirt" },
+     { name: "الملابس النسائية", percentage: "24.63", icon: "fa-person-dress" },
+     { name: "الملابس الولادي", percentage: "20.36", icon: "fa-child" },
+     { name: "العطور", percentage: "20.66", icon: "fa-spray-can" },
+     { name: "الأحذية", percentage: "19.24", icon: "fa-shoe-prints" },
+     { name: "الألعاب", percentage: "38.55", icon: "fa-gamepad" },
+     { name: "الرياضة والجاكت", percentage: "25.47", icon: "fa-futbol" },
+     { name: "التخفيضات", percentage: "11.29", icon: "fa-tags" },
+     { name: "سيفورا", percentage: "17.89", icon: "fa-wand-magic-sparkles" },
+     { name: "المكتبة والشنط", percentage: "25.11", icon: "fa-pen" }
+  ]},
+  fourpark:{title:"فور بارك",percentage:15.73,departments:[
+    {name:"المفروشات",percentage:16.26,icon:"fa-couch"},
+    {name:"المنزلية",percentage:11.71,icon:"fa-house"}
+  ]},
+  abyat:{title:"أبيات عسير",percentage:14.75,departments:[
+    {name:"المفروشات",percentage:13.76,icon:"fa-couch"},
+    {name:"الملابس الرجالية",percentage:19.98,icon:"fa-shirt"}
+  ]},
+  arabplaza:{title:"العرب بلازا",percentage:15.05,departments:[
+    {name:"المفروشات",percentage:18.88,icon:"fa-couch"},
+    {name:"الألعاب",percentage:11.86,icon:"fa-gamepad"}
+  ]}
+};
 
+function formatDateArabic(d){return new Intl.DateTimeFormat('ar-EG',{year:'numeric',month:'long',day:'numeric'}).format(d);}
+function calculateTarget(){return (3.33 * new Date().getDate()).toFixed(2);}
+const target=calculateTarget();
+document.getElementById('targetBadge').textContent=`هدف اليوم: ${target}%`;
+document.getElementById('currentDate').textContent=formatDateArabic(new Date());
 
-        function calculateTarget() {
-            const now = new Date();
-            return (3.33 * now.getDate()).toFixed(2);
-        }
+function getColor(p){
+  if(p>=target) return "var(--success)";
+  if(p>=target/2) return "var(--warn)";
+  return "var(--danger)";
+}
 
-        function updatePerformance() {
-            const dateElement = document.getElementById('currentDate');
-            const now = new Date();
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
-            dateElement.textContent = new Intl.DateTimeFormat('ar-EG', options).format(now);
+const mallsGrid=document.getElementById('mallsGrid');
+function renderMalls(){
+  mallsGrid.innerHTML="";
+  const arr=Object.values(mallsData);
+  const avg=(arr.reduce((a,c)=>a+c.percentage,0)/arr.length).toFixed(2);
+  document.getElementById('avgVal').textContent=avg+"%";
+  const top=arr.reduce((a,c)=>c.percentage>a.percentage?c:a);
+  const low=arr.reduce((a,c)=>c.percentage<a.percentage?c:a);
+  document.getElementById('topMall').textContent=top.title;
+  document.getElementById('lowMall').textContent=low.title;
 
-            const targetPercentage = calculateTarget();
-            const malls = Array.from(document.querySelectorAll('.mall-card'));
-            
-            // ترتيب المراكز حسب الأداء
-            malls.sort((a, b) => {
-                const aVal = parseFloat(a.querySelector('.mall-percentage').textContent);
-                const bVal = parseFloat(b.querySelector('.mall-percentage').textContent);
-                return bVal - aVal;
-            });
+  arr.sort((a,b)=>b.percentage-a.percentage).forEach(m=>{
+    const card=document.createElement('div');
+    card.className="mall-card";
+    card.onclick=()=>openModal(m);
+    const info=document.createElement('div');
+    info.className="mall-info";
+    info.innerHTML=`<h3>${m.title}</h3><div class="progress"><span style="width:${m.percentage}%;background:${getColor(m.percentage)}"></span></div>`;
+    const percentage=document.createElement('div');
+    percentage.className="mall-percentage";
+    percentage.textContent=m.percentage+"%";
+    card.appendChild(info);
+    card.appendChild(percentage);
+    mallsGrid.appendChild(card);
+  });
+}
+renderMalls();
 
-            // تحديث النقاط وحالة الأداء
-            malls.forEach((mall, index) => {
-                const dots = mall.querySelector('.active-dots');
-                dots.innerHTML = Array(4 - index).fill('<div class="dot"></div>').join('');
-                
-                const current = parseFloat(mall.querySelector('.mall-percentage').textContent);
-                const diff = (current - targetPercentage).toFixed(2);
-                const statusElement = mall.querySelector('.performance-status');
-                
-                statusElement.textContent = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                statusElement.className = `performance-status ${diff >= 0 ? 'above-target' : 'below-target'}`;
-            });
-        }
-
-        function openModal(mallId) {
-            const mall = mallsData[mallId];
-            const modal = document.getElementById('modal');
-            const target = calculateTarget();
-            
-            document.getElementById('modalTitle').textContent = mall.title;
-            
-            const departmentsHTML = mall.departments.map(dept => {
-                const percentage = parseFloat(dept.percentage);
-                const diff = (percentage - target).toFixed(2);
-                const statusClass = diff >= 0 ? 'above-target' : 'below-target';
-                const statusText = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                
-                return `
-                <div class="department-card">
-                    <i class="fas ${dept.icon} department-icon"></i>
-                    <h3>${dept.name}</h3>
-                    <div class="department-percentage">${dept.percentage}</div>
-                    <div class="department-performance ${statusClass}">${statusText}</div>
-                </div>
-                `;
-            }).join('');
-            
-            document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', updatePerformance);
-
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('click', () => openModal(card.dataset.mall));
-        });
-
-        document.addEventListener('click', (e) => {
-            if(e.target.closest('.modal-overlay')) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keyup', (e) => {
-            if(e.key === 'Escape') closeModal();
-        });
-
-        // تحسينات اللمس
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('touchstart', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            
-            card.addEventListener('touchend', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+// modal
+let chart=null;
+function openModal(mall){
+  document.getElementById('modalTitle').textContent=mall.title;
+  const cont=document.getElementById('departmentsContainer');
+  cont.innerHTML="";
+  mall.departments.forEach(d=>{
+    const el=document.createElement('div');
+    el.className="dept-card";
+    el.innerHTML=`<span><i class="fa ${d.icon}"></i> ${d.name}</span><span>${d.percentage}%</span>`;
+    cont.appendChild(el);
+  });
+  const ctx=document.getElementById('deptChart');
+  if(chart){chart.destroy();}
+  chart=new Chart(ctx,{type:'bar',data:{labels:mall.departments.map(d=>d.name),
+    datasets:[{data:mall.departments.map(d=>d.percentage),backgroundColor:["#2563eb","#10b981","#f59e0b","#ef4444","#8b5cf6"]}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+</script>
 </body>
 </html>
