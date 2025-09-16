@@ -1,364 +1,247 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scaleبب=1.0, user-scalable=no">
-    <title>مؤشرات الأداء الشهرية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #144dcb;
-            --accent-color: #ffd83a;
-            --bg-gradient: linear-gradient(88deg, #144dcb, #001542);
-            --card-bg: rgba(255, 255, 255, 0.35);
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة مؤشرات المراكز التجارية</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<!-- خط المراعي -->
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+<!-- أيقونات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-gradient);
-            color: white;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
-
-        .container {
-            padding: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            padding: 1.0rem 0;
-        }
-
-        .main-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .malls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1rem;
-            padding: 0.5rem;
-        }
-
-        .mall-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .mall-card:active {
-            transform: scale(0.98);
-        }
-
-        .mall-icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        
-        }
-
-        .performance-status {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .above-target {
-            color: #ffffff;
-        }
-
-        .below-target {
-            color: #ffd83a;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--primary-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .departments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .department-card {
-            background: rgba(255,255,255,0.05);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            position: relative;
-        }
-
-        .department-icon {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .department-percentage {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .department-performance {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 1.5rem;
-            }
-
-            .malls-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .department-card {
-                padding: 1rem;
-            }
-        }
-    </style>
+<style>
+:root {
+  --bg1: #e0f2fe;
+  --bg2: #fef9f9;
+  --glass: rgba(255,255,255,0.6);
+  --accent: #2563eb;
+  --success: #16a34a;
+  --warn: #facc15;
+  --danger: #dc2626;
+  --text-dark: #111827;
+  --shadow: 0 8px 25px rgba(0,0,0,0.08);
+  --font:'Almarai', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;color:var(--text-dark);padding:1rem;}
+.container{max-width:1400px;margin:auto;}
+header{text-align:center;margin-bottom:2rem;animation:fadeIn 1s ease;}
+header h1{font-size:2.4rem;font-weight:800;color:var(--accent);margin-bottom:1rem;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.badges{display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;}
+.badge{background:var(--glass);padding:0.6rem 1.2rem;border-radius:999px;font-weight:700;font-size:0.95rem;box-shadow:var(--shadow);backdrop-filter:blur(12px);transition:.3s;}
+.badge:hover{transform:scale(1.05);}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem;margin-bottom:2.5rem;}
+.summary-card{background:var(--glass);border-radius:20px;padding:1.5rem;text-align:center;backdrop-filter:blur(12px);box-shadow:var(--shadow);transition:.3s;position:relative;overflow:hidden;}
+.summary-card:hover{transform:translateY(-6px) scale(1.02);}
+.summary-card h3{font-size:1rem;opacity:.8;}
+.summary-card .val{font-size:1.9rem;font-weight:800;margin-top:0.5rem;color:var(--accent);}
+.malls{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;}
+.mall-card{background:var(--glass);border-radius:20px;padding:1.6rem;backdrop-filter:blur(10px);box-shadow:var(--shadow);cursor:pointer;transition:.3s;}
+.mall-card:hover{transform:translateY(-6px);background:rgba(255,255,255,0.85);}
+.mall-info h3{font-size:1.3rem;font-weight:800;margin-bottom:0.5rem;}
+.progress{height:12px;border-radius:6px;background:#e5e7eb;overflow:hidden;margin-top:0.5rem;position:relative;}
+.progress span{display:block;height:100%;border-radius:6px;box-shadow:inset 0 0 5px rgba(0,0,0,0.2);transition:width 1s ease;}
+.progress .label{position:absolute;right:5px;top:-22px;font-size:0.8rem;font-weight:700;}
+.best-depts{display:flex;gap:6px;margin-top:1rem;justify-content:center;}
+.dept-card{background:var(--glass);width:100px;height:60px;border-radius:12px;font-size:.85rem;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#111827;box-shadow:var(--shadow);transition:.3s;text-align:center;}
+.dept-card i{font-size:1.2rem;margin-bottom:4px;}
+.dept-card:hover{transform:scale(1.05);}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:999;}
+.modal.show{display:flex;}
+.modal-panel{max-width:1100px;width:95%;background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:scaleIn .3s ease;}
+@keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;}
+.modal-head h2{font-size:1.5rem;font-weight:800;color:var(--accent);}
+.modal-head button{border:none;background:var(--danger);color:#fff;padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-weight:700;}
+.modal-body{display:grid;grid-template-columns:380px 1fr;gap:1rem;margin-top:1rem;}
+@media(max-width:1000px){.modal-body{grid-template-columns:1fr}}
+.dept-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.9rem;text-align:center;box-shadow:var(--shadow);}
+.dept-table th,.dept-table td{border:1px solid #e5e7eb;padding:.5rem;}
+.dept-table th{background:var(--accent);color:#fff;font-weight:700;}
+.dept-table tr:nth-child(even){background:#f9fafb}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">مؤشرات اداء المراكز التجارية | <span id="currentDate"></span></h1>
-        </header>
-
-         <div class="malls-grid">
-            <div class="mall-card" data-mall="ansar">
-                <i class="fas fa-city mall-icon"></i>
-                <h2>الأنصار مول</h2>
-                <h1>34.71%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="abyat">
-                <i class="fas fa-home mall-icon"></i>
-                <h2>أبيات عسير</h2>
-                <h1>26.20%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="fourpark">
-                <i class="fas fa-parking mall-icon"></i>
-                <h2>فور بارك</h2>
-                    <h1>35.67%</h1>
-            </div>
-
-            <div class="mall-card" data-mall="arabplaza">
-                <i class="fas fa-building mall-icon"></i>
-                <h2>العرب بلازا</h2>
-                <h1>30.66%</h1>
-            </div>
-        </div>
+<div class="container">
+  <header>
+    <h1>مؤشرات أداء المراكز التجارية</h1>
+    <div class="badges">
+      <div id="targetBadge" class="badge">هدف اليوم: --%</div>
+      <div id="monthTarget" class="badge">هدف الشهر: 100%</div>
+      <div id="varianceBadge" class="badge">الفارق: --%</div>
+      <div id="currentDate" class="badge">--</div>
     </div>
+  </header>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 id="modalTitle" class="main-title"></h2>
-            <div class="departments-grid" id="departmentsContainer"></div>
-        </div>
+  <div class="summary">
+    <div class="summary-card"><h3>المعدل العام</h3><div class="val" id="avgVal">--%</div></div>
+    <div class="summary-card"><h3>أعلى مركز</h3><div class="val" id="topMall">--</div></div>
+    <div class="summary-card"><h3>أقل مركز</h3><div class="val" id="lowMall">--</div></div>
+  </div>
+
+  <section class="malls" id="mallsGrid"></section>
+</div>
+
+<!-- نافذة التفاصيل -->
+<div id="modal" class="modal">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h2 id="modalTitle"></h2>
+      <button onclick="closeModal()">إغلاق</button>
     </div>
+    <div class="modal-body">
+      <div id="departmentsContainer"></div>
+      <div><canvas id="deptChart"></canvas></div>
+    </div>
+  </div>
+</div>
 
-    <script>
-        const mallsData = {
-            ansar: {
-                title: "الأنصار مول",
-                departments: [
-                    { name: "المفروشات", percentage: "32.55%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "23.11%", icon: "fa-home" },
-                    { name: "الملابس الرجالية", percentage: "41.34%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "44.74%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "42.25%", icon: "fa-child" },
-                    { name: "العطور", percentage: "33.52%", icon: "fa-spray-can" },
-                    { name: "الأحذية", percentage: "32.68%", icon: "fa-shoe-prints" },
-                    { name: "الألعاب", percentage: "26.35%", icon: "fa-bicycle" },
-                    { name: "الرياضة و الجاكت", percentage: "42.74%", icon: "fa-futbol" },
-                    { name: "التخفيضات", percentage: "21.95%", icon: "fa-tags" },
-                    { name: "سيفورا", percentage: "34.43%", icon: "fa-spray-can" },
-                    { name: "المكتبة والشنط", percentage: "39.11%", icon: "fa-pen" }
-                ]
-            },
-            fourpark: {
-                title: "فور بارك",
-                departments: [
-                    { name: "المفروشات", percentage: "37.42%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "22.32%", icon: "fa-home" },
-                ]
-            },
-            abyat: {
-                title: "أبيات عسير",
-                departments: [
-                    { name: "المفروشات", percentage: "28.00%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "4.55%", icon: "fa-couch" },
-                    { name: "الملابس الرجالية", percentage: "34.03%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "34.30%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "19.79%", icon: "fa-child" },
-                    { name: "الملابس البناتي", percentage: "12.37%", icon: "fa-female" },
-                    { name: "الاحذية", percentage: "20.59%", icon: "fa-shoe-prints" },
-                    { name: "الالعاب", percentage: "29.69%", icon: "fa-bicycle" },
-                    { name: "العطور", percentage: "21.63%", icon: "fa-spray-can" },
-                    { name: "المواليد", percentage: "37.09%", icon: "fa-child" }
-                ]
-            },
-            arabplaza: {
-                title: "العرب بلازا",
-                departments: [
-                    { name: "المفروشات", percentage: "37.01%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "15.58%", icon: "fa-home" },
-                    { name: "ألعاب", percentage: "25.05%", icon: "fa-bicycle" }
-                ]
-            }
-        };
+<script>
+const today=new Date();
+const currentDay=today.getDate();
+const totalDays=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
+const plannedPercentage=(currentDay/totalDays)*100;
 
+// بيانات المراكز + الأقسام المحدّثة
+const mallsData={
+  ansar:{title:"الأنصار مول",percentage:39.38,departments:[
+    {name:"المفروشات",actual:28.84,icon:"fa-couch"},
+    {name:"المنزلية",actual:23.55,icon:"fa-home"},
+    {name:"الرجالي",actual:38.04,icon:"fa-tshirt"},
+    {name:"النسائي",actual:37.63,icon:"fa-female"},
+    {name:"الولادي",actual:34.24,icon:"fa-child"},
+    {name:"الرياضة",actual:38.55,icon:"fa-bicycle"},
+    {name:"الألعاب",actual:28.5,icon:"fa-gamepad"},
+    {name:"العطور",actual:31.7,icon:"fa-spray-can"},
+    {name:"المكتبة",actual:33.2,icon:"fa-book"},
+    {name:"التخفيضات",actual:26.1,icon:"fa-tags"},
+    {name:"سيفورا",actual:30.3,icon:"fa-star"}
+  ]},
+  abyat:{title:"أبيات عسير",percentage:14.75,departments:[
+    {name:"المفروشات",actual:13.76,icon:"fa-couch"},
+    {name:"المنزلية",actual:15.12,icon:"fa-home"},
+    {name:"الملابس الرجالية",actual:19.98,icon:"fa-tshirt"},
+    {name:"الألعاب",actual:11.23,icon:"fa-gamepad"}
+  ]},
+  fourpark:{title:"فور بارك",percentage:15.73,departments:[
+    {name:"المفروشات",actual:16.26,icon:"fa-couch"},
+    {name:"المنزلية",actual:11.71,icon:"fa-home"}
+  ]},
+  arabplaza:{title:"العرب بلازا",percentage:15.05,departments:[
+    {name:"المفروشات",actual:18.88,icon:"fa-couch"},
+    {name:"المنزلية",actual:11.86,icon:"fa-home"},
+    {name:"الألعاب",actual:12.65,icon:"fa-gamepad"}
+  ]}
+};
 
-        function calculateTarget() {
-            const now = new Date();
-            return (3.33 * now.getDate()).toFixed(2);
-        }
+function formatDateArabic(d){return new Intl.DateTimeFormat('ar-EG',{year:'numeric',month:'long',day:'numeric'}).format(d);}
+function calculateTarget(){return (3.33*new Date().getDate()).toFixed(2);}
+const target=calculateTarget();
+document.getElementById('targetBadge').textContent=`هدف اليوم: ${target}%`;
+document.getElementById('currentDate').textContent=formatDateArabic(today);
 
-        function updatePerformance() {
-            const dateElement = document.getElementById('currentDate');
-            const now = new Date();
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
-            dateElement.textContent = new Intl.DateTimeFormat('ar-EG', options).format(now);
+function getColor(p){if(p>=target) return "var(--success)";if(p>=target/2) return "var(--warn)";return "var(--danger)";}
 
-            const targetPercentage = calculateTarget();
-            const malls = Array.from(document.querySelectorAll('.mall-card'));
-            
-            // ترتيب المراكز حسب الأداء
-            malls.sort((a, b) => {
-                const aVal = parseFloat(a.querySelector('.mall-percentage').textContent);
-                const bVal = parseFloat(b.querySelector('.mall-percentage').textContent);
-                return bVal - aVal;
-            });
+const mallsGrid=document.getElementById('mallsGrid');
 
-            // تحديث النقاط وحالة الأداء
-            malls.forEach((mall, index) => {
-                const dots = mall.querySelector('.active-dots');
-                dots.innerHTML = Array(4 - index).fill('<div class="dot"></div>').join('');
-                
-                const current = parseFloat(mall.querySelector('.mall-percentage').textContent);
-                const diff = (current - targetPercentage).toFixed(2);
-                const statusElement = mall.querySelector('.performance-status');
-                
-                statusElement.textContent = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                statusElement.className = `performance-status ${diff >= 0 ? 'above-target' : 'below-target'}`;
-            });
-        }
+function renderMalls(){
+  mallsGrid.innerHTML="";
+  const arr=Object.values(mallsData);
+  const avg=(arr.reduce((a,c)=>a+c.percentage,0)/arr.length).toFixed(2);
+  document.getElementById('avgVal').textContent=avg+"%";
+  const top=arr.reduce((a,c)=>c.percentage>a.percentage?c:a);
+  const low=arr.reduce((a,c)=>c.percentage<a.percentage?c:a);
+  document.getElementById('topMall').textContent=`${top.title} (${top.percentage}%)`;
+  document.getElementById('lowMall').textContent=`${low.title} (${low.percentage}%)`;
+  const variance=(avg-plannedPercentage).toFixed(2);
+  const varianceBadge=document.getElementById('varianceBadge');
+  varianceBadge.textContent=`الفارق: ${variance}%`;
+  varianceBadge.style.color=variance>=0?"green":"red";
 
-        function openModal(mallId) {
-            const mall = mallsData[mallId];
-            const modal = document.getElementById('modal');
-            const target = calculateTarget();
-            
-            document.getElementById('modalTitle').textContent = mall.title;
-            
-            const departmentsHTML = mall.departments.map(dept => {
-                const percentage = parseFloat(dept.percentage);
-                const diff = (percentage - target).toFixed(2);
-                const statusClass = diff >= 0 ? 'above-target' : 'below-target';
-                const statusText = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                
-                return `
-                <div class="department-card">
-                    <i class="fas ${dept.icon} department-icon"></i>
-                    <h3>${dept.name}</h3>
-                    <div class="department-percentage">${dept.percentage}</div>
-                    <div class="department-performance ${statusClass}">${statusText}</div>
-                </div>
-                `;
-            }).join('');
-            
-            document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
-            modal.style.display = 'block';
-        }
+  arr.sort((a,b)=>b.percentage-a.percentage).forEach(m=>{
+    const card=document.createElement('div');
+    card.className="mall-card";
+    card.onclick=()=>openModal(m);
+    const info=document.createElement('div');
+    info.className="mall-info";
 
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
+    // 👇 النسبة المئوية أمام اسم المركز
+    const bestDept=m.departments.reduce((a,c)=>c.actual>a.actual?c:a);
+    info.innerHTML=`<h3>${m.title} - <span style="color:${getColor(m.percentage)}">${m.percentage}%</span></h3>
+    <div class="progress">
+      <span style="width:${m.percentage}%;background:${getColor(m.percentage)}"></span>
+      <div class="label">${m.percentage}%</div>
+    </div>
+    <small>أفضل قسم: ${bestDept.name}</small>`;
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', updatePerformance);
+    const bestDeptsContainer=document.createElement('div');
+    bestDeptsContainer.className="best-depts";
+    m.departments.sort((a,b)=>b.actual-a.actual).slice(0,3).forEach(d=>{
+      const deptCard=document.createElement('div');
+      deptCard.className="dept-card";
+      deptCard.innerHTML=`<i class="fa ${d.icon}"></i>${d.name}`;
+      bestDeptsContainer.appendChild(deptCard);
+    });
 
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('click', () => openModal(card.dataset.mall));
-        });
+    card.appendChild(info);
+    card.appendChild(bestDeptsContainer);
+    mallsGrid.appendChild(card);
+  });
+}
+renderMalls();
 
-        document.addEventListener('click', (e) => {
-            if(e.target.closest('.modal-overlay')) {
-                closeModal();
-            }
-        });
+let chart=null;
+function openModal(mall){
+  document.getElementById('modalTitle').textContent=mall.title;
+  const cont=document.getElementById('departmentsContainer');
+  cont.innerHTML="";
+  const table=document.createElement('table');
+  table.className="dept-table";
+  table.innerHTML="<thead><tr><th>القسم</th><th>المخطط</th><th>المحقق</th><th>الفارق</th></tr></thead>";
+  const tbody=document.createElement('tbody');
+  mall.departments.forEach(d=>{
+    const diff=(d.actual-plannedPercentage).toFixed(2);
+    tbody.innerHTML+=`<tr>
+      <td>${d.name}</td>
+      <td>${plannedPercentage.toFixed(2)}%</td>
+      <td>${d.actual}%</td>
+      <td style="color:${diff>=0?'green':'red'}">${diff}%</td>
+    </tr>`;
+  });
+  table.appendChild(tbody);
+  cont.appendChild(table);
 
-        document.addEventListener('keyup', (e) => {
-            if(e.key === 'Escape') closeModal();
-        });
-
-        // تحسينات اللمس
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('touchstart', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            
-            card.addEventListener('touchend', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+  const ctx=document.getElementById('deptChart');
+  if(chart){chart.destroy();}
+  chart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:mall.departments.map(d=>d.name),
+      datasets:[
+        {label:'المخطط',data:mall.departments.map(()=>plannedPercentage.toFixed(2)),backgroundColor:'rgba(50,70,175,0.8)'},
+        {label:'المحقق',data:mall.departments.map(d=>d.actual),backgroundColor:'rgba(251,146,60,0.9)'}
+      ]
+    },
+    options:{
+      responsive:true,
+      animation:{duration:1500,easing:'easeOutBounce'},
+      scales:{y:{beginAtZero:true,suggestedMax:Math.max(...mall.departments.map(d=>Math.max(plannedPercentage,d.actual)))+5}}
+    }
+  });
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+</script>
 </body>
 </html>
+
+
+
+
+
+
