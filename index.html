@@ -2,364 +2,554 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scaleبب=1.0, user-scalable=no">
-    <title>مؤشرات الأداء الشهرية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #144dcb;
-            --accent-color: #ffd83a;
-            --bg-gradient: linear-gradient(88deg, #144dcb, #001542);
-            --card-bg: rgba(255, 255, 255, 0.35);
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>شاشة إدارة المديونيات — واجهة متقدمة</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<!-- خطوط و أيقونات و Chart.js -->
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-gradient);
-            color: white;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+<style>
+:root{
+  --primary:#144dcb;
+  --accent:#ffd83a;
+  --bg-grad: linear-gradient(135deg,#0b2b6f 0%, #001542 100%);
+  --glass: rgba(255,255,255,0.25);
+  --inner-box: #ffd83a;
+  --card-w: 320px;
+  --card-h: 320px;
+  --radius: 30px;
+}
+*{box-sizing:border-box}
+body{
+  margin:2;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#fff;
+  -webkit-font-smoothing:antialiased;min-height:150vh;
+}
 
-        .container {
-            padding: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+/* ----- LOGIN ----- */
+#loginScreen{display:flex;align-items:center;justify-content:center;height:100vh;padding:20px}
+.login-card{
+  width:360px;padding:36px;border-radius:20px;background:var(--glass);backdrop-filter:blur(10px);
+  box-shadow:0 10px 40px rgba(2,6,23,0.6);text-align:center;
+}
+.login-card h1{margin:0 0 12px;font-size:22px}
+.login-card p{margin:0 0 18px;color:rgba(255,255,255,0.9)}
+.input{
+  width:100%;padding:12px 14px;margin:9px 0;border-radius:12px;border:none;font-size:15px;text-align:center;
+}
+.btn{
+  width:100%;padding:12px;border-radius:12px;border:none;font-weight:700;cursor:pointer;
+  background:linear-gradient(90deg,var(--accent),#f0c032);color:#000;margin-top:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+}
+.small-muted{color:rgba(255,255,255,0.8);font-size:13px;margin-top:6px}
 
-        .header {
-            text-align: center;
-            padding: 1.0rem 0;
-        }
+/* ----- APP ----- */
+#app{display:none;padding:22px;max-width:1300px;margin:18px auto}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;
+}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{
+  width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#00204a);
+  display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.35)
+}
+.brand h2{margin:0;font-size:18px}
+.controls{display:flex;gap:8px;align-items:center}
 
-        .main-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
+/* top buttons */
+.top-btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;background:transparent;color:#fff}
+.top-btn.primary{background:rgba(255,255,255,0.06);box-shadow:inset 0 -2px 0 rgba(0,0,0,0.08)}
+.top-btn.action{background:linear-gradient(90deg,var(--accent),#f0c032);color:#000}
 
-        .malls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1rem;
-            padding: 0.5rem;
-        }
+/* ----- filters ----- */
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+.select{
+  background:var(--glass);padding:10px;border-radius:12px;border:none;color:#fff;min-width:160px;text-align:center
+}
 
-        .mall-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
+/* ----- cards grid ----- */
+.grid{
+  display:grid;grid-template-columns:repeat(4,minmax(var(--card-w),1fr));gap:20px;justify-items:center;
+  align-items:start;padding-bottom:20px;
+}
+.card{
+  width:var(--card-w);height:var(--card-h);background:linear-gradient(180deg,rgba(255,255,255,0.98),#fff);
+  border-radius:var(--radius);color:#000;box-shadow:0 12px 30px rgba(2,6,23,0.18);
+  overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:14px;
+  transform:translateZ(0);transition:transform .22s, box-shadow .22s;
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.22)}
+.card h3{margin:0;font-size:16px;text-align:center}
 
-        .mall-card:active {
-            transform: scale(0.98);
-        }
+/* inner orange boxes */
+.info{
+  background:var(--inner-box);border-radius:10px;padding:8px 10px;text-align:center;font-weight:700;color:#000;margin:6px 0;
+}
 
-        .mall-icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        
-        }
+/* status badge */
+.status{display:inline-block;padding:8px 12px;border-radius:12px;font-weight:800}
+.status.pending{background:#ffd83a;color:#000}
+.status.late{background:#e53935;color:#fff}
+.status.paid{background:#2ecc71;color:#fff}
 
-        .performance-status {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
+/* small footer of card */
+.card-footer{display:flex;gap:8px;justify-content:center;align-items:center}
 
-        .above-target {
-            color: #ffffff;
-        }
+/* payment modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:60}
+.modal{width:420px;background:var(--glass);padding:18px;border-radius:14px;backdrop-filter:blur(8px);box-shadow:0 18px 60px rgba(0,0,0,0.45)}
+.modal h3{margin:0 0 10px;color:#fff}
+.modal .row{display:flex;gap:10px;margin:8px 0}
+.modal input{flex:1;padding:10px;border-radius:10px;border:none}
 
-        .below-target {
-            color: #ffd83a;
-        }
+/* add form modal uses same modal */
+#addBtn{display:none} /* shown for admin later */
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 1rem;
-        }
+/* dashboard */
+.dashboard{margin-top:10px;background:var(--glass);padding:16px;border-radius:14px;backdrop-filter:blur(8px)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.stat{background:linear-gradient(90deg,#ffffff,#fff);padding:12px;border-radius:12px;min-width:160px;text-align:center;color:#000;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+.canvas-wrap{background:#fff;border-radius:12px;padding:12px}
+.small-note{font-size:13px;color:rgba(0,0,0,0.6);margin-top:8px}
 
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--primary-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .departments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .department-card {
-            background: rgba(255,255,255,0.05);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            position: relative;
-        }
-
-        .department-icon {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .department-percentage {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .department-performance {
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 1.5rem;
-            }
-
-            .malls-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .department-card {
-                padding: 1rem;
-            }
-        }
-    </style>
+/* responsive */
+@media(max-width:720px){
+  .login-card{width:92%}
+  .modal{width:92%}
+  .card{width:92%}
+  .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">مؤشرات اداء المراكز التجارية | <span id="currentDate"></span></h1>
-        </header>
 
-         <div class="malls-grid">
-            <div class="mall-card" data-mall="ansar">
-                <i class="fas fa-city mall-icon"></i>
-                <h2>الأنصار مول</h2>
-                <h1>62.28%</h1>
-            </div>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>شاشة ادارة المديونيات</h1>
+    <p class="small-muted">سجل الدخول</p>
 
-            <div class="mall-card" data-mall="abyat">
-                <i class="fas fa-home mall-icon"></i>
-                <h2>أبيات عسير</h2>
-                <h1>44.32%</h1>
-            </div>
+    <input id="inputUser" class="input" placeholder="اسم المستخدم">
+    <input id="inputPass" type="password" class="input" placeholder="كلمة المرور">
+    <button class="btn" id="btnLogin">دخول</button>
 
-            <div class="mall-card" data-mall="fourpark">
-                <i class="fas fa-parking mall-icon"></i>
-                <h2>فور بارك</h2>
-                    <h1>54.58%</h1>
-            </div>
+    <p class="small-muted"></p>
+  </div>
+</div>
 
-            <div class="mall-card" data-mall="arabplaza">
-                <i class="fas fa-building mall-icon"></i>
-                <h2>العرب بلازا</h2>
-                <h1>55.20%</h1>
-            </div>
-        </div>
+<!-- APP -->
+<div id="app" style="display:none">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h2 id="welcomeTitle">مرحبا</h2>
+        <div class="small-muted" id="roleLabel">دور المستخدم</div>
+      </div>
     </div>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 id="modalTitle" class="main-title"></h2>
-            <div class="departments-grid" id="departmentsContainer"></div>
-        </div>
+    <div class="controls">
+      <button class="top-btn primary" id="btnRefresh" title="Refresh (doesn't logout)"><i class="fa fa-sync"></i> تحديث البيانات</button>
+      <button class="top-btn action" id="btnShowAdd"><i class="fa fa-plus-circle"></i> ترحيل مديونية</button>
+      <button class="top-btn" id="btnShowDash"><i class="fa fa-chart-bar"></i> لوحة البيانات</button>
+      <button class="top-btn" id="btnLogout"><i class="fa fa-sign-out-alt"></i> خروج</button>
     </div>
+  </div>
 
-    <script>
-        const mallsData = {
-            ansar: {
-                title: "الأنصار مول",
-                departments: [
-                    { name: "المفروشات", percentage: "70.93%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "38.54%", icon: "fa-home" },
-                    { name: "الملابس الرجالية", percentage: "61.59%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "70.65%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "88.53%", icon: "fa-child" },
-                    { name: "العطور", percentage: "59.85%", icon: "fa-spray-can" },
-                    { name: "الأحذية", percentage: "53.03%", icon: "fa-shoe-prints" },
-                    { name: "الألعاب", percentage: "42.55%", icon: "fa-bicycle" },
-                    { name: "الرياضة و الجاكت", percentage: "70.28%", icon: "fa-futbol" },
-                    { name: "التخفيضات", percentage: "50.47%", icon: "fa-tags" },
-                    { name: "سيفورا", percentage: "64.22%", icon: "fa-spray-can" },
-                    { name: "المكتبة والشنط", percentage: "55.58%", icon: "fa-pen" }
-                ]
-            },
-            fourpark: {
-                title: "فور بارك",
-                departments: [
-                    { name: "المفروشات", percentage: "57.68%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "31.05%", icon: "fa-home" },
-                ]
-            },
-            abyat: {
-                title: "أبيات عسير",
-                departments: [
-                    { name: "المفروشات", percentage: "45.44%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "9.04%", icon: "fa-couch" },
-                    { name: "الملابس الرجالية", percentage: "50.82%", icon: "fa-tshirt" },
-                    { name: "الملابس النسائية", percentage: "57.70%", icon: "fa-female" },
-                    { name: "الملابس الولادي", percentage: "94.53%", icon: "fa-child" },
-                    { name: "الملابس البناتي", percentage: "41.82%", icon: "fa-female" },
-                    { name: "الاحذية", percentage: "30.24%", icon: "fa-shoe-prints" },
-                    { name: "الالعاب", percentage: "42.55%", icon: "fa-bicycle" },
-                    { name: "العطور", percentage: "35.33%", icon: "fa-spray-can" },
-                    { name: "المواليد", percentage: "49.34%", icon: "fa-child" }
-                ]
-            },
-            arabplaza: {
-                title: "العرب بلازا",
-                departments: [
-                    { name: "المفروشات", percentage: "64.24%", icon: "fa-couch" },
-                    { name: "المنزلية", percentage: "28.87%", icon: "fa-home" },
-                    { name: "ألعاب", percentage: "59.62%", icon: "fa-bicycle" }
-                ]
-            }
-        };
+  <!-- filters -->
+  <div class="filters" style="margin-bottom:12px">
+    <select id="filterMall" class="select">
+      <option value="">كل المولات</option>
+      <option>الانصار مول</option>
+      <option>ابيات عسير</option>
+      <option>فور بارك</option>
+      <option>العرب بلازا</option>
+    </select>
 
+    <select id="filterSection" class="select">
+      <option value="">كل الأقسام</option>
+      <option>المفروشات</option><option>المنزلية</option><option>الرجالي</option>
+      <option>النسائي</option><option>الولادي</option><option>الرياضة</option>
+      <option>الالعاب</option><option>العطور</option><option>التخفيضات</option><option>سيفورا</option>
+    </select>
 
-        function calculateTarget() {
-            const now = new Date();
-            return (3.33 * now.getDate()).toFixed(2);
-        }
+    <select id="filterStatus" class="select">
+      <option value="">كل الحالات</option>
+      <option value="pending">مستحقة</option>
+      <option value="late">متأخر</option>
+      <option value="paid">مسدد</option>
+    </select>
+  </div>
 
-        function updatePerformance() {
-            const dateElement = document.getElementById('currentDate');
-            const now = new Date();
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
-            dateElement.textContent = new Intl.DateTimeFormat('ar-EG', options).format(now);
+  <!-- grid of cards -->
+  <div class="grid" id="cardsGrid"></div>
 
-            const targetPercentage = calculateTarget();
-            const malls = Array.from(document.querySelectorAll('.mall-card'));
-            
-            // ترتيب المراكز حسب الأداء
-            malls.sort((a, b) => {
-                const aVal = parseFloat(a.querySelector('.mall-percentage').textContent);
-                const bVal = parseFloat(b.querySelector('.mall-percentage').textContent);
-                return bVal - aVal;
-            });
+  <!-- dashboard -->
+  <div class="dashboard" id="dashboard">
+    <div class="stats">
+      <div class="stat" id="statTotal">الاجمالي: 0</div>
+      <div class="stat" id="statPaid">مسدد: 0</div>
+      <div class="stat" id="statPending">معلق: 0</div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="chartDept" height="120"></canvas>
+    </div>
+  </div>
+</div>
 
-            // تحديث النقاط وحالة الأداء
-            malls.forEach((mall, index) => {
-                const dots = mall.querySelector('.active-dots');
-                dots.innerHTML = Array(4 - index).fill('<div class="dot"></div>').join('');
-                
-                const current = parseFloat(mall.querySelector('.mall-percentage').textContent);
-                const diff = (current - targetPercentage).toFixed(2);
-                const statusElement = mall.querySelector('.performance-status');
-                
-                statusElement.textContent = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                statusElement.className = `performance-status ${diff >= 0 ? 'above-target' : 'below-target'}`;
-            });
-        }
+<!-- Add modal -->
+<div class="modal-backdrop" id="modalAddBackdrop">
+  <div class="modal">
+    <h3>إضافة مديونية جديدة</h3>
+    <div class="row">
+      <input id="addLocation" placeholder="">
+      <input id="addMall" placeholder="">
+    </div>
+    <div class="row">
+      <input id="addSection" placeholder="">
+      <input id="addAmount" type="number" placeholder="المبلغ (SAR)">
+    </div>
+    <div class="row">
+      <input id="addDue" type="date">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" id="addSave">حفظ</button>
+      <button class="btn" id="addCancel" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.12)">إلغاء</button>
+    </div>
+  </div>
+</div>
 
-        function openModal(mallId) {
-            const mall = mallsData[mallId];
-            const modal = document.getElementById('modal');
-            const target = calculateTarget();
-            
-            document.getElementById('modalTitle').textContent = mall.title;
-            
-            const departmentsHTML = mall.departments.map(dept => {
-                const percentage = parseFloat(dept.percentage);
-                const diff = (percentage - target).toFixed(2);
-                const statusClass = diff >= 0 ? 'above-target' : 'below-target';
-                const statusText = `${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}`;
-                
-                return `
-                <div class="department-card">
-                    <i class="fas ${dept.icon} department-icon"></i>
-                    <h3>${dept.name}</h3>
-                    <div class="department-percentage">${dept.percentage}</div>
-                    <div class="department-performance ${statusClass}">${statusText}</div>
-                </div>
-                `;
-            }).join('');
-            
-            document.getElementById('departmentsContainer').innerHTML = departmentsHTML;
-            modal.style.display = 'block';
-        }
+<!-- Pay modal -->
+<div class="modal-backdrop" id="modalPayBackdrop">
+  <div class="modal">
+    <h3 id="payTitle">تأكيد السداد</h3>
+    <div class="row">
+      <input id="payAmount" type="number" placeholder="المبلغ الفعلي">
+    </div>
+    <div class="row">
+      <input id="payPass" type="password" placeholder="كلمة المرور">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" id="payConfirm">تأكيد</button>
+      <button class="btn" id="payCancel" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.12)">إلغاء</button>
+    </div>
+    <p class="small-note">المستخدم يجب أن يدخل كلمة المرور الخاصة به لتأكيد السداد.</p>
+  </div>
+</div>
 
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
+<script>
+/* ============================
+   Data & Users
+   ============================ */
+const USERS = {
+  "نصر": { pass: "71111", role: "admin" },
+  "مصطفى": { pass: "123456", role: "collector" },
+  "استعلام": { pass: "123456", role: "viewer" }
+};
+let currentUser = null;
+let debts = []; // loaded from localStorage
+const LS_KEY = "pos_debts_v1";
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', updatePerformance);
+/* sample seed if empty */
+function seedIfEmpty(){
+  const stored = localStorage.getItem(LS_KEY);
+  if(stored){ debts = JSON.parse(stored); return; }
+  debts = [
+    { location:"الجنادرية", mall:"الانصار مول", section:"المفروشات", amount:5000, due:"2025-09-20", status:"pending", paidBy:null, paidAmount:null, created: new Date().toISOString() },
+    { location:"حي النور", mall:"ابيات عسير", section:"المنزلية", amount:3200, due:"2025-09-10", status:"pending", paidBy:null, paidAmount:null, created: new Date().toISOString() },
+    { location:"مدينة الخُبر", mall:"فور بارك", section:"الرياضة", amount:1200, due:"2025-09-01", status:"paid", paidBy:"نصر", paidAmount:1300, created: new Date().toISOString() }
+  ];
+  localStorage.setItem(LS_KEY, JSON.stringify(debts));
+}
 
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('click', () => openModal(card.dataset.mall));
-        });
+/* initialize */
+seedIfEmpty();
 
-        document.addEventListener('click', (e) => {
-            if(e.target.closest('.modal-overlay')) {
-                closeModal();
-            }
-        });
+/* ============================
+   Helpers
+   ============================ */
+function saveDebts(){ localStorage.setItem(LS_KEY, JSON.stringify(debts)); }
+function fmtNum(n){ return Number(n).toLocaleString('en-US'); }
+function calcStatus(d){
+  if(d.status === "paid") return { text:"مسدد", cls:"paid" };
+  const diffDays = (new Date() - new Date(d.due))/(1000*60*60*24);
+  if(diffDays > 7) return { text:"متأخر", cls:"late" };
+  return { text:"مستحق", cls:"pending" };
+}
 
-        document.addEventListener('keyup', (e) => {
-            if(e.key === 'Escape') closeModal();
-        });
+/* ============================
+   UI Elements
+   ============================ */
+const loginScreen = document.getElementById("loginScreen");
+const appEl = document.getElementById("app");
+const welcomeTitle = document.getElementById("welcomeTitle");
+const roleLabel = document.getElementById("roleLabel");
+const cardsGrid = document.getElementById("cardsGrid");
+const dashboard = document.getElementById("dashboard");
+const modalAdd = document.getElementById("modalAddBackdrop");
+const modalPay = document.getElementById("modalPayBackdrop");
+const chartCtx = document.getElementById("chartDept").getContext("2d");
+let deptChart = null;
 
-        // تحسينات اللمس
-        document.querySelectorAll('.mall-card').forEach(card => {
-            card.addEventListener('touchstart', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            
-            card.addEventListener('touchend', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+/* ============================
+   Login
+   ============================ */
+document.getElementById("btnLogin").addEventListener("click", () => {
+  const u = document.getElementById("inputUser").value.trim();
+  const p = document.getElementById("inputPass").value.trim();
+  if(!u || !p){ alert("أدخل اسم المستخدم وكلمة المرور"); return; }
+  if(USERS[u] && USERS[u].pass === p){
+    currentUser = u;
+    // show app
+    loginScreen.style.display = "none";
+    appEl.style.display = "block";
+    welcomeTitle.textContent = `مرحباً، ${currentUser}`;
+    roleLabel.textContent = `الصلاحية: ${USERS[currentUser].role}`;
+    applyRoleFeatures();
+    refreshAll();
+    startAutoLogout();
+  } else {
+    alert("اسم المستخدم أو كلمة المرور غير صحيح");
+  }
+});
+
+/* ============================
+   Role features
+   ============================ */
+function applyRoleFeatures(){
+  const showAdd = (USERS[currentUser].role === "admin");
+  document.getElementById("btnShowAdd").style.display = showAdd ? "inline-block" : "none";
+}
+
+/* top controls */
+document.getElementById("btnLogout").addEventListener("click", () => {
+  if(confirm("هل تريد تسجيل الخروج؟")) doLogout();
+});
+document.getElementById("btnShowAdd").addEventListener("click", () => openAddModal());
+document.getElementById("btnShowDash").addEventListener("click", () => {
+  dashboard.scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("btnRefresh").addEventListener("click", () => refreshAll());
+
+/* ============================
+   Render Cards
+   ============================ */
+function renderCards(){
+  // load fresh data
+  debts = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+  const filterMall = document.getElementById("filterMall").value;
+  const filterSection = document.getElementById("filterSection").value;
+  const filterStatus = document.getElementById("filterStatus").value;
+
+  cardsGrid.innerHTML = "";
+  // ensure equal spacing grid; cards fixed size via CSS
+  debts.forEach((d, idx) => {
+    // compute status
+    const st = calcStatus(d);
+    // apply filters
+    if(filterMall && d.mall !== filterMall) return;
+    if(filterSection && d.section !== filterSection) return;
+    if(filterStatus){
+      if(filterStatus === "pending" && st.cls !== "مجدول") return;
+      if(filterStatus === "late" && st.cls !== "متأخر") return;
+      if(filterStatus === "paid" && st.cls !== "مسدد" && d.status !== "paid") return;
+    }
+
+    // create card
+    const card = document.createElement("div");
+    card.className = "card";
+    // layout: location (big), mall, section, amount, due, status, actions
+    card.innerHTML = `
+      <div>
+        <h3 style="font-size:16px">${escapeHtml(d.location || "")}</h3>
+        <div class="info"> ${escapeHtml(d.mall || "-")}</div>
+        <div class="info"> ${escapeHtml(d.section || "-")}</div>
+        <div class="info"> ${fmtNum(d.amount)} ريال</div>
+        <div class="info"> ${d.due}</div>
+      </div>
+      <div class="card-footer">
+        <span class="status ${st.cls}">${st.text}</span>
+      </div>
+    `;
+
+    // actions
+    const actionsWrap = document.createElement("div");
+    actionsWrap.style.display = "flex";
+    actionsWrap.style.justifyContent = "center";
+    actionsWrap.style.marginTop = "8px";
+
+    // show pay button to admin and collector if not paid
+    if((USERS[currentUser].role === "admin" || USERS[currentUser].role === "collector") && d.status !== "paid"){
+      const payBtn = document.createElement("button");
+      payBtn.className = "top-btn action";
+      payBtn.style.padding = "8px 12px";
+      payBtn.innerHTML = `<i class="fa fa-money-bill-wave"></i> سداد`;
+      payBtn.onclick = () => openPayModal(idx);
+      actionsWrap.appendChild(payBtn);
+    }
+
+    // admin can delete maybe? optional (not requested) — skip delete to be safe.
+
+    card.appendChild(actionsWrap);
+    cardsGrid.appendChild(card);
+  });
+}
+
+/* ============================
+   Add Modal
+   ============================ */
+function openAddModal(){
+  if(!currentUser) return;
+  document.getElementById("addLocation").value = "";
+  document.getElementById("addMall").value = "";
+  document.getElementById("addSection").value = "";
+  document.getElementById("addAmount").value = "";
+  document.getElementById("addDue").value = "";
+  modalAdd.style.display = "flex";
+}
+document.getElementById("addCancel").addEventListener("click", () => modalAdd.style.display = "none");
+document.getElementById("addSave").addEventListener("click", () => {
+  const loc = document.getElementById("addLocation").value.trim();
+  const mall = document.getElementById("addMall").value.trim();
+  const section = document.getElementById("addSection").value.trim();
+  const amount = parseFloat(document.getElementById("addAmount").value);
+  const due = document.getElementById("addDue").value;
+  if(!loc || !section || !amount || !due){ alert("اكمل جميع الحقول: الموقع، القسم، المبلغ، وتاريخ الاستحقاق"); return; }
+  const entry = { location: loc, mall: mall || "–", section, amount, due, status: "pending", paidBy: null, paidAmount: null, created: new Date().toISOString() };
+  debts.unshift(entry);
+  saveDebts();
+  modalAdd.style.display = "none";
+  renderCards();
+  updateDashboard();
+});
+
+/* ============================
+   Pay Modal
+   ============================ */
+let payIndex = null;
+function openPayModal(index){
+  payIndex = index;
+  const d = debts[index];
+  document.getElementById("payAmount").value = d.amount;
+  document.getElementById("payPass").value = "";
+  document.getElementById("payTitle").textContent = `سداد مديونية — ${escapeHtml(d.location)} / ${escapeHtml(d.section)}`;
+  modalPay.style.display = "flex";
+}
+document.getElementById("payCancel").addEventListener("click", () => modalPay.style.display = "none");
+
+document.getElementById("payConfirm").addEventListener("click", () => {
+  const amt = parseFloat(document.getElementById("payAmount").value);
+  const pass = document.getElementById("payPass").value;
+  if(!payIndex && payIndex !== 0){ alert("خطأ داخلي، حاول مجددًا"); return; }
+  if(!amt || !pass){ alert("أدخل المبلغ وكلمة المرور"); return; }
+  // verify password matches current user's
+  if(!USERS[currentUser] || USERS[currentUser].pass !== pass){ alert("كلمة المرور غير صحيحة"); return; }
+
+  // mark paid
+  debts[payIndex].status = "paid";
+  debts[payIndex].paidBy = currentUser;
+  debts[payIndex].paidAmount = amt;
+  debts[payIndex].paidDate = new Date().toISOString().slice(0,10);
+
+  saveDebts();
+  modalPay.style.display = "none";
+  renderCards();
+  updateDashboard();
+});
+
+/* ============================
+   Dashboard
+   ============================ */
+function updateDashboard(){
+  // totals
+  const total = debts.reduce((s,d) => s + (d.amount || 0), 0);
+  const paid = debts.filter(d => d.status === "paid").reduce((s,d) => s + (d.paidAmount || d.amount || 0), 0);
+  const pending = total - paid;
+
+  document.getElementById("statTotal").textContent = `Total: ${fmtNum(total)}`;
+  document.getElementById("statPaid").textContent = `Paid: ${fmtNum(paid)}`;
+  document.getElementById("statPending").textContent = `Pending: ${fmtNum(pending)}`;
+
+  // per section chart (planned vs paid)
+  const map = {};
+  debts.forEach(d => {
+    if(!map[d.section]) map[d.section] = { planned:0, paid:0 };
+    map[d.section].planned += d.amount || 0;
+    if(d.status === "paid") map[d.section].paid += (d.paidAmount || d.amount || 0);
+  });
+  const labels = Object.keys(map);
+  const planned = labels.map(l => map[l].planned);
+  const paidArr = labels.map(l => map[l].paid);
+
+  // destroy existing
+  if(deptChart) deptChart.destroy();
+  deptChart = new Chart(chartCtx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets:[
+        { label: 'Planned', data: planned, backgroundColor: '#ffd83a' },
+        { label: 'Paid', data: paidArr, backgroundColor: '#4caf50' }
+      ]
+    },
+    options: {
+      responsive:true,
+      plugins:{legend:{labels:{color:'#000'}}},
+      scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}
+    }
+  });
+}
+
+/* ============================
+   Refresh / Logout
+   ============================ */
+function refreshAll(){
+  debts = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+  renderCards();
+  updateDashboard();
+}
+function doLogout(){
+  currentUser = null;
+  document.getElementById("inputUser").value = "";
+  document.getElementById("inputPass").value = "";
+  appEl.style.display = "none";
+  loginScreen.style.display = "flex";
+  clearTimeout(logoutTimer);
+}
+
+/* ============================
+   Auto-logout timer (4 hours)
+   ============================ */
+let logoutTimer = null;
+function startAutoLogout(){
+  if(logoutTimer) clearTimeout(logoutTimer);
+  logoutTimer = setTimeout(()=>{ alert("انتهت الجلسة — تم تسجيل الخروج تلقائيًا"); doLogout(); }, 4*60*60*1000);
+}
+["mousemove","keydown","click","touchstart"].forEach(ev => window.addEventListener(ev, startAutoLogout));
+
+/* ============================
+   Utilities
+   ============================ */
+function saveDebts(){ localStorage.setItem(LS_KEY, JSON.stringify(debts)); }
+function escapeHtml(s){ if(!s) return ""; return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ============================
+   Initial bind and filters
+   ============================ */
+document.getElementById("filterMall").addEventListener("change", renderCards);
+document.getElementById("filterSection").addEventListener("change", renderCards);
+document.getElementById("filterStatus").addEventListener("change", renderCards);
+
+/* load initial data from storage (or seed previously already) */
+(function init(){
+  // ensure debts is loaded
+  debts = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+  if(!debts || !debts.length) seedIfEmpty();
+})();
+</script>
 </body>
 </html>
