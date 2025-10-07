@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -395,7 +394,7 @@ function updateDashboard(){ debts = JSON.parse(localStorage.getItem(LS_KEY) || '
   if(filterMonth) relevant = relevant.filter(d=> (d.created||d.due).slice(0,7)===filterMonth);
   if(filterStatus) relevant = relevant.filter(d=>d.status===filterStatus);
   const total = relevant.reduce((s,d)=> s + (d.amount||0),0); const paid = relevant.reduce((s,d)=> s + (d.paidAmount||0),0); const pending = total - paid; const count = relevant.length;
-  document.getElementById('statTotal').textContent = `الاجمالي: ${fmtNum(total)}`; document.getElementById('statPaid').textContent = `مسدد: ${fmtNum(paid)}`; document.getElementById('statPending').textContent = `معلق: ${fmtNum(pending)}`; document.getElementById('statCount').textContent = `عدد المديونيات: ${count}`;
+  document.getElementById('statTotal').textContent = `المخطط: ${fmtNum(total)}`; document.getElementById('statPaid').textContent = `المسدد: ${fmtNum(paid)}`; document.getElementById('statPending').textContent = `المتأخر: ${fmtNum(pending)}`; document.getElementById('statCount').textContent = `عدد الدفعات: ${count}`;
   // chart by supplier (top 12)
   const map = {}; relevant.forEach(d=>{ if(!map[d.supplier]) map[d.supplier] = {planned:0, paid:0, late:0}; map[d.supplier].planned += d.amount||0; map[d.supplier].paid += d.paidAmount||0; if(calcStatus(d).cls==='late') map[d.supplier].late += d.amount||0; });
   const labels = Object.keys(map).sort((a,b)=>map[b].planned-map[a].planned).slice(0,12); const planned = labels.map(l=>map[l].planned); const paidArr = labels.map(l=>map[l].paid); const lateArr = labels.map(l=>map[l].late);
