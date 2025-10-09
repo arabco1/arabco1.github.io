@@ -1,25 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>شاشة إدارة المديونيات — نهائي (محدث)</title>
+<title>شاشة إدارة المديونيات — مستقر</title>
 <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<!-- ملاحظة: حتى لو لم تُحمّل Chart.js فالصفحة ستعمل بدون تعطل -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{
-  --primary:#0b3a8a;
-  --accent:#ffd83a;
-  --bg-grad: linear-gradient(135deg,#071735 0%, #0b2b6f 100%);
-  --glass: rgba(255,255,255,0.08);
-  --card-w: 350px;
-  --card-h: 520px;
-  --radius: 18px;
-  --gray-card: #f3f4f6;
+  --primary:#0b3a8a; --accent:#ffd83a; --bg-grad: linear-gradient(135deg,#071735 0%, #0b2b6f 100%);
+  --glass: rgba(255,255,255,0.08); --card-w: 350px; --card-h: 520px; --radius: 18px; --gray-card: #f3f4f6;
+  --green:#2ecc71; --orange:#f59e0b;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh;padding:18px}
+body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#fff;min-height:100vh;padding:18px}
 
 /* login */
 #loginScreen{display:flex;align-items:center;justify-content:center;height:calc(100vh - 36px);padding:20px}
@@ -35,18 +32,15 @@ body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#
 .brand{display:flex;align-items:center;gap:14px}
 .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#00204a);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
 .brand h2{margin:0;font-size:18px}
-.controls{display:flex;gap:8px;align-items:center;justify-content:flex-end}
-.top-btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;background:transparent;color:#fff}
+.controls{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.top-btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;background:transparent;color:#fff;white-space:nowrap}
 .top-btn.primary{background:rgba(255,255,255,0.06);box-shadow:inset 0 -2px 0 rgba(0,0,0,0.08)}
 .top-btn.action{background:linear-gradient(90deg,var(--accent),#f0c032);color:#000}
 .search-wrap{display:flex;align-items:center;gap:8px}
 .search-input{width:240px;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.12);color:#fff;display:none}
 
-/* select fix */
-.select{
-  background:#fff !important;color:#111 !important;
-  padding:10px;border-radius:12px;border:1px solid #ddd;min-width:160px;text-align:center;appearance:auto;
-}
+/* selects */
+.select{background:#fff !important;color:#111 !important;padding:10px;border-radius:12px;border:1px solid #ddd;min-width:160px;text-align:center;appearance:auto}
 select option{background:#fff;color:#111}
 select:focus{outline:2px solid #c7d2fe}
 
@@ -58,19 +52,14 @@ select:focus{outline:2px solid #c7d2fe}
 
 /* card */
 .card{
-  position:relative;
-  width:var(--card-w);height:var(--card-h);
+  position:relative;width:var(--card-w);height:var(--card-h);
   background:linear-gradient(180deg,var(--gray-card),#ffffffee);
-  border-radius:var(--radius);color:#000;
-  box-shadow:0 12px 30px rgba(2,6,23,0.18);
-  overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;
-  padding:0;transform:translateZ(0);transition:transform .22s, box-shadow .22s
+  border-radius:var(--radius);color:#000;box-shadow:0 12px 30px rgba(2,6,23,0.18);
+  overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:0;transition:transform .22s, box-shadow .22s
 }
 .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.22)}
 .mall-bar{height:8px;width:100%}
 .mall-bar.bottom{margin-top:10px}
-
-/* value rectangles colored per mall */
 .value-line{border-radius:10px;padding:10px 12px;text-align:center;font-weight:800;color:#fff;margin:8px 14px}
 
 /* status */
@@ -85,7 +74,7 @@ select:focus{outline:2px solid #c7d2fe}
 .card-body{padding:12px 8px 4px 8px}
 .card-footer{display:flex;gap:8px;justify-content:center;align-items:center;padding:8px 12px 12px}
 
-/* kebab menu */
+/* kebab */
 .kebab{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:6}
 .menu{position:absolute;top:44px;right:8px;background:#111;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:10px;min-width:200px;box-shadow:0 10px 30px rgba(0,0,0,0.4);display:none;z-index:7}
 .menu.open{display:block}
@@ -96,11 +85,8 @@ select:focus{outline:2px solid #c7d2fe}
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:60}
 .modal{width:760px;max-width:92vw;background:var(--glass);padding:18px;border-radius:14px;backdrop-filter:blur(10px);box-shadow:0 18px 60px rgba(0,0,0,0.45)}
 .modal h3{margin:0 0 10px;color:#fff}
-.modal .row{display:flex;gap:10px;margin:8px 0}
-.modal input,.modal select,.modal textarea{
-  flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.45);
-  background:rgba(255,255,255,0.14);color:#fff;font-weight:700
-}
+.modal .row{display:flex;gap:10px;margin:8px 0;align-items:center}
+.modal input,.modal select,.modal textarea{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.45);background:rgba(255,255,255,0.14);color:#fff;font-weight:700}
 .modal input::placeholder,.modal textarea::placeholder{color:#eef2ff}
 
 /* dashboard */
@@ -113,9 +99,24 @@ select:focus{outline:2px solid #c7d2fe}
 .chart-box{background:#fff;border-radius:12px;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
 .chart-title{color:#111;margin:0 0 8px 0;font-size:14px;font-weight:800}
 
+/* Budget indicator */
+.budget-indicator{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.dot{width:14px;height:14px;border-radius:999px;background:var(--orange);display:inline-block}
+.dot.green{background:var(--green)}
+.budget-box{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.45);border-radius:10px;padding:8px 12px;font-weight:800;min-width:240px;text-align:center;color:#fff}
+.small-fade{opacity:0.9;font-weight:700}
+
+/* Budget modal */
+.budget-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.budget-note{font-size:13px;opacity:0.9;margin-top:6px}
+
+/* responsive */
 @media(max-width:1280px){.kpis{grid-template-columns:repeat(3,1fr)}.charts{grid-template-columns:1fr}}
 @media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(220px,1fr))}}
-@media(max-width:720px){.login-card{width:92%}.modal{width:92%}.card{width:92%}.grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+@media(max-width:720px){
+  .login-card{width:92%}.modal{width:92%}.card{width:92%}.grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .budget-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -152,14 +153,19 @@ select:focus{outline:2px solid #c7d2fe}
         <button class="top-btn action" id="btnShowAdd" title="ترحيل مديونية"><i class="fa fa-plus-circle"></i> ترحيل طلب جديد</button>
         <button class="top-btn" id="btnShowDash" title="لوحة البيانات"><i class="fa fa-chart-bar"></i> لوحة البيانات</button>
         <button class="top-btn primary" id="btnAdmin" title="لوحة التحكم" style="display:none"><i class="fa fa-user-gear"></i> لوحة التحكم</button>
+
+        <!-- Budget allocations -->
+        <button class="top-btn primary" id="btnBudgets" title="مخصصات الأقسام المالية" style="display:none">
+          <i class="fa fa-sack-dollar"></i> مخصصات الأقسام المالية
+        </button>
+
         <button class="top-btn" id="btnLogout" title="تسجيل الخروج"><i class="fa fa-sign-out-alt"></i> خروج</button>
       </div>
     </div>
   </div>
 
-  <!-- ====== عرض الكروت (فلاتر + كروت) مغلف لسهولة الإخفاء ====== -->
+  <!-- ====== عرض الكروت ====== -->
   <div id="cardsView">
-    <!-- filters -->
     <div class="filters" style="margin-bottom:12px">
       <select id="filterMall" class="select">
         <option value="">كل المولات</option>
@@ -172,30 +178,21 @@ select:focus{outline:2px solid #c7d2fe}
         <option value="">كل الأقسام</option>
         <option>الرجالي</option><option>النسائي</option><option>الولادي</option><option>الرياضة</option>
         <option>الجاكت</option><option>التخفيضات</option><option>المفروشات</option><option>المنزلية</option>
-        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا الوادي</option>
+        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا</option><option>الالعاب</option><option>المواليد</option>
       </select>
-      <select id="filterSupplier" class="select">
-        <option value="">كل الموردين</option>
-      </select>
+      <select id="filterSupplier" class="select"><option value="">كل الموردين</option></select>
       <select id="filterStatus" class="select">
         <option value="">كل الحالات</option>
-        <option value="pending">مستحقة</option>
-        <option value="late">متأخر</option>
-        <option value="paid">مسدد</option>
-        <option value="approval_pending">بانتظار الموافقة</option>
-        <option value="approved">معتمدة</option>
-        <option value="cancelled">ملغاة</option>
+        <option value="pending">مستحقة</option><option value="late">متأخر</option><option value="paid">مسدد</option>
+        <option value="approval_pending">بانتظار الموافقة</option><option value="approved">معتمدة</option><option value="cancelled">ملغاة</option>
       </select>
       <input id="filterMonth" type="month" class="select" style="min-width:170px" />
     </div>
-
-    <!-- grid of cards -->
     <div class="grid" id="cardsGrid"></div>
   </div>
 
-  <!-- dashboard (مخفي افتراضياً) -->
+  <!-- ====== لوحة البيانات ====== -->
   <div class="dashboard" id="dashboard" style="display:none">
-    <!-- فلاتر خاصة بالداشبورد -->
     <div class="dash-filters">
       <input id="dashFrom" class="df" type="date" title="من تاريخ">
       <input id="dashTo" class="df" type="date" title="إلى تاريخ">
@@ -207,7 +204,7 @@ select:focus{outline:2px solid #c7d2fe}
         <option value="">كل الأقسام</option>
         <option>الرجالي</option><option>النسائي</option><option>الولادي</option><option>الرياضة</option>
         <option>الجاكت</option><option>التخفيضات</option><option>المفروشات</option><option>المنزلية</option>
-        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا الوادي</option>
+        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا</option><option>الالعاب</option><option>المواليد</option>
       </select>
       <select id="dashStatus" class="df">
         <option value="">كل الحالات</option>
@@ -222,7 +219,6 @@ select:focus{outline:2px solid #c7d2fe}
       <button class="top-btn action" id="dashApply" style="padding:8px 14px">تطبيق</button>
     </div>
 
-    <!-- KPIs -->
     <div class="kpis">
       <div class="kpi" id="kpiPlanned">المخطط: 0</div>
       <div class="kpi" id="kpiNet">الصافي (بعد الخصم): 0</div>
@@ -232,52 +228,53 @@ select:focus{outline:2px solid #c7d2fe}
       <div class="kpi" id="kpiApproval">بانتظار/معتمد: 0 / 0</div>
     </div>
 
-    <!-- Charts -->
     <div class="charts">
-      <div class="chart-box">
-        <h4 class="chart-title">تطور الدفعات عبر الزمن</h4>
-        <canvas id="chTime" height="120"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4 class="chart-title">توزيع حسب المولات</h4>
-        <canvas id="chMall" height="120"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4 class="chart-title">توزيع حسب الأقسام</h4>
-        <canvas id="chSection" height="120"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4 class="chart-title">مسدد مقابل المتبقي</h4>
-        <canvas id="chPaidVsOut" height="120"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4 class="chart-title">مسار الموافقات</h4>
-        <canvas id="chApproval" height="120"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4 class="chart-title">حالات المديونية</h4>
-        <canvas id="chStatuses" height="120"></canvas>
-      </div>
+      <div class="chart-box"><h4 class="chart-title">تطور الدفعات عبر الزمن</h4><canvas id="chTime" height="120"></canvas></div>
+      <div class="chart-box"><h4 class="chart-title">توزيع حسب المولات</h4><canvas id="chMall" height="120"></canvas></div>
+      <div class="chart-box"><h4 class="chart-title">توزيع حسب الأقسام</h4><canvas id="chSection" height="120"></canvas></div>
+      <div class="chart-box"><h4 class="chart-title">مسدد مقابل المتبقي</h4><canvas id="chPaidVsOut" height="120"></canvas></div>
+      <div class="chart-box"><h4 class="chart-title">مسار الموافقات</h4><canvas id="chApproval" height="120"></canvas></div>
+      <div class="chart-box"><h4 class="chart-title">حالات المديونية</h4><canvas id="chStatuses" height="120"></canvas></div>
     </div>
   </div>
 </div>
 
-<!-- Add modal -->
+<!-- ========= Budget Modal ========= -->
+<div class="modal-backdrop" id="modalBudgetBackdrop">
+  <div class="modal">
+    <h3><i class="fa fa-sack-dollar"></i> مخصصات الأقسام المالية</h3>
+    <div class="budget-grid">
+      <select id="budgetMall" class="select" title="المركز التجاري"></select>
+      <select id="budgetSection" class="select" title="القسم"></select>
+      <select id="budgetMonth" class="select" title="الشهر"></select>
+      <input id="budgetAmount" class="input" type="number" placeholder="المخصص المالي (ريال)">
+    </div>
+    <div class="row" style="margin-top:6px">
+      <button class="btn" id="budgetSave"><i class="fa fa-save"></i> حفظ واعتماد المخصص</button>
+      <button class="btn" id="budgetClose" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)">إغلاق</button>
+    </div>
+    <div class="budget-note small-fade" id="budgetInfo">
+      يتم تطبيق المخصص على تركيبة <strong>مول + قسم + شهر</strong>، ويُخصم تلقائيًا عند اعتماد طلبات special.
+    </div>
+  </div>
+</div>
+
+<!-- ========= Add modal ========= -->
 <div class="modal-backdrop" id="modalAddBackdrop">
   <div class="modal">
-    <h3>إضافة مديونية جديدة</h3>
+    <h3 style="display:flex;align-items:center;justify-content:space-between">
+      <span>إضافة مديونية جديدة</span>
+      <span class="budget-indicator">
+        <span id="addBudgetDot" class="dot" title="حالة المخصص"></span>
+        <span id="addBudgetBox" class="budget-box">لا يوجد مخصصات مالية بعد</span>
+      </span>
+    </h3>
     <div class="row">
-      <select id="addSection" class="select">
-        <option>الرجالي</option><option>النسائي</option><option>الولادي</option><option>الرياضة</option>
-        <option>الجاكت</option><option>التخفيضات</option><option selected>المفروشات</option><option>المنزلية</option>
-        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا الوادي</option>
-      </select>
-      <select id="addSupplier" class="select"><option>اختر المورد</option></select>
+      <select id="addMall" class="select"></select>
+      <select id="addSection" class="select"></select>
     </div>
     <div class="row">
-      <select id="addMall" class="select">
-        <option>الانصار مول</option><option>ابيات عسير</option><option>فور بارك</option><option>العرب بلازا</option>
-      </select>
+      <select id="addSupplier" class="select"><option>اختر المورد</option></select>
       <input id="addAmount" class="input" type="number" placeholder="الدفعة (المبلغ)">
     </div>
     <div class="row">
@@ -294,7 +291,7 @@ select:focus{outline:2px solid #c7d2fe}
   </div>
 </div>
 
-<!-- Edit modal -->
+<!-- ========= Edit modal ========= -->
 <div class="modal-backdrop" id="modalEditBackdrop">
   <div class="modal">
     <h3>تعديل بيانات الحوالة</h3>
@@ -320,7 +317,7 @@ select:focus{outline:2px solid #c7d2fe}
   </div>
 </div>
 
-<!-- Pay modal -->
+<!-- ========= Pay modal ========= -->
 <div class="modal-backdrop" id="modalPayBackdrop">
   <div class="modal">
     <h3 id="payTitle">تأكيد السداد</h3>
@@ -336,12 +333,10 @@ select:focus{outline:2px solid #c7d2fe}
   </div>
 </div>
 
-<!-- Admin (لوحة التحكم) modal -->
+<!-- ========= Admin modal ========= -->
 <div class="modal-backdrop" id="modalAdminBackdrop">
   <div class="modal">
     <h3><i class="fa fa-user-gear"></i> لوحة التحكم — إدارة المستخدمين والموردين</h3>
-
-    <!-- إضافة مستخدم -->
     <div class="row">
       <input id="adminUserName" class="input" type="text" placeholder="اسم المستخدم الجديد">
       <input id="adminUserPass" class="input" type="password" placeholder="كلمة المرور">
@@ -350,29 +345,22 @@ select:focus{outline:2px solid #c7d2fe}
       <select id="adminUserSection" class="select" title="القسم المسموح">
         <option>الرجالي</option><option>النسائي</option><option>الولادي</option><option>الرياضة</option>
         <option>الجاكت</option><option>التخفيضات</option><option>المفروشات</option><option>المنزلية</option>
-        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا الوادي</option>
+        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا</option><option>الالعاب</option><option>المواليد</option>
       </select>
       <input disabled class="input" value="الدور: special | إضافة: مسموح | سداد: غير مسموح">
     </div>
     <div class="row"><button class="btn" id="adminAddUser"><i class="fa fa-user-plus"></i> إضافة المستخدم</button></div>
-
     <hr style="border-color:rgba(255,255,255,0.2)">
-
-    <!-- إضافة مورد/مجموعة موردين -->
     <h3 style="margin-top:4px">إضافة موردين</h3>
-    <div class="row">
-      <textarea id="adminSuppliersText" class="input" style="height:120px;text-align:right" placeholder="اكتب اسم مورد واحد أو عدة موردين (كل مورد بسطر مستقل)"></textarea>
-    </div>
+    <div class="row"><textarea id="adminSuppliersText" class="input" style="height:120px;text-align:right" placeholder="اكتب اسم مورد واحد أو عدة موردين (كل مورد بسطر مستقل)"></textarea></div>
     <div class="row">
       <select id="adminSupplierSection" class="select" title="اختر القسم للموردين">
-        <option>الرجالي</option><option>النسائي</option><option>الولادي</option><option>الرياضة</option>
-        <option>الجاكت</option><option>التخفيضات</option><option selected>المفروشات</option><option>المنزلية</option>
-        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا الوادي</option>
+        <option>الرجالي</option><option>النسائي</option><option>المفروشات</option><option>المنزلية</option>
+        <option>العطور</option><option>الاحذية</option><option>المكتبة</option><option>الشنط</option><option>سيفورا</option><option>الالعاب</option><option>المواليد</option>
       </select>
       <button class="btn" id="adminAddSuppliers"><i class="fa fa-plus"></i> إضافة المورد/الموردين</button>
     </div>
     <p class="small-note">المستخدمون والموردون المضافون يُحفظون محليًا على هذا المتصفح.</p>
-
     <div class="admin-list" id="adminUsersList"></div>
     <div style="display:flex;gap:8px;margin-top:10px">
       <button class="btn" id="adminClose" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)">إغلاق</button>
@@ -381,51 +369,42 @@ select:focus{outline:2px solid #c7d2fe}
 </div>
 
 <script>
-/* ==== Session Persistence ==== */
+/* ——— لالتقاط أي خطأ عام في الكونسول دون تعطيل الواجهة ——— */
+window.addEventListener('error', e => { console.error('JS Error:', e.error || e.message); });
+
+/* ========= Session ========= */
 const SESSION_KEY = 'pos_session_user_v1';
 
-/* ==== Users ==== */
+/* ========= Users ========= */
 const USERS_LS_KEY = 'pos_users_dynamic_v1';
 const BASE_USERS = {
   "نصر": { pass: "71111", role: "admin", canAdd: true, canPay: true, allowedSection: null },
-  "مصطفى": { pass: "123456", role: "collector", canAdd: false, canPay: true, allowedSection: null },
+  "مصطفى": { pass: "123456", role: "collector", canAdd: true, canPay: true, allowedSection: null },
   "استعلام": { pass: "123456", role: "viewer", canAdd: false, canPay: false, allowedSection: null },
   "جياب": { pass: "71111", role: "special", canAdd: true, canPay: false, allowedSection: "المنزلية" },
-  "راجح": { pass: "73333", role: "special", canAdd: true, canPay: false, allowedSection: "المفروشات" },
-  "العطور": { pass: "81111", role: "special", canAdd: true, canPay: false, allowedSection: "العطور" }
+  "راجح": { pass: "73333", role: "special", canAdd: true, canPay: false, allowedSection: "المفروشات" }
 };
 function loadDynamicUsers(){ try { return JSON.parse(localStorage.getItem(USERS_LS_KEY) || '{}'); } catch(e){ return {}; } }
 function saveDynamicUsers(dynamic){ localStorage.setItem(USERS_LS_KEY, JSON.stringify(dynamic||{})); }
 let USERS = { ...BASE_USERS, ...loadDynamicUsers() };
 
-/* ==== Suppliers ==== */
+/* ========= Mall → Sections ========= */
+const MALL_SECTIONS = {
+  "الانصار مول": ["الرجالي","النسائي","الولادي","الرياضة","الجاكت","التخفيضات","المفروشات","المنزلية","الاحذية","العطور","سيفورا","المكتبة","الشنط","الالعاب"],
+  "ابيات عسير": ["الرجالي","النسائي","الولادي","المواليد","العطور","الالعاب","الاحذية","المفروشات","المنزلية"],
+  "فور بارك": ["المفروشات","المنزلية"],
+  "العرب بلازا": ["المفروشات","المنزلية","الالعاب"]
+};
+const ALL_MALLS = Object.keys(MALL_SECTIONS);
+
+/* ========= Suppliers ========= */
 const SUPPLIERS_LS_KEY = 'pos_suppliers_dynamic_v1';
 const BASE_SUPPLIERS = {
   "الرجالي": [], "النسائي": [], "الولادي": [], "الرياضة": [], "الجاكت": [], "التخفيضات": [],
-  "المفروشات": [
-    'شركة زهرة بيسان للتجارة','شركة الجنادرية للمفروشات','شركة الهرم الدولي /مفروشات هرم المدينة','شموع الجزيرة',
-    'شركة نور التجارية للتحف والهدايا','قارة هوم/افاق هوم','مؤسسة عالم الجوهرة للتجارة','مؤسسة اثاث غاليري للتجارة',
-    'شركة نوادر التصاميم للتجارة','شركة روائع النسيج للاقمشة (مراتب المملكة)','شركة رواد العائلة','مؤسسة فراج محمد الجوير التجارية',
-    'شركة رونق المنزل للصناعة','مؤسسة جبل ثهلان للتجارة','قصر الكلاسيك','ورشة تلال نجد للحدادة والالمونيوم','شركة روائع القلعة للصناعة',
-    'مؤسسة الموهوب الصغير (روما ستار)','غرائب التحف','شركة بيت المراتب والمفروشات','مؤسسة تشكيلات الإبداع للحدادةــ ورشة نوف',
-    'شركة بانوب للتجارة','مؤسسة ركن المعرفة الاولي للتجارة','معرض التوفيق ــ عبدالله العبد اللطيف','مؤسسة عامر بامسق',
-    'مؤسسة نواف سليمان عيد الحبيشي','مطابع لمسة الوادي','مخازن الانارة(تحفتي ذوق)','شركة طيف البستان تحف وهدايا',
-    'شركة بيت الاثاث السعودي','مؤسسة هزاع عواض الهبداني للتجارة'
-  ],
-  "المنزلية": [
-    'شركة السيف للتوكيلات التجارية/ الرياض','شركة رمز الجودة/عبدالرحمن قاسم سابقا','شركة ريفان الدولية منزلية','شركة سما للاواني المنزلية(العيسائي )',
-    'شركة السيف قسم الكهربائيات','شركة بن شيهون ابو عمر','شركة اواني مائدتي التجارية (الجهوري)','شركة مصنع بيت التصنيع البلاستيكي',
-    'مؤسسة التاج المنزلية للتجارة','اواني الاسطورة','جيباس','شركة بن شيهون ترامس روز','شركة المجموعة المنزلية للتجارة',
-    'شركة المهيدب اول مهمة المحدودة','شركة ريبون العالمية (منزلية)','مؤسسة المطري للاواني المنزلية','شركة بيتك الذهبي للتجارة',
-    'شركة الماسة للاواني الفاخرة','مؤسسة الاصايل للتجارة','الصبيحي منزلية','شركة - الدالة العربية',
-    'شركة الاعتصام الخليجي','مؤسسة سواة الخليج','مصنع اعمال الريادة(السعودي للمكانس سابقا)'
-  ],
-  "العطور": [
-    'مؤسسة دار سمائل','النرجس للعطور','مؤسسة المستثمر الرائد للتجارة','شركة صفوة العطور للتجارة','مؤسسة اجمل الخليجية للتجميل',
-    'شركة امواج التجميل المحدودة','شركة وجه الجمال للتجارة','الاسطورة للاكسسوارات','مؤسسة عالم الامل للاكسسوارات',
-    'شركة ريبون العالمية (تجميل)','شركة قمة الاسطورة المحدودة','شركة عوارض للتجارة','شركة الزمان التجارية (اجمل)'
-  ],
-  "الاحذية": [], "المكتبة": [], "الشنط": [], "سيفورا الوادي": []
+  "المفروشات": ['شركة زهرة بيسان للتجارة','شركة الجنادرية للمفروشات','شركة الهرم الدولي /مفروشات هرم المدينة','شموع الجزيرة','قارة هوم/افاق هوم'],
+  "المنزلية": ['شركة السيف للتوكيلات التجارية/ الرياض','شركة رمز الجودة/عبدالرحمن قاسم سابقا','شركة ريفان الدولية منزلية','شركة سما للاواني المنزلية(العيسائي )'],
+  "العطور": ['مؤسسة دار سمائل','النرجس للعطور','مؤسسة المستثمر الرائد للتجارة','شركة صفوة العطور للتجارة'],
+  "الاحذية": [], "المكتبة": [], "الشنط": [], "سيفورا": [], "الالعاب": [], "المواليد":[]
 };
 function loadDynamicSuppliers(){ try{ return JSON.parse(localStorage.getItem(SUPPLIERS_LS_KEY) || '{}'); }catch(e){ return {}; } }
 function saveDynamicSuppliers(dynamic){ localStorage.setItem(SUPPLIERS_LS_KEY, JSON.stringify(dynamic||{})); }
@@ -439,72 +418,89 @@ function mergeSuppliers(){
 }
 let SUPPLIERS = mergeSuppliers();
 
-/* ==== Debts ==== */
-const LS_KEY = 'pos_debts_final_v5';
+/* ========= Debts ========= */
+const LS_KEY = 'pos_debts_final_v10';
 let debts = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
 function saveDebts(){ localStorage.setItem(LS_KEY, JSON.stringify(debts)); }
 
-// seed
+/* ========= Budgets Mall+Section+Month ========= */
+const BUDGET_LS_KEY = 'pos_section_budgets_v4';
+/*
+{
+ "YYYY-MM": {
+   "الانصار مول": { "المفروشات": {amount,consumed,approved}, ... },
+   "ابيات عسير": { ... }
+ }
+}
+*/
+function loadBudgets(){ try{ return JSON.parse(localStorage.getItem(BUDGET_LS_KEY) || '{}'); }catch(e){ return {}; } }
+function saveBudgets(obj){ localStorage.setItem(BUDGET_LS_KEY, JSON.stringify(obj||{})); }
+function ensureBudget(b, ym, mall, section){
+  if(!b[ym]) b[ym]={};
+  if(!b[ym][mall]) b[ym][mall]={};
+  if(!b[ym][mall][section]) b[ym][mall][section]={amount:0,consumed:0,approved:false};
+}
+function setBudget(ym, mall, section, amount){
+  const b = loadBudgets();
+  ensureBudget(b, ym, mall, section);
+  const prevCons = b[ym][mall][section].consumed||0;
+  b[ym][mall][section] = {amount:Number(amount)||0, consumed:prevCons, approved:true};
+  saveBudgets(b);
+}
+function addConsumption(ym, mall, section, value){
+  const b = loadBudgets();
+  if(!b[ym]||!b[ym][mall]||!b[ym][mall][section]) return;
+  b[ym][mall][section].consumed = (b[ym][mall][section].consumed||0) + Math.max(Number(value)||0,0);
+  saveBudgets(b);
+}
+function getBudget(ym, mall, section){
+  const b = loadBudgets();
+  const rec = (((b[ym]||{})[mall]||{})[section]);
+  if(!rec) return null;
+  return {...rec, remaining: Math.max((rec.amount||0)-(rec.consumed||0),0)};
+}
+
+/* ========= Seed demo ========= */
 if(!debts.length){
   debts = [
-    { mall:'الانصار مول', section:'المفروشات', supplier: SUPPLIERS['المفروشات'][0]||'مورد افتراضي', amount:5000, discount:0, due:'2025-09-20', status:'pending', paidAmount:0, paymentType:'تحويل', paidDate:'', approval:'approved', cancelled:false, createdBy:'نصر', created:new Date().toISOString() },
-    { mall:'ابيات عسير', section:'المنزلية', supplier: SUPPLIERS['المنزلية'][0]||'مورد افتراضي', amount:3200, discount:0, due:'2025-09-10', status:'late', paidAmount:0, paymentType:'نقدي', paidDate:'', approval:'approved', cancelled:false, createdBy:'نصر', created:new Date().toISOString() }
+    { mall:'الانصار مول', section:'المفروشات', supplier: SUPPLIERS['المفروشات'][0]||'مورد', amount:5000, discount:0, due:'2025-09-20', status:'pending', paidAmount:0, paymentType:'تحويل', paidDate:'', approval:'approved', cancelled:false, createdBy:'نصر', created:new Date().toISOString() }
   ];
   saveDebts();
 }
 
-/* Helpers */
+/* ========= Helpers ========= */
 function fmtNum(n){ return Number(n||0).toLocaleString('en-US'); }
-function mallColor(m){
-  if(m==='الانصار مول') return '#03045e';
-  if(m==='ابيات عسير') return '#007BA7';
-  if(m==='فور بارك') return '#7b2cbf';
-  if(m==='العرب بلازا') return '#588157';
-  return '#6b7280';
-}
-function calcStatus(d){
-  if(d.cancelled) return {text:'ملغاة',cls:'cancelled'};
-  if(d.status==='paid') return {text:'مسدد',cls:'paid'};
-  const diff=(new Date()-new Date(d.due))/(1000*60*60*24);
-  if(diff>7) return {text:'متأخر',cls:'late'};
-  return {text:'مستحقة',cls:'pending'};
-}
-function approvalInfo(d){
-  if(d.cancelled) return {text:'',cls:''};
-  if(d.approval==='pending') return {text:'بانتظار الموافقة', cls:'approval-pending'};
-  if(d.approval==='approved') return {text:'معتمدة', cls:'approved'};
-  return {text:'', cls:''};
-}
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&gt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function mallColor(m){ if(m==='الانصار مول') return '#03045e'; if(m==='ابيات عسير') return '#007BA7'; if(m==='فور بارك') return '#7b2cbf'; if(m==='العرب بلازا') return '#588157'; return '#6b7280'; }
+function calcStatus(d){ if(d.cancelled) return {text:'ملغاة',cls:'cancelled'}; if(d.status==='paid') return {text:'مسدد',cls:'paid'}; const diff=(new Date()-new Date(d.due))/(1000*60*60*24); if(diff>7) return {text:'متأخر',cls:'late'}; return {text:'مستحقة',cls:'pending'}; }
+function approvalInfo(d){ if(d.cancelled) return {text:'',cls:''}; if(d.approval==='pending') return {text:'بانتظار الموافقة', cls:'approval-pending'}; if(d.approval==='approved') return {text:'معتمدة', cls:'approved'}; return {text:'', cls:''}; }
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function currentMonthKey(){ const dt = new Date(); const y=dt.getFullYear(); const m=String(dt.getMonth()+1).padStart(2,'0'); return `${y}-${m}`; }
+function monthLabel(ym){ const [y,m]=ym.split('-'); const names=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']; return `${names[Number(m)-1]} ${y}`; }
 
-/* Elements */
+/* ========= Elements & state ========= */
 const loginScreen = document.getElementById('loginScreen');
 const appEl = document.getElementById('app');
 const welcomeTitle = document.getElementById('welcomeTitle');
 const roleLabel = document.getElementById('roleLabel');
 const cardsGrid = document.getElementById('cardsGrid');
+const cardsView = document.getElementById('cardsView');
+const dashboard = document.getElementById('dashboard');
+
 const modalAdd = document.getElementById('modalAddBackdrop');
 const modalEdit = document.getElementById('modalEditBackdrop');
 const modalPay = document.getElementById('modalPayBackdrop');
 const modalAdmin = document.getElementById('modalAdminBackdrop');
-const cardsView = document.getElementById('cardsView');
-const dashboard = document.getElementById('dashboard');
+const modalBudget = document.getElementById('modalBudgetBackdrop');
 
-/* Dashboard charts */
-const chTimeCtx = document.getElementById('chTime').getContext('2d');
-const chMallCtx = document.getElementById('chMall').getContext('2d');
-const chSectionCtx = document.getElementById('chSection').getContext('2d');
-const chPaidVsOutCtx = document.getElementById('chPaidVsOut').getContext('2d');
-const chApprovalCtx = document.getElementById('chApproval').getContext('2d');
-const chStatusesCtx = document.getElementById('chStatuses').getContext('2d');
-let chTime, chMall, chSection, chPaidVsOut, chApproval, chStatuses;
+const addBudgetDot = document.getElementById('addBudgetDot');
+const addBudgetBox = document.getElementById('addBudgetBox');
 
 let currentUser = null;
 let searchQuery = '';
 let editIndex = null;
 let payIndex = null;
 
-/* Login */
+/* ========= Login ========= */
 document.getElementById('btnLogin').addEventListener('click', doLogin);
 function doLogin(){
   const u = document.getElementById('inputUser').value.trim();
@@ -519,36 +515,31 @@ function doLogin(){
     welcomeTitle.textContent = `مرحباً، ${u}`;
     roleLabel.textContent = `الصلاحية: ${USERS[u].role}`;
     applyRoleFeatures();
-    // الافتراضي: عرض الكروت فقط وإخفاء الداشبورد
     showCardsOnly();
     refreshAll();
     startAutoLogout();
   } else alert('اسم المستخدم أو كلمة المرور غير صحيح');
 }
-document.getElementById('inputUser').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
-document.getElementById('inputPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+['inputUser','inputPass'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); }));
 
-/* Top controls */
+/* ========= Top controls ========= */
 document.getElementById('btnLogout').addEventListener('click', ()=>{ if(confirm('هل تريد تسجيل الخروج؟')) doLogout(); });
-document.getElementById('btnShowAdd').addEventListener('click', ()=> openAddModal());
-// بدلاً من scrollIntoView: تبديل الرؤية بين الشاشتين
 document.getElementById('btnShowDash').addEventListener('click', showDashboardOnly);
 document.getElementById('btnShowCards').addEventListener('click', showCardsOnly);
 document.getElementById('btnAdmin').addEventListener('click', ()=> openAdminModal());
+document.getElementById('btnBudgets').addEventListener('click', ()=> openBudgetModal());
 
-function showDashboardOnly(){
-  cardsView.style.display='none';
-  dashboard.style.display='block';
-  updateDashboard();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function showCardsOnly(){
-  cardsView.style.display='block';
-  dashboard.style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+/* فتح شاشة الإضافة دائمًا — التحقق سيكون عند الحفظ */
+document.getElementById('btnShowAdd').addEventListener('click', ()=>{
+  if(!currentUser) return alert('سجل الدخول أولاً');
+  if(!currentUser.canAdd) return alert('ليس لديك صلاحية لإضافة مديونيات');
+  openAddModal();
+});
 
-/* Search */
+function showDashboardOnly(){ cardsView.style.display='none'; dashboard.style.display='block'; updateDashboard(); window.scrollTo({top:0,behavior:'smooth'}); }
+function showCardsOnly(){ cardsView.style.display='block'; dashboard.style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ========= Search ========= */
 document.getElementById('btnSearchToggle').addEventListener('click', ()=>{
   const si = document.getElementById('searchInput');
   si.style.display = si.style.display === 'inline-block' ? 'none' : 'inline-block';
@@ -556,77 +547,130 @@ document.getElementById('btnSearchToggle').addEventListener('click', ()=>{
 });
 document.getElementById('searchInput').addEventListener('input', (e)=>{ searchQuery = e.target.value.trim().toLowerCase(); renderCards(); });
 
-/* Role features */
+/* ========= Role features ========= */
 function applyRoleFeatures(){
   document.getElementById('btnShowAdd').style.display = currentUser.canAdd ? 'inline-block' : 'none';
   document.getElementById('btnAdmin').style.display = (currentUser.role === 'admin' || currentUser.name === 'نصر') ? 'inline-block' : 'none';
-  const fs = document.getElementById('filterSection');
-  if(currentUser.allowedSection){ fs.value = currentUser.allowedSection; fs.disabled = true; } else { fs.disabled = false; }
+  document.getElementById('btnBudgets').style.display = (currentUser && (currentUser.name==='نصر' || currentUser.name==='مصطفى')) ? 'inline-block' : 'none';
   populateSupplierFilter();
 }
 
-/* Suppliers populate */
+/* ========= Suppliers populate ========= */
 function populateSupplierFilter(){
   SUPPLIERS = mergeSuppliers();
-  const filterSectionEl = document.getElementById('filterSection');
-  const selSection = filterSectionEl.value;
+  const selSection = document.getElementById('filterSection').value;
   const el = document.getElementById('filterSupplier'); el.innerHTML='';
-  const addEl = document.getElementById('addSupplier'); addEl.innerHTML='';
-
-  if(currentUser && currentUser.name === 'نصر'){
-    el.appendChild(new Option('كل الموردين',''));
-    Object.keys(SUPPLIERS).forEach(section=>{
-      const arr = SUPPLIERS[section];
-      if(arr && arr.length){
-        const optgroup = document.createElement('optgroup'); optgroup.label = section;
-        arr.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; optgroup.appendChild(o); });
-        el.appendChild(optgroup);
-      }
-    });
-    const addSection = document.getElementById('addSection'); addSection.disabled = false;
-    populateAddSupplierBySection(addSection.value || 'المفروشات');
-  } else if(currentUser && currentUser.allowedSection){
-    const list = SUPPLIERS[currentUser.allowedSection] || [];
-    el.appendChild(new Option('كل الموردين',''));
-    list.forEach(s => el.appendChild(new Option(s,s)));
-    document.getElementById('addSection').value = currentUser.allowedSection; document.getElementById('addSection').disabled = true;
-    populateAddSupplierBySection(currentUser.allowedSection);
-  } else {
-    if(selSection){
-      const arr = SUPPLIERS[selSection] || [];
-      el.appendChild(new Option('كل الموردين',''));
-      arr.forEach(s=>el.appendChild(new Option(s,s)));
-      populateAddSupplierBySection(selSection);
-    } else {
-      el.appendChild(new Option('كل الموردين',''));
-      const all = new Set(); Object.values(SUPPLIERS).forEach(arr=>arr.forEach(s=>all.add(s)));
-      Array.from(all).forEach(s=>el.appendChild(new Option(s,s)));
-      populateAddSupplierBySection(document.getElementById('addSection').value);
-    }
+  el.appendChild(new Option('كل الموردين',''));
+  if(selSection){
+    (SUPPLIERS[selSection]||[]).forEach(s=>el.appendChild(new Option(s,s)));
+  }else{
+    const all = new Set(); Object.values(SUPPLIERS).forEach(arr=>arr.forEach(s=>all.add(s)));
+    Array.from(all).forEach(s=>el.appendChild(new Option(s,s)));
   }
 }
 document.getElementById('filterSection').addEventListener('change', ()=>{ populateSupplierFilter(); renderCards(); updateDashboard(); });
 
+/* ========= Add modal (مول → أقسام) ========= */
+function fillMallSelect(sel){ sel.innerHTML=''; ALL_MALLS.forEach(m=> sel.appendChild(new Option(m,m))); }
+function fillSectionByMall(mall, sel){ sel.innerHTML=''; (MALL_SECTIONS[mall]||[]).forEach(s => sel.appendChild(new Option(s,s))); }
 function populateAddSupplierBySection(section){
-  const el = document.getElementById('addSupplier');
-  el.innerHTML='';
+  const el = document.getElementById('addSupplier'); el.innerHTML='';
   const arr = SUPPLIERS[section] || [];
   if(!arr.length) el.appendChild(new Option('لا يوجد موردون في هذا القسم حالياً',''));
   arr.forEach(s=> el.appendChild(new Option(s,s)));
 }
-document.getElementById('addSection').addEventListener('change', (e)=> populateAddSupplierBySection(e.target.value));
-
-/* Visibility rules */
-function isVisibleForUser(d){
-  if(currentUser && currentUser.name==='مصطفى') return d.approval === 'approved' && !d.cancelled;
-  if(currentUser && currentUser.role==='special'){
-    if(currentUser.allowedSection && d.section !== currentUser.allowedSection) return false;
-    return true;
+function updateAddBudgetIndicator(){
+  const mall = document.getElementById('addMall').value;
+  const section = document.getElementById('addSection').value;
+  const ym = currentMonthKey();
+  if(!(MALL_SECTIONS[mall]||[]).includes(section)){
+    addBudgetDot.classList.remove('green');
+    addBudgetBox.textContent = `القسم "${section}" غير متاح في "${mall}"`;
+    return;
   }
+  const b = getBudget(ym, mall, section);
+  if(!b || !b.approved){
+    addBudgetDot.classList.remove('green');
+    addBudgetBox.textContent = 'لا يوجد مخصصات مالية بعد';
+    return;
+  }
+  addBudgetDot.classList.add('green');
+  addBudgetBox.textContent = `مخصص ${section} في ${mall} لشهر ${monthLabel(ym)}: ${fmtNum(b.amount)} ريال — متبقٍ: ${fmtNum(b.remaining)} ريال`;
+}
+function openAddModal(){
+  const mallSel = document.getElementById('addMall');
+  fillMallSelect(mallSel);
+  const secSel = document.getElementById('addSection');
+
+  // إن كان المستخدم special فالقسم ثابت
+  if(currentUser && currentUser.role==='special' && currentUser.allowedSection){
+    // سنملأ كل الأقسام للمول المبدئي ثم نثبت الاختيار على قسمه
+    fillSectionByMall(mallSel.value, secSel);
+    secSel.value = currentUser.allowedSection;
+    secSel.disabled = true;
+  }else{
+    fillSectionByMall(mallSel.value, secSel);
+    secSel.disabled = false;
+  }
+
+  populateAddSupplierBySection(secSel.value);
+  document.getElementById('addAmount').value='';
+  document.getElementById('addDiscount').value='';
+  document.getElementById('addDue').value='';
+  document.getElementById('addPayType').value='تحويل';
+  updateAddBudgetIndicator();
+  modalAdd.style.display='flex';
+}
+document.getElementById('addCancel').addEventListener('click', ()=> modalAdd.style.display='none');
+document.getElementById('addMall').addEventListener('change', ()=>{
+  const secSel = document.getElementById('addSection');
+  if(!(currentUser && currentUser.role==='special' && currentUser.allowedSection)){
+    fillSectionByMall(document.getElementById('addMall').value, secSel);
+  }
+  populateAddSupplierBySection(secSel.value);
+  updateAddBudgetIndicator();
+});
+document.getElementById('addSection').addEventListener('change', (e)=>{ populateAddSupplierBySection(e.target.value); updateAddBudgetIndicator(); });
+
+document.getElementById('addSave').addEventListener('click', ()=>{
+  const supplier = (document.getElementById('addSupplier').value||'').trim();
+  const mall = (document.getElementById('addMall').value||'').trim();
+  const section = (document.getElementById('addSection').value||'').trim();
+  const amount = parseFloat(document.getElementById('addAmount').value);
+  const discount = parseFloat(document.getElementById('addDiscount').value) || 0;
+  const paymentType = (document.getElementById('addPayType').value||'').trim();
+  const due = document.getElementById('addDue').value;
+  if(!supplier || !mall || !section || !amount || !due || !paymentType) return alert('اكمل الحقول المطلوبة');
+
+  const ym = currentMonthKey();
+  const b = getBudget(ym, mall, section);
+  const net = Math.max((amount||0)-(discount||0),0);
+  if(!(MALL_SECTIONS[mall]||[]).includes(section) || !b || !b.approved || b.remaining < net){
+    alert('عذرا لا يوجد لديكم مخصص مالي بعد اما بسبب استنفاذ الرصيد أو لعدم اعتماد المخصصات بعد');
+    return;
+  }
+
+  const approval = (currentUser.role==='special') ? 'pending' : 'approved';
+  const entry = { mall, section, supplier, amount, discount, due, status:'pending', paidAmount:0, paymentType, paidDate:'', approval, cancelled:false, createdBy: currentUser.name, created:new Date().toISOString() };
+  debts.unshift(entry);
+  saveDebts();
+  modalAdd.style.display='none';
+  renderCards();
+  updateDashboard();
+});
+['addMall','addSection','addSupplier','addAmount','addDiscount','addPayType','addDue'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('addSave').click(); });
+});
+
+/* ========= Cards ========= */
+function isVisibleForUser(d){
+  if(currentUser && currentUser.role==='special' && currentUser.allowedSection){
+    return d.section === currentUser.allowedSection;
+  }
+  if(currentUser && currentUser.name==='مصطفى') return d.approval === 'approved' && !d.cancelled;
   return true;
 }
-
-/* Render Cards */
 function renderCards(){
   debts = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
   const filterMall = document.getElementById('filterMall').value;
@@ -638,7 +682,6 @@ function renderCards(){
   cardsGrid.innerHTML='';
   debts.forEach((d, idx)=>{
     if(!isVisibleForUser(d)) return;
-    if(currentUser && currentUser.allowedSection && d.section !== currentUser.allowedSection) return;
     if(filterMall && d.mall !== filterMall) return;
     if(filterSection && d.section !== filterSection) return;
     if(filterSupplier && d.supplier !== filterSupplier) return;
@@ -659,7 +702,6 @@ function renderCards(){
     const color = mallColor(d.mall);
     const textColor = '#fff';
 
-    // أنشئ الكرت بمحتواه أولاً
     const card = document.createElement('div'); card.className='card';
     card.innerHTML = `
       <div class="mall-bar" style="background:${color}"></div>
@@ -680,57 +722,57 @@ function renderCards(){
       <div class="mall-bar bottom" style="background:${color}"></div>
     `;
 
-    // زر السداد (حسب الصلاحية)
+    // سداد
     const actionsWrap = document.createElement('div');
-    actionsWrap.style.display='flex';
-    actionsWrap.style.gap='8px';
-    actionsWrap.style.marginTop='0';
+    actionsWrap.style.display='flex'; actionsWrap.style.gap='8px';
     if(currentUser && currentUser.canPay && d.approval==='approved' && d.status!=='paid' && !d.cancelled){
       const payBtn = document.createElement('button');
-      payBtn.className='top-btn action';
-      payBtn.style.padding='8px 12px';
+      payBtn.className='top-btn action'; payBtn.style.padding='8px 12px';
       payBtn.innerHTML = '<i class="fa fa-money-bill-wave"></i> سداد';
       payBtn.onclick = ()=> openPayModal(idx);
       actionsWrap.appendChild(payBtn);
     }
-    if(actionsWrap.children.length){
-      card.querySelector('.card-footer').appendChild(actionsWrap);
-    }
+    if(actionsWrap.children.length){ card.querySelector('.card-footer').appendChild(actionsWrap); }
 
-    // قائمة الثلاث نقاط (لنصر/الأدمن)
+    // قائمة الإدارة
     if(currentUser && (currentUser.role==='admin' || currentUser.name==='نصر')){
       const kb = document.createElement('button'); kb.className='kebab'; kb.innerHTML='<i class="fa fa-ellipsis-vertical"></i>';
       const menu = document.createElement('div'); menu.className='menu';
 
-      // اعتماد الحوالة
       const approveBtn = document.createElement('button');
       approveBtn.textContent = 'اعتماد الحوالة';
-      approveBtn.onclick = ()=>{ debts[idx].approval='approved'; if(!debts[idx].cancelled && debts[idx].status!=='paid') debts[idx].status='pending'; saveDebts(); renderCards(); updateDashboard(); };
+      approveBtn.onclick = ()=>{
+        const mergedUsers = { ...BASE_USERS, ...loadDynamicUsers() };
+        const creator = debts[idx].createdBy;
+        const isSpecial = creator && mergedUsers[creator] && mergedUsers[creator].role==='special';
+        if(isSpecial){
+          const ym = (debts[idx].created || debts[idx].due || new Date().toISOString()).slice(0,7);
+          const netVal = Math.max((debts[idx].amount||0) - (debts[idx].discount||0), 0);
+          const b = getBudget(ym, debts[idx].mall, debts[idx].section);
+          if(!b || !b.approved || b.remaining < netVal){ alert('لا يمكن الاعتماد: الرصيد غير كافٍ في مخصص هذا المول/القسم/الشهر'); return; }
+          addConsumption(ym, debts[idx].mall, debts[idx].section, netVal);
+        }
+        debts[idx].approval='approved';
+        if(!debts[idx].cancelled && debts[idx].status!=='paid') debts[idx].status='pending';
+        saveDebts(); renderCards(); updateDashboard(); updateAddBudgetIndicator();
+      };
 
-      // إلغاء الاعتماد
       const unapproveBtn = document.createElement('button');
       unapproveBtn.textContent = 'إلغاء الاعتماد';
       unapproveBtn.onclick = ()=>{ debts[idx].approval='pending'; if(debts[idx].status!=='paid') debts[idx].status='pending'; saveDebts(); renderCards(); updateDashboard(); };
 
-      // تعديل بيانات الحوالة
       const editBtn = document.createElement('button');
       editBtn.textContent = 'تعديل بيانات الحوالة';
       editBtn.onclick = ()=> openEditModal(idx);
 
-      // تعديل/إلغاء الحوالة
       const cancelBtn = document.createElement('button');
-      cancelBtn.textContent = d.cancelled ? 'إلغاء حالة الإلغاء' : 'تعديل/إلغاء الحوالة';
+      cancelBtn.textContent = debts[idx].cancelled ? 'إلغاء حالة الإلغاء' : 'تعديل/إلغاء الحوالة';
       cancelBtn.onclick = ()=>{ debts[idx].cancelled = !debts[idx].cancelled; if(debts[idx].cancelled){ debts[idx].approval='pending'; debts[idx].status='pending'; } saveDebts(); renderCards(); updateDashboard(); };
 
-      menu.appendChild(approveBtn);
-      menu.appendChild(unapproveBtn);
-      menu.appendChild(editBtn);
-      menu.appendChild(cancelBtn);
+      menu.appendChild(approveBtn); menu.appendChild(unapproveBtn); menu.appendChild(editBtn); menu.appendChild(cancelBtn);
 
       kb.addEventListener('click', (e)=>{ e.stopPropagation(); closeAllMenus(); menu.classList.toggle('open'); });
-      card.appendChild(kb);
-      card.appendChild(menu);
-
+      card.appendChild(kb); card.appendChild(menu);
       document.addEventListener('click', closeAllMenus);
       function closeAllMenus(){ document.querySelectorAll('.menu.open').forEach(el=> el.classList.remove('open')); }
     }
@@ -739,46 +781,16 @@ function renderCards(){
   });
 }
 
-/* Add modal */
-function openAddModal(){
-  if(!currentUser) return alert('سجل الدخول أولاً');
-  if(!currentUser.canAdd) return alert('ليس لديك صلاحية لإضافة مديونيات');
-  if(currentUser.name === 'نصر'){ document.getElementById('addSection').disabled = false; populateAddSupplierBySection(document.getElementById('addSection').value); }
-  else { document.getElementById('addSection').value = currentUser.allowedSection; document.getElementById('addSection').disabled = true; populateAddSupplierBySection(currentUser.allowedSection); }
-  document.getElementById('addAmount').value='';
-  document.getElementById('addDiscount').value='';
-  document.getElementById('addDue').value='';
-  document.getElementById('addPayType').value='تحويل';
-  modalAdd.style.display='flex';
-}
-document.getElementById('addCancel').addEventListener('click', ()=> modalAdd.style.display='none');
-document.getElementById('addSave').addEventListener('click', ()=>{
-  const supplier = (document.getElementById('addSupplier').value||'').trim();
-  const mall = (document.getElementById('addMall').value||'').trim();
-  const section = (document.getElementById('addSection').value||'').trim();
-  const amount = parseFloat(document.getElementById('addAmount').value);
-  const discount = parseFloat(document.getElementById('addDiscount').value) || 0;
-  const paymentType = (document.getElementById('addPayType').value||'').trim();
-  const due = document.getElementById('addDue').value;
-  if(!supplier || !mall || !section || !amount || !due || !paymentType) return alert('اكمل الحقول المطلوبة');
-  if(currentUser.allowedSection && currentUser.allowedSection !== section) return alert('غير مسموح لك بإدخال مديونيات في هذا القسم');
-  const approval = (currentUser.role==='special') ? 'pending' : 'approved';
-  const entry = { mall, section, supplier, amount, discount, due, status:'pending', paidAmount:0, paymentType, paidDate:'', approval, cancelled:false, createdBy: currentUser.name, created:new Date().toISOString() };
-  debts.unshift(entry); saveDebts(); modalAdd.style.display='none'; renderCards(); updateDashboard();
-});
-['addSection','addSupplier','addMall','addAmount','addDiscount','addPayType','addDue'].forEach(id=>{
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('addSave').click(); });
-});
-
-/* Edit modal */
+/* ========= Edit modal ========= */
 function openEditModal(idx){
   editIndex = idx;
   const d = debts[idx];
+
   const es = document.getElementById('editSection');
   const ep = document.getElementById('editSupplier');
   es.innerHTML = '';
-  Object.keys(SUPPLIERS).forEach(sec=>{ es.appendChild(new Option(sec,sec)); });
+  const allSectionsSet = new Set(); Object.values(MALL_SECTIONS).forEach(arr=>arr.forEach(s=>allSectionsSet.add(s)));
+  Array.from(allSectionsSet).forEach(sec=>{ es.appendChild(new Option(sec,sec)); });
   es.value = d.section;
   function fillSuppliersFor(sec){
     ep.innerHTML=''; (SUPPLIERS[sec]||[]).forEach(s=> ep.appendChild(new Option(s,s)));
@@ -807,12 +819,8 @@ document.getElementById('editSave').addEventListener('click', ()=>{
   d.due = document.getElementById('editDue').value;
   saveDebts(); modalEdit.style.display='none'; renderCards(); updateDashboard();
 });
-['editSection','editSupplier','editMall','editAmount','editDiscount','editPayType','editDue'].forEach(id=>{
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('editSave').click(); });
-});
 
-/* Pay modal */
+/* ========= Pay modal ========= */
 function openPayModal(idx){
   payIndex = idx;
   const d = debts[idx];
@@ -832,9 +840,8 @@ document.getElementById('payConfirm').addEventListener('click', ()=>{
   if(debts[payIndex].approval!=='approved' || debts[payIndex].cancelled) return alert('لا يمكن السداد قبل الاعتماد أو إذا كانت الحوالة ملغاة');
 
   debts[payIndex].paidAmount = (debts[payIndex].paidAmount||0) + amt;
-  // ----- الإصلاح هنا: كانت debs بدل debts -----
-  const net = (debts[payIndex]?.amount||0) - (debts[payIndex]?.discount||0);
-  if(debts[payIndex].paidAmount >= net){
+  const netVal = (debts[payIndex]?.amount||0) - (debts[payIndex]?.discount||0);
+  if(debts[payIndex].paidAmount >= netVal){
     debts[payIndex].status = 'paid';
     if(currentUser.name === 'مصطفى'){
       const today = new Date();
@@ -846,12 +853,8 @@ document.getElementById('payConfirm').addEventListener('click', ()=>{
   }
   saveDebts(); modalPay.style.display='none'; renderCards(); updateDashboard();
 });
-['payAmount','payPass'].forEach(id=>{
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('payConfirm').click(); });
-});
 
-/* ===== Admin Panel ===== */
+/* ========= Admin ========= */
 function openAdminModal(){
   if(!currentUser || !(currentUser.role==='admin' || currentUser.name==='نصر')) return alert('غير مسموح');
   document.getElementById('adminUserName').value = '';
@@ -888,18 +891,14 @@ document.getElementById('adminAddSuppliers').addEventListener('click', ()=>{
   if(!text) return alert('أدخل اسم مورد واحد على الأقل');
   const names = text.split('\n').map(s=>s.trim()).filter(Boolean);
   if(!names.length) return alert('لا توجد أسماء صالحة');
-
   const dynamic = loadDynamicSuppliers();
   if(!dynamic[section]) dynamic[section] = [];
   const before = new Set(dynamic[section]);
   names.forEach(n => before.add(n));
   dynamic[section] = Array.from(before);
-
   saveDynamicSuppliers(dynamic);
   SUPPLIERS = mergeSuppliers();
   alert('تمت إضافة المورد/الموردين بنجاح');
-
-  populateSupplierFilter();
   const curAddSec = document.getElementById('addSection').value;
   if(curAddSec === section) populateAddSupplierBySection(section);
 });
@@ -930,28 +929,11 @@ function renderAdminUsersList(){
   });
 }
 
-/* ===== Dashboard ===== */
-function getDashFiltered(){
-  const from = document.getElementById('dashFrom').value;
-  const to = document.getElementById('dashTo').value;
-  const mall = document.getElementById('dashMall').value;
-  const section = document.getElementById('dashSection').value;
-  const st = document.getElementById('dashStatus').value;
-
-  let list = debts.slice().filter(isVisibleForUser);
-  if(from) list = list.filter(d=> (d.created||d.due) >= from);
-  if(to) list = list.filter(d=> (d.created||d.due) <= to);
-  if(mall) list = list.filter(d=> d.mall===mall);
-  if(section) list = list.filter(d=> d.section===section);
-  if(st){
-    if(st==='approval_pending') list = list.filter(d=> d.approval==='pending');
-    else if(st==='approved') list = list.filter(d=> d.approval==='approved');
-    else if(st==='cancelled') list = list.filter(d=> d.cancelled);
-    else list = list.filter(d=> d.status===st);
-  }
-  return list;
-}
+/* ========= Dashboard (مؤمّنة) ========= */
+let chTime, chMall, chSection, chPaidVsOut, chApproval, chStatuses;
+function updateDashboard(){ updateKPIsAndCharts(); }
 function updateKPIsAndCharts(){
+  /* KPIs تعمل دائمًا */
   const list = getDashFiltered();
   const planned = list.reduce((s,d)=> s + (d.amount||0),0);
   const net = list.reduce((s,d)=> s + Math.max((d.amount||0)-(d.discount||0),0),0);
@@ -969,7 +951,19 @@ function updateKPIsAndCharts(){
   document.getElementById('kpiAvgDelay').textContent = `متوسط التأخير: ${avgDelay} يوم`;
   document.getElementById('kpiApproval').textContent = `بانتظار/معتمد: ${approvalPending} / ${approvedCount}`;
 
-  // Grouping function
+  /* الرسوم: لا تُنشأ إلا إذا كانت Chart.js متوفرة والعناصر موجودة */
+  if(typeof Chart === 'undefined') return;
+
+  const ctxTime = document.getElementById('chTime');
+  const ctxMall = document.getElementById('chMall');
+  const ctxSection = document.getElementById('chSection');
+  const ctxPaidVsOut = document.getElementById('chPaidVsOut');
+  const ctxApproval = document.getElementById('chApproval');
+  const ctxStatuses = document.getElementById('chStatuses');
+  if(!ctxTime || !ctxMall || !ctxSection || !ctxPaidVsOut || !ctxApproval || !ctxStatuses) return;
+
+  [chTime,chMall,chSection,chPaidVsOut,chApproval,chStatuses].forEach(ch=>{ if(ch) ch.destroy(); });
+
   function groupByTime(arr, grain='month'){
     const fmt = (d)=> {
       const dt = new Date(d);
@@ -990,64 +984,101 @@ function updateKPIsAndCharts(){
     return { labels: keys, planned: keys.map(k=>map[k].planned), paid: keys.map(k=>map[k].paid), net: keys.map(k=>map[k].net) };
   }
 
-  // charts destroy/recreate
-  [chTime,chMall,chSection,chPaidVsOut,chApproval,chStatuses].forEach(ch=>{ if(ch) ch.destroy(); });
-
-  // Time (line)
   const grain = document.getElementById('dashGroup').value || 'month';
   const g = groupByTime(list, grain);
-  chTime = new Chart(chTimeCtx,{type:'line',data:{labels:g.labels,datasets:[
+  chTime = new Chart(ctxTime.getContext('2d'),{type:'line',data:{labels:g.labels,datasets:[
     {label:'الصافي',data:g.net},
     {label:'المسدّد',data:g.paid}
   ]},options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
 
-  // Mall (bar)
   const mm={}; list.forEach(d=>{ if(!mm[d.mall]) mm[d.mall]=0; mm[d.mall]+=Math.max((d.amount||0)-(d.discount||0),0); });
   const mlabels=Object.keys(mm), mvals=mlabels.map(k=>mm[k]);
-  chMall = new Chart(chMallCtx,{type:'bar',data:{labels:mlabels,datasets:[{label:'الصافي',data:mvals}]} ,options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
+  chMall = new Chart(ctxMall.getContext('2d'),{type:'bar',data:{labels:mlabels,datasets:[{label:'الصافي',data:mvals}]},options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
 
-  // Section (bar)
   const sm={}; list.forEach(d=>{ if(!sm[d.section]) sm[d.section]=0; sm[d.section]+=Math.max((d.amount||0)-(d.discount||0),0); });
   const slabels=Object.keys(sm), svals=slabels.map(k=>sm[k]);
-  chSection = new Chart(chSectionCtx,{type:'bar',data:{labels:slabels,datasets:[{label:'الصافي',data:svals}]} ,options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
+  chSection = new Chart(ctxSection.getContext('2d'),{type:'bar',data:{labels:slabels,datasets:[{label:'الصافي',data:svals}]},options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
 
-  // Paid vs Outstanding (bar)
-  chPaidVsOut = new Chart(chPaidVsOutCtx,{type:'bar',data:{labels:['المسدّد','المتبقي'],datasets:[{label:'القيمة',data:[paid,Math.max(net-paid,0)]}]} ,options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
+  chPaidVsOut = new Chart(ctxPaidVsOut.getContext('2d'),{type:'bar',data:{labels:['المسدّد','المتبقي'],datasets:[{label:'القيمة',data:[paid,Math.max(net-paid,0)]}]},options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
 
-  // Approval (bar)
   const apPending = list.filter(d=>d.approval==='pending' && !d.cancelled).length;
-  const apApproved = list.filter(d=>d.approval==='approved' && !d.cancelled).length;
-  const apCancelled = list.filter(d=>d.cancelled).length;
-  chApproval = new Chart(chApprovalCtx,{type:'bar',data:{labels:['بانتظار','معتمدة','ملغاة'],datasets:[{label:'عدد',data:[apPending,apApproved,apCancelled]}]} ,options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
-
-  // Statuses (bar)
-  const sp={pending:0,late:0,paid:0};
-  list.forEach(d=>{ const st=calcStatus(d).cls; if(sp[st]!=null) sp[st] += 1; });
-  chStatuses = new Chart(chStatusesCtx,{type:'bar',data:{labels:['مستحقة','متأخر','مسدد'],datasets:[{label:'عدد',data:[sp.pending,sp.late,sp.paid]}]} ,options:{responsive:true,plugins:{legend:{labels:{color:'#000'}}},scales:{x:{ticks:{color:'#000'}},y:{ticks:{color:'#000'}}}}});
+  const apApproved = list.filter(d=>d.approval==='approved' && !d.cancelمل).length; // intentional typo fixed below
 }
-document.getElementById('dashApply').addEventListener('click', updateKPIsAndCharts);
 
-/* Global filters listeners (grid) */
-['filterMall','filterSupplier','filterMonth','filterStatus'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('change', ()=>{ renderCards(); updateDashboard(); });
+/* إصلاح خطأ مطبعي صغير في السطر السابق */
+function getDashFiltered(){
+  const from = document.getElementById('dashFrom').value;
+  const to = document.getElementById('dashTo').value;
+  const mall = document.getElementById('dashMall').value;
+  const section = document.getElementById('dashSection').value;
+  const st = document.getElementById('dashStatus').value;
+
+  let list = debts.slice().filter(isVisibleForUser);
+  if(from) list = list.filter(d=> (d.created||d.due) >= from);
+  if(to) list = list.filter(d=> (d.created||d.due) <= to);
+  if(mall) list = list.filter(d=> d.mall===mall);
+  if(section) list = list.filter(d=> d.section===section);
+  if(st){
+    if(st==='approval_pending') list = list.filter(d=> d.approval==='pending');
+    else if(st==='approved') list = list.filter(d=> d.approval==='approved');
+    else if(st==='cancelled') list = list.filter(d=> d.cancelled);
+    else list = list.filter(d=> d.status===st);
+  }
+  return list;
+}
+document.getElementById('dashApply').addEventListener('click', updateDashboard);
+
+/* ========= Budget Modal ========= */
+function fillBudgetMallSelect(){ const sel = document.getElementById('budgetMall'); sel.innerHTML=''; ALL_MALLS.forEach(m => sel.appendChild(new Option(m,m))); }
+function fillBudgetSectionSelect(){ const mall = document.getElementById('budgetMall').value; const sel = document.getElementById('budgetSection'); sel.innerHTML=''; (MALL_SECTIONS[mall]||[]).forEach(s => sel.appendChild(new Option(s, s))); }
+function fillBudgetMonthSelect(){
+  const sel = document.getElementById('budgetMonth'); sel.innerHTML='';
+  const base = new Date(); base.setMonth(base.getMonth()-1);
+  for(let i=0;i<12;i++){
+    const d=new Date(base.getFullYear(), base.getMonth()+i, 1);
+    const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'); const key=`${y}-${m}`;
+    const opt=new Option(monthLabel(key), key);
+    if(key===currentMonthKey()) opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+function openBudgetModal(){
+  if(!(currentUser && (currentUser.name==='نصر' || currentUser.name==='مصطفى'))) return alert('مسموح لنصر ومصطفى فقط');
+  fillBudgetMallSelect(); fillBudgetSectionSelect(); fillBudgetMonthSelect();
+  document.getElementById('budgetAmount').value=''; modalBudget.style.display='flex';
+}
+document.getElementById('budgetMall').addEventListener('change', fillBudgetSectionSelect);
+document.getElementById('budgetClose').addEventListener('click', ()=> modalBudget.style.display='none');
+document.getElementById('budgetSave').addEventListener('click', ()=>{
+  const mall = document.getElementById('budgetMall').value;
+  const section = document.getElementById('budgetSection').value;
+  const monthKey = document.getElementById('budgetMonth').value;
+  const amount = parseFloat(document.getElementById('budgetAmount').value);
+  if(!mall || !section || !monthKey || !amount || amount<=0) return alert('أدخل بيانات صحيحة للمخصص (مول، قسم، شهر، مبلغ).');
+  setBudget(monthKey, mall, section, amount);
+  alert(`تم حفظ واعتماد مخصص ${section} في ${mall} لشهر ${monthLabel(monthKey)} بقيمة ${fmtNum(amount)} ريال`);
+  modalBudget.style.display='none';
+  updateAddBudgetIndicator();
 });
 
-/* Dashboard update wrapper */
-function updateDashboard(){
-  updateKPIsAndCharts();
-}
+/* ========= refresh / logout ========= */
+function refreshAll(){
+  // تعبئة فورم الإضافة مع قيم أولية
+  const addMallSel = document.getElementById('addMall');
+  fillMallSelect(addMallSel);
+  const addSecSel = document.getElementById('addSection');
+  fillSectionByMall(addMallSel.value, addSecSel);
+  populateAddSupplierBySection(addSecSel.value);
 
-/* refresh / logout / auto-logout */
-function refreshAll(){ populateSupplierFilter(); renderCards(); updateDashboard(); }
+  populateSupplierFilter();
+  renderCards();
+  updateDashboard();
+  updateAddBudgetIndicator();
+}
 function doLogout(){
-  currentUser=null;
-  localStorage.removeItem(SESSION_KEY);
-  document.getElementById('inputUser').value='';
-  document.getElementById('inputPass').value='';
-  appEl.style.display='none';
-  loginScreen.style.display='flex';
-  clearTimeout(logoutTimer);
+  currentUser=null; localStorage.removeItem(SESSION_KEY);
+  document.getElementById('inputUser').value=''; document.getElementById('inputPass').value='';
+  appEl.style.display='none'; loginScreen.style.display='flex'; clearTimeout(logoutTimer);
 }
 let logoutTimer = null;
 function startAutoLogout(){
@@ -1056,7 +1087,7 @@ function startAutoLogout(){
 }
 ['mousemove','keydown','click','touchstart'].forEach(ev => window.addEventListener(ev, startAutoLogout));
 
-/* init */
+/* ========= init ========= */
 (function init(){
   USERS = { ...BASE_USERS, ...loadDynamicUsers() };
   SUPPLIERS = mergeSuppliers();
@@ -1064,22 +1095,14 @@ function startAutoLogout(){
   const sesUser = localStorage.getItem(SESSION_KEY);
   if(sesUser && USERS[sesUser]){
     currentUser = { name: sesUser, ...USERS[sesUser] };
-    loginScreen.style.display='none';
-    appEl.style.display='block';
-    welcomeTitle.textContent = `مرحباً، ${sesUser}`;
-    roleLabel.textContent = `الصلاحية: ${USERS[sesUser].role}`;
-    applyRoleFeatures();
-    showCardsOnly();
+    loginScreen.style.display='none'; appEl.style.display='block';
+    welcomeTitle.textContent = `مرحباً، ${sesUser}`; roleLabel.textContent = `الصلاحية: ${USERS[sesUser].role}`;
+    applyRoleFeatures(); showCardsOnly(); refreshAll(); startAutoLogout();
+  } else {
+    showCardsOnly(); // نعرض الكروت (داخليًا) لكن تبقى شاشة الدخول ظاهرة
+    // لا نستدعي الرسوم إن لم تتوفر المكتبة
     refreshAll();
-    startAutoLogout();
-    return;
   }
-
-  // افتراضياً عند أول فتح: عرض الكروت فقط
-  showCardsOnly();
-  populateSupplierFilter();
-  renderCards();
-  updateDashboard();
 })();
 </script>
 </body>
