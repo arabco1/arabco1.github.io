@@ -4,21 +4,21 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>إدارة المديونيات </title>
+<title>إدارة المديونيات — صلاحيات مفصلة + مؤشرات أداء</title>
 <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
   --primary:#0b3a8a; --accent:#ffd83a; --bg-grad: linear-gradient(135deg,#071735 0%, #0b2b6f 100%);
   --glass: rgba(255,255,255,0.08); --card-w: 340px; --radius: 16px; --gray-card: #f3f4f6;
-  --green:#2ecc71; --orange:#f59e0b; --yellow:#ffd83a;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#fff;min-height:100vh;padding:18px}
+body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#fff;min-height:100vh;padding:14px}
 
 /* login */
-#loginScreen{display:flex;align-items:center;justify-content:center;height:calc(100vh - 36px);padding:20px}
-.login-card{width:380px;padding:28px;border-radius:14px;background:var(--glass);backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(2,6,23,0.6);text-align:center}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 28px);padding:20px}
+.login-card{width:380px;max-width:96vw;padding:24px;border-radius:14px;background:var(--glass);backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(2,6,23,0.6);text-align:center}
 .login-card h1{margin:0 0 10px;font-size:20px}
 .input{width:100%;padding:11px 13px;margin:8px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.35);font-size:14px;text-align:center;background:rgba(255,255,255,0.12);color:#fff}
 .input::placeholder{color:#eef2ff}
@@ -27,10 +27,10 @@ body{margin:0;font-family:'Almarai',sans-serif;background:var(--bg-grad);color:#
 .btn.block{width:100%}
 
 /* app */
-#app{display:none;padding:16px;max-width:1600px;margin:8px auto}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:50px;height:50px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#00204a);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+#app{display:none;padding:10px;max-width:1400px;margin:8px auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#00204a);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
 .brand h2{margin:0;font-size:17px}
 .controls{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
 .top-btn{padding:9px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;background:transparent;color:#fff;white-space:nowrap;font-size:13px}
@@ -45,10 +45,10 @@ select option{background:#fff;color:#111}
 select:focus{outline:2px solid #c7d2fe}
 
 /* filters */
-.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 
-/* grid */
-.grid{display:grid;grid-template-columns:repeat(5,minmax(var(--card-w),1fr));gap:16px;justify-items:center;align-items:start;padding-bottom:16px}
+/* grid -> 4 per row */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(var(--card-w),1fr));gap:14px;justify-items:center;align-items:start;padding-bottom:14px}
 
 /* card */
 .card{
@@ -61,8 +61,7 @@ select:focus{outline:2px solid #c7d2fe}
 .mall-bar{height:6px;width:100%}
 .mall-bar.bottom{margin-top:8px}
 .value-line{border-radius:8px;padding:6px 8px;text-align:center;font-weight:800;color:#fff;margin:6px 10px;font-size:13px;line-height:1.25}
-.value-line.yellow-text{color:var(--yellow); border:1px dashed rgba(255,216,58,0.6)}
-.value-line.white-text{color:#fff; border:1px dashed rgba(255,255,255,0.45)}
+.value-line.yellow-fill{background:#ffd83a !important;color:#111 !important;border:1px solid #eab308!important}
 
 /* status */
 .status{display:inline-block;padding:5px 8px;border-radius:10px;font-weight:800;margin:2px 3px;font-size:12px}
@@ -74,7 +73,7 @@ select:focus{outline:2px solid #c7d2fe}
 .status.cancelled{background:#6b7280;color:#fff}
 
 .card-body{padding:10px 6px 2px 6px}
-.card-footer{display:flex;gap:6px;justify-content:center;align-items:center;padding:6px 10px 10px}
+.card-footer{display:flex;gap:6px;justify-content:center;align-items:center;padding:6px 10px 10px;flex-wrap:wrap}
 
 /* kebab */
 .kebab{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:999px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:6}
@@ -85,33 +84,27 @@ select:focus{outline:2px solid #c7d2fe}
 
 /* modal */
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:60}
-.modal{width:960px;max-width:95vw;background:var(--glass);padding:16px;border-radius:14px;backdrop-filter:blur(10px);box-shadow:0 18px 60px rgba(0,0,0,0.45)}
+.modal{width:1000px;max-width:95vw;background:var(--glass);padding:16px;border-radius:14px;backdrop-filter:blur(10px);box-shadow:0 18px 60px rgba(0,0,0,0.45)}
 .modal h3{margin:0 0 8px;color:#fff}
-.modal h4{margin:8px 0 6px}
-.modal .row{display:flex;gap:8px;margin:6px 0;align-items:center}
+.modal .row{display:flex;gap:8px;margin:6px 0;align-items:center;flex-wrap:wrap}
 .modal input,.modal select,.modal textarea{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.45);background:rgba(255,255,255,0.14);color:#fff;font-weight:700;font-size:13px}
 .modal input::placeholder,.modal textarea::placeholder{color:#eef2ff}
 
-/* budget grid new */
-.sec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.sec-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:8px}
-.sec-title{font-weight:800;margin-bottom:6px}
-.sec-foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;opacity:.9}
-
-/* admin tags */
-.tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);padding:4px 8px;border-radius:999px;margin:4px 6px 0 0}
-.tag button{background:transparent;border:none;color:#fff;cursor:pointer}
-
+/* admin small */
 .admin-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.08);padding:8px 10px;border-radius:10px;margin:6px 0}
 .small-note{opacity:.9}
 
+/* dashboard */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.kpi-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px}
+
 /* responsive */
-@media(max-width:1400px){.grid{grid-template-columns:repeat(4,minmax(260px,1fr))}}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(240px,1fr))}}
-@media(max-width:820px){.grid{grid-template-columns:repeat(2,minmax(220px,1fr))}}
+@media(max-width:1400px){.grid{grid-template-columns:repeat(3,minmax(260px,1fr))}}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(240px,1fr))}}
 @media(max-width:720px){
-  .login-card{width:92%}.modal{width:92%}.grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-  .sec-grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(1,minmax(220px,1fr))}
+  .kpi-grid{grid-template-columns:1fr}
+  .logo{width:42px;height:42px}
 }
 </style>
 </head>
@@ -148,6 +141,7 @@ select:focus{outline:2px solid #c7d2fe}
         <button class="top-btn primary" id="btnShowCards"><i class="fa fa-th-large"></i> الكروت</button>
         <button class="top-btn action" id="btnShowAdd"><i class="fa fa-plus-circle"></i> ترحيل طلب جديد</button>
         <button class="top-btn primary" id="btnBudgets" style="display:none"><i class="fa fa-sack-dollar"></i> مخصصات الأقسام</button>
+        <button class="top-btn primary" id="btnKPI"><i class="fa fa-chart-bar"></i> مؤشرات الأداء</button>
         <button class="top-btn primary" id="btnAdmin" style="display:none"><i class="fa fa-user-gear"></i> لوحة التحكم</button>
         <button class="top-btn" id="btnLogout"><i class="fa fa-sign-out-alt"></i> خروج</button>
       </div>
@@ -174,7 +168,7 @@ select:focus{outline:2px solid #c7d2fe}
     </select>
     <input id="filterMonth" type="month" class="select" style="min-width:170px" />
     <label style="display:flex;align-items:center;gap:6px">
-      <input type="checkbox" id="filterHasDiscount"> يحتوي خصم مكتسب
+      <input type="checkbox" id="filterHasDiscount"> اتفاقية خصم مكتسب
     </label>
   </div>
 
@@ -182,7 +176,7 @@ select:focus{outline:2px solid #c7d2fe}
   <div class="grid" id="cardsGrid"></div>
 </div>
 
-<!-- ===== Budget Modal (Improved) ===== -->
+<!-- ===== Budget Modal ===== -->
 <div class="modal-backdrop" id="modalBudget">
   <div class="modal">
     <h3><i class="fa fa-sack-dollar"></i> مخصصات الأقسام المالية</h3>
@@ -193,7 +187,7 @@ select:focus{outline:2px solid #c7d2fe}
       <button class="btn" id="budCopyPrev"><i class="fa fa-copy"></i> نسخ من الشهر السابق</button>
       <button class="btn" id="budFillBulk"><i class="fa fa-bolt"></i> تعبئة جماعية</button>
     </div>
-    <div id="budSecGrid" class="sec-grid"></div>
+    <div id="budSecGrid" class="grid" style="grid-template-columns:repeat(3,1fr);gap:10px"></div>
     <div class="row" style="justify-content:flex-end">
       <button class="btn" id="budSave"><i class="fa fa-save"></i> حفظ</button>
       <button class="btn ghost" id="budClose">إغلاق</button>
@@ -229,22 +223,85 @@ select:focus{outline:2px solid #c7d2fe}
   </div>
 </div>
 
-<!-- ===== Admin Modal (Improved Users) ===== -->
+<!-- ===== Edit (Employee before approval) ===== -->
+<div class="modal-backdrop" id="modalEdit">
+  <div class="modal">
+    <h3>تعديل الطلب (قبل الاعتماد)</h3>
+    <div class="row">
+      <input id="edMall" class="input" disabled>
+      <input id="edSection" class="input" disabled>
+    </div>
+    <div class="row">
+      <input id="edSupplier" class="input" placeholder="المورد">
+      <select id="edTransferKind" class="select">
+        <option>مقدم</option><option>مستحق</option><option>تسوية نهائية</option>
+      </select>
+    </div>
+    <div class="row">
+      <input id="edAmount" class="input" type="number" placeholder="المبلغ">
+      <input id="edDiscount" class="input" type="number" placeholder="الخصم المكتسب">
+      <input id="edDue" class="input" type="date">
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn" id="edSave">تحديث</button>
+      <button class="btn ghost" id="edCancel">إلغاء</button>
+    </div>
+    <p class="small-note">يمكنك تعديل الطلب ما دام بانتظار الموافقة.</p>
+  </div>
+</div>
+
+<!-- ===== Edit (Admin after approval) ===== -->
+<div class="modal-backdrop" id="modalAdminEdit">
+  <div class="modal">
+    <h3>تعديل طلب/اعتماد</h3>
+    <div class="row" style="background:rgba(255,216,58,.12);border:1px solid rgba(255,216,58,.4);border-radius:12px;padding:8px">
+      <input id="adSupplierDebt" class="input" type="number" min="0" placeholder="رصيد مديونية المورد">
+      <input id="adSupplierStock" class="input" type="number" min="0" placeholder="رصيد مخزون المورد">
+      <select id="adPriority" class="select">
+        <option>أولوية عادية</option><option>أولوية مرتفعة</option>
+      </select>
+    </div>
+    <div class="row">
+      <input id="adSupplier" class="input" placeholder="المورد">
+      <select id="adTransferKind" class="select">
+        <option>مقدم</option><option>مستحق</option><option>تسوية نهائية</option>
+      </select>
+      <input id="adAmount" class="input" type="number" placeholder="المبلغ">
+      <input id="adDiscount" class="input" type="number" placeholder="الخصم المكتسب">
+      <input id="adDue" class="input" type="date">
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn" id="adSave">حفظ</button>
+      <button class="btn ghost" id="adCancel">إلغاء</button>
+    </div>
+    <p class="small-note">سيتم تعديل استهلاك المخصص تلقائياً إذا تغيّر صافي المبلغ لطلب صُنِع بواسطة مشرف قسم.</p>
+  </div>
+</div>
+
+<!-- ===== Admin Modal (Users & Suppliers) ===== -->
 <div class="modal-backdrop" id="modalAdmin">
   <div class="modal">
     <h3><i class="fa fa-user-gear"></i> لوحة التحكم</h3>
-
-    <!-- إضافة مستخدم -->
     <h4>إضافة مستخدم جديد</h4>
     <div class="row">
       <input id="adminUserName" class="input" type="text" placeholder="اسم المستخدم">
       <input id="adminUserPass" class="input" type="password" placeholder="كلمة المرور">
       <select id="adminUserRole" class="select" title="الصلاحية">
         <option value="admin">إدارة تنفيذية</option>
-        <option value="accountant">ادارة مالية </option>
+        <option value="accountant">إدارة مالية</option>
         <option value="special">مشرف قسم</option>
         <option value="viewer">إستعلام</option>
       </select>
+    </div>
+
+    <!-- صلاحيات تفصيلية -->
+    <div class="row" id="permRow" style="gap:14px">
+      <label><input type="checkbox" id="permAdd"> صلاحية ترحيل طلب</label>
+      <label><input type="checkbox" id="permBudgets"> صلاحيات مخصصات الأقسام</label>
+      <label><input type="checkbox" id="permApprove"> صلاحيات اعتماد</label>
+      <label><input type="checkbox" id="permPay"> صلاحية سداد</label>
+      <label><input type="checkbox" id="permEditCards"> صلاحية تعديل كروت</label>
+      <label><input type="checkbox" id="permCancelCards"> صلاحية إلغاء كروت</label>
     </div>
 
     <!-- تعيينات المشرف -->
@@ -258,10 +315,8 @@ select:focus{outline:2px solid #c7d2fe}
     </div>
 
     <div class="row"><button class="btn" id="adminAddUser"><i class="fa fa-user-plus"></i> حفظ المستخدم</button></div>
-
     <hr style="border-color:rgba(255,255,255,0.2)">
 
-    <!-- إضافة مورد -->
     <h4>إضافة موردين</h4>
     <div class="row">
       <select id="adminSupMall" class="select" title="المركز"></select>
@@ -281,30 +336,39 @@ select:focus{outline:2px solid #c7d2fe}
   </div>
 </div>
 
-<!-- ===== Approve Extras Modal ===== -->
-<div class="modal-backdrop" id="modalApproveExtras">
+<!-- ===== KPI Dashboard ===== -->
+<div class="modal-backdrop" id="modalKPI">
   <div class="modal">
-    <h3>إدخال بعد الاعتماد</h3>
+    <h3><i class="fa fa-chart-bar"></i> مؤشرات الأداء</h3>
     <div class="row">
-      <input id="apSupplierDebt" class="input" type="number" placeholder="رصيد مديونية المورد (اختياري)">
-      <select id="apPriority" class="select">
-        <option value="">بدون تحديد</option>
-        <option>أولوية عادية</option>
-        <option>أولوية مرتفعة</option>
+      <input id="kpiYear" class="input" type="number" min="2000" max="2100" placeholder="السنة (مثال 2025)">
+      <select id="kpiMonth" class="select"><option value="">كل الشهور</option></select>
+      <select id="kpiMall" class="select">
+        <option value="">كل المولات</option>
+        <option>الانصار مول</option>
+        <option>ابيات عسير</option>
+        <option>فور بارك</option>
+        <option>العرب بلازا</option>
       </select>
+      <button class="btn" id="kpiRefresh"><i class="fa fa-rotate"></i> تحديث</button>
+      <button class="btn ghost" id="kpiClose">إغلاق</button>
     </div>
-    <div class="row" style="justify-content:flex-end">
-      <button class="btn" id="apSave">حفظ</button>
-      <button class="btn ghost" id="apCancel">إغلاق</button>
+    <div class="kpi-grid">
+      <div class="kpi-card"><canvas id="chPaidByMall"></canvas></div>
+      <div class="kpi-card"><canvas id="chPaidBySectionPerMall"></canvas></div>
+      <div class="kpi-card"><canvas id="chPlannedPaidCancelled"></canvas></div>
+      <div class="kpi-card"><canvas id="chTotalVsPaidByMall"></canvas></div>
+      <div class="kpi-card" style="grid-column:1 / -1"><canvas id="chSupplierDebtBySection"></canvas></div>
     </div>
+    <p class="small-note">الفلترة تعمل على مستوى (السنة/الشهر/المركز).</p>
   </div>
 </div>
 
 <script>
-/* ======= ثابت ======= */
+/* ===== ثابت ===== */
 const SESSION_KEY='pos_session_user_v1';
 
-/* ======= تعريف المراكز والأقسام ======= */
+/* ===== المراكز والأقسام ===== */
 const MALL_SECTIONS = {
   "الانصار مول": ["الرجالي","النسائي","الولادي","الرياضة","الجاكت","التخفيضات","المفروشات","المنزلية","الاحذية","العطور","سيفورا","المكتبة","الشنط","الالعاب","المواليد"],
   "ابيات عسير": ["الرجالي","النسائي","الولادي","المواليد","العطور","الالعاب","الاحذية","المفروشات","المنزلية"],
@@ -312,25 +376,52 @@ const MALL_SECTIONS = {
   "العرب بلازا": ["المفروشات","المنزلية","الالعاب"]
 };
 
-/* ======= المستخدمون ======= */
-const USERS_LS_KEY='pos_users_dynamic_v3';
+/* ===== المستخدمون (صلاحيات مفصلة) ===== */
+const USERS_LS_KEY='pos_users_dynamic_v4_perms';
 /*
  user object:
- { pass, role, canAdd, canPay, isEnabled, assignments?: [ {mall, section}, ... ] }
+ {
+   pass, role, isEnabled,
+   canAdd, canManageBudgets, canApprove, canPay, canEditCards, canCancelCards,
+   assignments?: [ {mall, section}, ... ]   // لمشرف القسم
+ }
 */
 const BASE_USERS={
-  "نصر":{pass:"71111",role:"admin",canAdd:true,canPay:true,isEnabled:true},
-  "مصطفى":{pass:"123456",role:"accountant",canAdd:false,canPay:true,isEnabled:true},
-  "استعلام":{pass:"123456",role:"viewer",canAdd:false,canPay:false,isEnabled:true},
-  "جياب":{pass:"71111",role:"special",canAdd:true,canPay:false,isEnabled:true,assignments:[{mall:"الانصار مول",section:"المنزلية"}]},
-  "راجح":{pass:"73333",role:"special",canAdd:true,canPay:false,isEnabled:true,assignments:[{mall:"الانصار مول",section:"المفروشات"}]},
-  "العطور":{pass:"81111",role:"special",canAdd:true,canPay:false,isEnabled:true,assignments:[{mall:"الانصار مول",section:"العطور"}]}
+  // نصر: كل الصلاحيات
+  "نصر":{
+    pass:"71111",role:"admin",isEnabled:true,
+    canAdd:true,canManageBudgets:true,canApprove:true,canPay:true,canEditCards:true,canCancelCards:true
+  },
+  // مصطفى: محاسب — تمت إزالة المخصصات عنه كما طُلِب
+  "مصطفى":{
+    pass:"123456",role:"accountant",isEnabled:true,
+    canAdd:false,canManageBudgets:false,canApprove:false,canPay:true,canEditCards:false,canCancelCards:false
+  },
+  "استعلام":{
+    pass:"123456",role:"viewer",isEnabled:true,
+    canAdd:false,canManageBudgets:false,canApprove:false,canPay:false,canEditCards:false,canCancelCards:false
+  },
+  "جياب":{
+    pass:"71111",role:"special",isEnabled:true,
+    canAdd:true,canManageBudgets:false,canApprove:false,canPay:false,canEditCards:false,canCancelCards:false,
+    assignments:[{mall:"الانصار مول",section:"المنزلية"}]
+  },
+  "راجح":{
+    pass:"73333",role:"special",isEnabled:true,
+    canAdd:true,canManageBudgets:false,canApprove:false,canPay:false,canEditCards:false,canCancelCards:false,
+    assignments:[{mall:"الانصار مول",section:"المفروشات"}]
+  },
+  "العطور":{
+    pass:"81111",role:"special",isEnabled:true,
+    canAdd:true,canManageBudgets:false,canApprove:false,canPay:false,canEditCards:false,canCancelCards:false,
+    assignments:[{mall:"الانصار مول",section:"العطور"}]
+  }
 };
 function loadDynamicUsers(){try{return JSON.parse(localStorage.getItem(USERS_LS_KEY)||'{}')}catch(e){return{}}}
 function saveDynamicUsers(o){localStorage.setItem(USERS_LS_KEY,JSON.stringify(o||{}))}
 let USERS={...BASE_USERS,...loadDynamicUsers()};
 
-/* ======= الموردون ======= */
+/* ===== الموردون ===== */
 const SUPPLIERS_LS_KEY='pos_suppliers_by_mall_section_v1';
 function loadSuppliers(){ try{return JSON.parse(localStorage.getItem(SUPPLIERS_LS_KEY)||'{}')}catch(e){return{}} }
 function saveSuppliers(o){ localStorage.setItem(SUPPLIERS_LS_KEY, JSON.stringify(o||{})); }
@@ -343,19 +434,8 @@ if(Object.keys(SUPPLIERS).length===0){
   saveSuppliers(SUPPLIERS);
 }
 
-/* ======= المخصصات ======= */
+/* ===== المخصصات ===== */
 const BUDGET_LS_KEY='pos_section_budgets_v9';
-/* structure:
-{
-  "YYYY-MM": {
-    "الانصار مول": {
-      "المفروشات": {amount:100000,consumed:0,approved:true},
-      ...
-    },
-    ...
-  }
-}
-*/
 function loadBudgets(){ try{return JSON.parse(localStorage.getItem(BUDGET_LS_KEY)||'{}')}catch(e){return{}} }
 function saveBudgets(o){ localStorage.setItem(BUDGET_LS_KEY, JSON.stringify(o||{})); }
 function ensureBudget(b, ym, mall, section){
@@ -382,12 +462,12 @@ function getBudget(ym, mall, section){
   return {...rec, remaining: Math.max((rec.amount||0)-(rec.consumed||0),0)};
 }
 
-/* ======= المديونيات ======= */
-const LS_KEY='pos_debts_final_v17';
+/* ===== الديون ===== */
+const LS_KEY='pos_debts_final_v19_kpi_perms';
 let debts=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
 function saveDebts(){ localStorage.setItem(LS_KEY, JSON.stringify(debts)); }
 
-/* ======= Helpers ======= */
+/* ===== Helpers ===== */
 function fmtNum(n){return Number(n||0).toLocaleString('en-US')}
 function mallColor(m){ if(m==='الانصار مول') return '#03045e'; if(m==='ابيات عسير') return '#007BA7'; if(m==='فور بارك') return '#7b2cbf'; if(m==='العرب بلازا') return '#588157'; return '#6b7280';}
 function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -398,7 +478,7 @@ function calcStatus(d){ if(d.cancelled) return {text:'ملغاة',cls:'cancelled
 function approvalInfo(d){ if(d.cancelled) return {text:'',cls:''}; if(d.approval==='pending') return {text:'بانتظار الموافقة',cls:'approval-pending'}; if(d.approval==='approved') return {text:'معتمدة',cls:'approved'}; return {text:'',cls:''}; }
 function translateRole(r){ return r==='admin'?'إدارة تنفيذية':r==='accountant'?'إدارة مالية':r==='special'?'مشرف قسم':r==='viewer'?'إستعلام':r; }
 
-/* ======= Elements ======= */
+/* ===== Elements ===== */
 const loginScreen=document.getElementById('loginScreen');
 const appEl=document.getElementById('app');
 const welcomeTitle=document.getElementById('welcomeTitle');
@@ -413,6 +493,7 @@ const btnShowAdd=document.getElementById('btnShowAdd');
 const btnShowCards=document.getElementById('btnShowCards');
 const btnBudgets=document.getElementById('btnBudgets');
 const btnAdmin=document.getElementById('btnAdmin');
+const btnKPI=document.getElementById('btnKPI');
 const btnLogout=document.getElementById('btnLogout');
 
 const filterMall=document.getElementById('filterMall');
@@ -423,7 +504,7 @@ const filterMonth=document.getElementById('filterMonth');
 const filterHasDiscount=document.getElementById('filterHasDiscount');
 const searchInput=document.getElementById('searchInput');
 
-/* Modals */
+/* Budget modal */
 const modalBudget=document.getElementById('modalBudget');
 const budMall=document.getElementById('budMall');
 const budMonth=document.getElementById('budMonth');
@@ -434,6 +515,7 @@ const budClose=document.getElementById('budClose');
 const budCopyPrev=document.getElementById('budCopyPrev');
 const budFillBulk=document.getElementById('budFillBulk');
 
+/* Add modal */
 const modalAdd=document.getElementById('modalAdd');
 const addMall=document.getElementById('addMall');
 const addSection=document.getElementById('addSection');
@@ -446,6 +528,32 @@ const addSave=document.getElementById('addSave');
 const addCancel=document.getElementById('addCancel');
 const addBudgetNote=document.getElementById('addBudgetNote');
 
+/* Edit (employee) */
+const modalEdit=document.getElementById('modalEdit');
+const edMall=document.getElementById('edMall');
+const edSection=document.getElementById('edSection');
+const edSupplier=document.getElementById('edSupplier');
+const edTransferKind=document.getElementById('edTransferKind');
+const edAmount=document.getElementById('edAmount');
+const edDiscount=document.getElementById('edDiscount');
+const edDue=document.getElementById('edDue');
+const edSave=document.getElementById('edSave');
+const edCancel=document.getElementById('edCancel');
+
+/* Admin edit (approve/after approve) */
+const modalAdminEdit=document.getElementById('modalAdminEdit');
+const adSupplierDebt=document.getElementById('adSupplierDebt');
+const adSupplierStock=document.getElementById('adSupplierStock');
+const adPriority=document.getElementById('adPriority');
+const adSupplier=document.getElementById('adSupplier');
+const adTransferKind=document.getElementById('adTransferKind');
+const adAmount=document.getElementById('adAmount');
+const adDiscount=document.getElementById('adDiscount');
+const adDue=document.getElementById('adDue');
+const adSave=document.getElementById('adSave');
+const adCancel=document.getElementById('adCancel');
+
+/* Admin panel elements */
 const modalAdmin=document.getElementById('modalAdmin');
 const adminUserName=document.getElementById('adminUserName');
 const adminUserPass=document.getElementById('adminUserPass');
@@ -462,19 +570,29 @@ const adminSuppliersText=document.getElementById('adminSuppliersText');
 const adminAddSuppliers=document.getElementById('adminAddSuppliers');
 const adminClose=document.getElementById('adminClose');
 const adminUsersList=document.getElementById('adminUsersList');
+const permAdd=document.getElementById('permAdd');
+const permBudgets=document.getElementById('permBudgets');
+const permApprove=document.getElementById('permApprove');
+const permPay=document.getElementById('permPay');
+const permEditCards=document.getElementById('permEditCards');
+const permCancelCards=document.getElementById('permCancelCards');
 
-const modalApproveExtras=document.getElementById('modalApproveExtras');
-const apSupplierDebt=document.getElementById('apSupplierDebt');
-const apPriority=document.getElementById('apPriority');
-const apSave=document.getElementById('apSave');
-const apCancel=document.getElementById('apCancel');
+/* KPI elements */
+const modalKPI=document.getElementById('modalKPI');
+const kpiYear=document.getElementById('kpiYear');
+const kpiMonth=document.getElementById('kpiMonth');
+const kpiMall=document.getElementById('kpiMall');
+const kpiRefresh=document.getElementById('kpiRefresh');
+const kpiClose=document.getElementById('kpiClose');
 
-/* ======= حالة عامة ======= */
+/* ===== حالة عامة ===== */
 let currentUser=null;
-let searchQuery=''; 
-let approveExtrasIndex=null;
+let searchQuery='';
+let editIndex=null;        // طلب قبل الاعتماد
+let adminEditIndex=null;   // اعتماد/تعديل بعد الاعتماد
+let kpiCharts={};
 
-/* ======= Login ======= */
+/* ===== Login ===== */
 btnLogin.addEventListener('click', doLogin);
 inputUser.addEventListener('keydown',e=>{if(e.key==='Enter') doLogin()});
 inputPass.addEventListener('keydown',e=>{if(e.key==='Enter') doLogin()});
@@ -484,29 +602,18 @@ function doLogin(){
   if(!u||!p){ alert('أدخل اسم المستخدم وكلمة المرور'); return; }
   const rec=USERS[u];
   if(rec && rec.pass===p){
-    if(rec.isEnabled===false){ alert('تم تجميد هذا الحساب. الرجاء التواصل مع الإدارة.'); return; }
+    if(rec.isEnabled===false){ alert('تم تجميد هذا الحساب.'); return; }
     currentUser={name:u,...rec};
     localStorage.setItem(SESSION_KEY,u);
     loginScreen.style.display='none'; appEl.style.display='block';
     welcomeTitle.textContent=`مرحباً، ${u}`; roleLabel.textContent=`الدور: ${translateRole(rec.role)}`;
     applyRoleFeatures();
-    populateFilterSections();
-    populateSupplierFilter();
-    renderCards();
-  }else{
-    alert('اسم المستخدم أو كلمة المرور غير صحيح');
-  }
+    populateFilterSections(); populateSupplierFilter(); renderCards();
+  }else{ alert('اسم المستخدم أو كلمة المرور غير صحيح'); }
 }
+btnLogout.addEventListener('click', ()=>{ if(confirm('هل تريد تسجيل الخروج؟')) { currentUser=null; localStorage.removeItem(SESSION_KEY); appEl.style.display='none'; loginScreen.style.display='flex'; inputUser.value=''; inputPass.value=''; }});
 
-/* ======= Logout ======= */
-btnLogout.addEventListener('click', ()=>{ if(confirm('هل تريد تسجيل الخروج؟')) doLogout(); });
-function doLogout(){
-  currentUser=null; localStorage.removeItem(SESSION_KEY);
-  inputUser.value=''; inputPass.value='';
-  appEl.style.display='none'; loginScreen.style.display='flex';
-}
-
-/* ======= Top buttons ======= */
+/* ===== Top buttons ===== */
 document.getElementById('btnSearchToggle').addEventListener('click', ()=>{
   searchInput.style.display = searchInput.style.display==='inline-block' ? 'none' : 'inline-block';
   if(searchInput.style.display==='inline-block') searchInput.focus(); else { searchInput.value=''; searchQuery=''; renderCards(); }
@@ -517,19 +624,17 @@ btnShowAdd.addEventListener('click', openAddModal);
 btnShowCards.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
 btnBudgets.addEventListener('click', openBudgetModal);
 btnAdmin.addEventListener('click', openAdminModal);
-
-/* ======= Role features ======= */
+btnKPI.addEventListener('click', openKPIModal);
 function applyRoleFeatures(){
-  const r=currentUser.role;
   btnShowAdd.style.display = currentUser.canAdd ? 'inline-block' : 'none';
-  btnAdmin.style.display = (r==='admin' || currentUser.name==='نصر') ? 'inline-block' : 'none';
-  btnBudgets.style.display = (currentUser && (currentUser.name==='نصر' || currentUser.name==='مصطفى')) ? 'inline-block' : 'none';
+  btnAdmin.style.display = (currentUser.role==='admin' || currentUser.name==='نصر') ? 'inline-block' : 'none';
+  // تمت إزالة المخصصات عن مصطفى: الزر يعتمد الآن على canManageBudgets فقط
+  btnBudgets.style.display = (currentUser && currentUser.canManageBudgets) ? 'inline-block' : 'none';
 }
 
-/* ======= Filters ======= */
+/* ===== Filters ===== */
 function populateFilterSections(){
-  const fs=filterSection; fs.innerHTML='';
-  fs.appendChild(new Option('كل الأقسام',''));
+  const fs=filterSection; fs.innerHTML=''; fs.appendChild(new Option('كل الأقسام',''));
   const all=new Set(); Object.values(MALL_SECTIONS).forEach(arr=>arr.forEach(s=>all.add(s)));
   Array.from(all).forEach(s=> fs.appendChild(new Option(s,s)));
 }
@@ -540,7 +645,7 @@ filterStatus.addEventListener('change',renderCards);
 filterMonth.addEventListener('change',renderCards);
 filterHasDiscount.addEventListener('change',renderCards);
 
-/* ======= suppliers filter ======= */
+/* ===== suppliers filter ===== */
 function populateSupplierFilter(){
   const el=filterSupplier; el.innerHTML=''; el.appendChild(new Option('كل الموردين',''));
   const all=new Set();
@@ -548,26 +653,28 @@ function populateSupplierFilter(){
   Array.from(all).forEach(s=> el.appendChild(new Option(s,s)));
 }
 
-/* ======= Special assignments helpers ======= */
+/* ===== Assignments ===== */
 function getAssignments(user){
   if(!user) return [];
   if(Array.isArray(user.assignments)) return user.assignments.slice();
-  // توافق قديم: لا نستخدم الآن، لكن للإكمال
   if(user.mall && user.allowedSection) return [{mall:user.mall,section:user.allowedSection}];
   return [];
 }
+
+/* ===== التحكم بإظهار الكروت ===== */
 function isVisibleForUser(d){
   if(currentUser && currentUser.role==='special'){
     const assigns=getAssignments(currentUser);
     return assigns.some(a=> a.mall===d.mall && a.section===d.section);
   }
-  if(currentUser && currentUser.name==='مصطفى'){
-    return !d.cancelled;
+  // المحاسبون يرون المعتمد فقط
+  if(currentUser && currentUser.role==='accountant'){
+    return d.approval==='approved' && !d.cancelled;
   }
   return true;
 }
 
-/* ======= Render Cards ======= */
+/* ===== Cards ===== */
 function renderCards(){
   debts=JSON.parse(localStorage.getItem(LS_KEY)||'[]');
   const fm=filterMall.value, fs=filterSection.value, fsp=filterSupplier.value, fst=filterStatus.value, fmo=filterMonth.value, fdisc=filterHasDiscount.checked;
@@ -591,75 +698,100 @@ function renderCards(){
       if(!hay.includes(searchQuery)) return;
     }
 
-    const card = renderSingleCard(d, idx);
-    cardsGrid.appendChild(card);
+    const color=mallColor(d.mall);
+    const st=calcStatus(d), appr=approvalInfo(d);
+    const el=document.createElement('div'); el.className='card';
+
+    const debtLine  = (d.approval==='approved' && d.supplierDebt!=null && d.supplierDebt!=='')
+        ? `<div class="value-line yellow-fill">رصيد مديونية المورد: ${fmtNum(d.supplierDebt)} ريال</div>` : '';
+    const stockLine = (d.approval==='approved' && d.supplierStock!=null && d.supplierStock!=='')
+        ? `<div class="value-line yellow-fill">رصيد مخزون المورد: ${fmtNum(d.supplierStock)} ريال</div>` : '';
+    const prText = d.supplierPriority||'';
+    const priorityLine = (d.approval==='approved' && prText)
+        ? `<div class="value-line yellow-fill">الأولوية: ${escapeHtml(prText)}</div>` : '';
+
+    el.innerHTML=`
+      <div class="mall-bar" style="background:${color}"></div>
+      <div class="card-body">
+        <div class="value-line" style="background:${color}">المورد: ${escapeHtml(d.supplier||'-')}</div>
+        <div class="value-line" style="background:${color}">المركز: ${escapeHtml(d.mall||'-')}</div>
+        <div class="value-line" style="background:${color}">القسم: ${escapeHtml(d.section||'-')}</div>
+        ${debtLine}${stockLine}${priorityLine}
+        <div class="value-line" style="background:${color}">نوع التحويل: ${escapeHtml(d.transferKind||'-')}</div>
+        <div class="value-line" style="background:${color}">المبلغ: ${fmtNum(d.amount)} — الخصم: ${fmtNum(d.discount||0)}</div>
+        <div class="value-line" style="background:${color}">الاستحقاق: ${escapeHtml(d.due||'-')}</div>
+      </div>
+      <div class="card-footer">
+        ${appr.text? `<span class="status ${appr.cls}">${appr.text}</span>`:''}
+        <span class="status ${st.cls}">${st.text}</span>
+      </div>
+      <div class="mall-bar bottom" style="background:${color}"></div>
+    `;
+
+    /* قائمة الإجراءات */
+    const menu=document.createElement('div'); menu.className='menu';
+    const kb=document.createElement('button'); kb.className='kebab'; kb.innerHTML='<i class="fa fa-ellipsis-vertical"></i>';
+    kb.addEventListener('click', (e)=>{ e.stopPropagation(); document.querySelectorAll('.menu.open').forEach(x=>x.classList.remove('open')); menu.classList.toggle('open'); });
+    document.addEventListener('click', ()=> menu.classList.remove('open'));
+
+    // تعديل قبل الاعتماد — لصاحب الطلب أو من لديه صلاحية تعديل الكروت
+    if(!d.cancelled && d.approval==='pending' && currentUser && (currentUser.name===d.createdBy || currentUser.canEditCards)){
+      const mEdit=document.createElement('button');
+      mEdit.textContent='تعديل الطلب (قبل الاعتماد)';
+      mEdit.onclick=()=> openEditModal(idx);
+      menu.appendChild(mEdit);
+    }
+
+    // اعتماد/إلغاء/تعديل بعد الاعتماد — يتطلب canApprove/ canEditCards/ canCancelCards
+    if(currentUser && (currentUser.canApprove || currentUser.canEditCards || currentUser.canCancelCards)){
+      if(currentUser.canApprove){
+        const approveBtn=document.createElement('button');
+        approveBtn.textContent='اعتماد الحوالة';
+        approveBtn.onclick=()=> approveDebt(idx);
+        menu.appendChild(approveBtn);
+
+        const unapproveBtn=document.createElement('button');
+        unapproveBtn.textContent='إلغاء الاعتماد (يرجع للمخصص)';
+        unapproveBtn.onclick=()=> unapproveDebt(idx);
+        menu.appendChild(unapproveBtn);
+      }
+
+      if(d.approval==='approved' && !d.cancelled && currentUser.canEditCards){
+        const adminEditBtn=document.createElement('button');
+        adminEditBtn.textContent='تعديل بيانات طلب معتمد';
+        adminEditBtn.onclick=()=> openAdminEditModal(idx);
+        menu.appendChild(adminEditBtn);
+      }
+
+      if(currentUser.canCancelCards){
+        const cancelBtn=document.createElement('button');
+        cancelBtn.textContent=d.cancelled?'إلغاء حالة الإلغاء':'إلغاء الحوالة';
+        cancelBtn.onclick=()=>{ debts[idx].cancelled=!debts[idx].cancelled; saveDebts(); renderCards(); };
+        menu.appendChild(cancelBtn);
+      }
+    }
+
+    el.appendChild(kb); el.appendChild(menu);
+
+    /* سداد — يتطلب canPay */
+    if(currentUser && currentUser.canPay && d.approval==='approved' && d.status!=='paid' && !d.cancelled){
+      const pay=document.createElement('button'); pay.className='top-btn action'; pay.style.padding='8px 12px'; pay.innerHTML='<i class="fa fa-money-bill-wave"></i> سداد';
+      pay.onclick=()=> payDebt(idx);
+      el.querySelector('.card-footer').appendChild(pay);
+    }
+
+    cardsGrid.appendChild(el);
   });
 }
 
-function renderSingleCard(d, idx){
-  const color=mallColor(d.mall);
-  const st=calcStatus(d), appr=approvalInfo(d);
-  const el=document.createElement('div'); el.className='card';
-  const supplierDebtLine = (d.supplierDebt!=null && d.supplierDebt!=='') ? `<div class="value-line yellow-text" style="background:${color}">رصيد مديونية المورد: ${fmtNum(d.supplierDebt)} ريال</div>` : '';
-  const priorityText = d.supplierPriority||'';
-  const priorityLine = priorityText ? `<div class="value-line ${priorityText.includes('مرتفعة')?'yellow-text':'white-text'}" style="background:${color}">الأولوية: ${escapeHtml(priorityText)}</div>` : '';
-  el.innerHTML=`
-    <div class="mall-bar" style="background:${color}"></div>
-    <div class="card-body">
-      <div class="value-line" style="background:${color}">المورد: ${escapeHtml(d.supplier||'-')}</div>
-      <div class="value-line" style="background:${color}">المركز: ${escapeHtml(d.mall||'-')}</div>
-      <div class="value-line" style="background:${color}">القسم: ${escapeHtml(d.section||'-')}</div>
-      ${supplierDebtLine}
-      ${priorityLine}
-      <div class="value-line" style="background:${color}">نوع التحويل: ${escapeHtml(d.transferKind||'-')}</div>
-      <div class="value-line" style="background:${color}">المبلغ: ${fmtNum(d.amount)} — خصم: ${fmtNum(d.discount||0)}</div>
-      <div class="value-line" style="background:${color}">الاستحقاق: ${escapeHtml(d.due||'-')}</div>
-    </div>
-    <div class="card-footer">
-      ${appr.text? `<span class="status ${appr.cls}">${appr.text}</span>`:''}
-      <span class="status ${st.cls}">${st.text}</span>
-    </div>
-    <div class="mall-bar bottom" style="background:${color}"></div>
-  `;
-
-  if(currentUser && (currentUser.role==='admin' || currentUser.name==='نصر')){
-    const kb=document.createElement('button'); kb.className='kebab'; kb.innerHTML='<i class="fa fa-ellipsis-vertical"></i>';
-    const menu=document.createElement('div'); menu.className='menu';
-
-    const approveBtn=document.createElement('button');
-    approveBtn.textContent='اعتماد الحوالة (يخصم من المخصص)';
-    approveBtn.onclick=()=> approveDebt(idx);
-
-    const unapproveBtn=document.createElement('button');
-    unapproveBtn.textContent='إلغاء الاعتماد (يرجع للمخصص)';
-    unapproveBtn.onclick=()=> unapproveDebt(idx);
-
-    const cancelBtn=document.createElement('button');
-    cancelBtn.textContent=d.cancelled?'إلغاء حالة الإلغاء':'إلغاء الحوالة';
-    cancelBtn.onclick=()=>{ debts[idx].cancelled=!debts[idx].cancelled; saveDebts(); renderCards(); };
-
-    menu.appendChild(approveBtn); menu.appendChild(unapproveBtn); menu.appendChild(cancelBtn);
-    kb.addEventListener('click', (e)=>{ e.stopPropagation(); document.querySelectorAll('.menu.open').forEach(x=>x.classList.remove('open')); menu.classList.toggle('open'); });
-    document.addEventListener('click', ()=> menu.classList.remove('open'));
-    el.appendChild(kb); el.appendChild(menu);
-  }
-
-  if(currentUser && currentUser.canPay && d.approval==='approved' && d.status!=='paid' && !d.cancelled){
-    const pay=document.createElement('button'); pay.className='top-btn action'; pay.style.padding='8px 12px'; pay.innerHTML='<i class="fa fa-money-bill-wave"></i> سداد';
-    pay.onclick=()=> payDebt(idx);
-    el.querySelector('.card-footer').appendChild(pay);
-  }
-
-  return el;
-}
-
-/* ======= Approve / Unapprove ======= */
+/* ===== اعتماد/إلغاء اعتماد ===== */
 function approveDebt(idx){
   const d=debts[idx];
+  if(!currentUser || !currentUser.canApprove){ alert('لا تملك صلاحية الاعتماد'); return; }
   if(d.approval==='approved'){ alert('هذه الحوالة معتمدة مسبقًا.'); return; }
   const ym=(d.created||d.due||new Date().toISOString()).slice(0,7);
-  const creator=d.createdBy; const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
-  const isSpecial = creator && mergedUsers[creator] && mergedUsers[creator].role==='special';
+  const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
+  const isSpecial = d.createdBy && mergedUsers[d.createdBy] && mergedUsers[d.createdBy].role==='special';
   const nett = netValue(d);
   if(isSpecial){
     const b=getBudget(ym, d.mall, d.section);
@@ -669,20 +801,16 @@ function approveDebt(idx){
     }
     addConsumption(ym, d.mall, d.section, nett);
   }
-  d.approval='approved';
-  saveDebts();
-  // نافذة إدخال رصيد المديونية + الأولوية
-  approveExtrasIndex=idx;
-  apSupplierDebt.value=''; apPriority.value='';
-  show(modalApproveExtras,true);
-  renderCards();
+  adminEditIndex = idx;
+  openAdminEditModal(idx, /*fromApprove*/true);
 }
 function unapproveDebt(idx){
   const d=debts[idx];
+  if(!currentUser || !currentUser.canApprove){ alert('لا تملك صلاحية إلغاء الاعتماد'); return; }
   if(d.approval!=='approved'){ alert('الحوالة ليست معتمدة.'); return; }
   const ym=(d.created||d.due||new Date().toISOString()).slice(0,7);
-  const creator=d.createdBy; const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
-  const isSpecial = creator && mergedUsers[creator] && mergedUsers[creator].role==='special';
+  const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
+  const isSpecial = d.createdBy && mergedUsers[d.createdBy] && mergedUsers[d.createdBy].role==='special';
   const nett = netValue(d);
   if(isSpecial){ refundConsumption(ym, d.mall, d.section, nett); }
   d.approval='pending';
@@ -690,8 +818,9 @@ function unapproveDebt(idx){
   renderCards();
 }
 
-/* ======= Pay (مختصر) ======= */
+/* ===== سداد ===== */
 function payDebt(idx){
+  if(!currentUser || !currentUser.canPay){ alert('لا تملك صلاحية السداد'); return; }
   const amt = prompt('أدخل المبلغ المسدّد:');
   if(!amt) return;
   const v=parseFloat(amt); if(!(v>0)) { alert('مبلغ غير صحيح'); return; }
@@ -701,26 +830,11 @@ function payDebt(idx){
   saveDebts(); renderCards();
 }
 
-/* ======= Modal Approve Extras ======= */
-apSave.addEventListener('click', ()=>{
-  if(approveExtrasIndex==null) { show(modalApproveExtras,false); return; }
-  debts[approveExtrasIndex].supplierDebt = apSupplierDebt.value ? Number(apSupplierDebt.value)||0 : '';
-  const pr=apPriority.value || '';
-  debts[approveExtrasIndex].supplierPriority = pr ? (pr.includes('مرتفعة')?'أولوية مرتفعة':'أولوية عادية') : '';
-  saveDebts();
-  show(modalApproveExtras,false);
-  renderCards();
-});
-apCancel.addEventListener('click', ()=> show(modalApproveExtras,false));
-
-/* ======= Add Modal ======= */
+/* ===== إضافة ===== */
 function openAddModal(){
-  if(!currentUser) {alert('سجل الدخول أولاً'); return;}
-  if(!currentUser.canAdd) {alert('ليس لديك صلاحية لإضافة مديونيات'); return;}
-  // mall/section lists depend on role
-  fillAddMallAndSectionsByRole();
-  fillAddSuppliers();
-  updateAddBudgetNote();
+  if(!currentUser){alert('سجل الدخول أولاً'); return;}
+  if(!currentUser.canAdd){alert('ليس لديك صلاحية لإضافة مديونيات'); return;}
+  fillAddMallAndSectionsByRole(); fillAddSuppliers(); updateAddBudgetNote();
   addAmount.value=''; addDiscount.value=''; addDue.value='';
   show(modalAdd,true);
 }
@@ -731,7 +845,6 @@ addSave.addEventListener('click', ()=>{
   const amount=parseFloat(addAmount.value); const discount=parseFloat(addDiscount.value)||0;
   const due=addDue.value;
   if(!supplier || !mall || !section || !amount || !due) { alert('اكمل الحقول المطلوبة'); return; }
-  // التحقق من المخصص لمشرف القسم
   if(currentUser.role==='special'){
     const ym=currentMonthKey();
     const b=getBudget(ym, mall, section);
@@ -741,29 +854,19 @@ addSave.addEventListener('click', ()=>{
       return;
     }
   }
-  const approval = (currentUser.role==='special') ? 'pending' : 'approved';
-  const entry={mall, section, supplier, transferKind, amount, discount, due, status:'pending', paidAmount:0, paymentType:'', paidDate:'', approval, cancelled:false, createdBy: currentUser.name, created:new Date().toISOString(), supplierDebt:'', supplierPriority:''};
+  const approval = (currentUser.role==='special') ? 'pending' : (currentUser.canApprove ? 'approved' : 'pending');
+  const entry={mall, section, supplier, transferKind, amount, discount, due, status:'pending', paidAmount:0, approval, cancelled:false, createdBy: currentUser.name, created:new Date().toISOString(), supplierDebt:'', supplierPriority:'', supplierStock:''};
   debts.unshift(entry); saveDebts(); show(modalAdd,false); renderCards();
 });
-
 function fillAddMallAndSectionsByRole(){
   addMall.innerHTML=''; addSection.innerHTML='';
   if(currentUser.role==='special'){
     const assigns=getAssignments(currentUser);
     const malls=[...new Set(assigns.map(a=>a.mall))];
     malls.forEach(m=> addMall.appendChild(new Option(m,m)));
-    const firstMall=addMall.value||malls[0];
-    addSection.innerHTML='';
-    assigns.filter(a=>a.mall===firstMall).forEach(a=> addSection.appendChild(new Option(a.section,a.section)));
-    addMall.onchange=()=>{
-      addSection.innerHTML='';
-      const ms=getAssignments(currentUser).filter(a=>a.mall===addMall.value);
-      ms.forEach(a=> addSection.appendChild(new Option(a.section,a.section)));
-      fillAddSuppliers(); updateAddBudgetNote();
-    };
-    addSection.onchange=()=>{ fillAddSuppliers(); updateAddBudgetNote(); };
+    const fillS=()=>{ addSection.innerHTML=''; assigns.filter(a=>a.mall===addMall.value).forEach(a=> addSection.appendChild(new Option(a.section,a.section))); fillAddSuppliers(); updateAddBudgetNote(); };
+    addMall.onchange=fillS; fillS(); addSection.onchange=()=>{ fillAddSuppliers(); updateAddBudgetNote(); };
   } else {
-    // أدوار أخرى: كل المولات وكل أقسام المول المختار
     Object.keys(MALL_SECTIONS).forEach(m=> addMall.appendChild(new Option(m,m)));
     const fillSecs=()=>{ addSection.innerHTML=''; (MALL_SECTIONS[addMall.value]||[]).forEach(s=> addSection.appendChild(new Option(s,s))); fillAddSuppliers(); updateAddBudgetNote(); };
     addMall.onchange=fillSecs; addSection.onchange=()=>{ fillAddSuppliers(); updateAddBudgetNote(); };
@@ -772,7 +875,7 @@ function fillAddMallAndSectionsByRole(){
 }
 function fillAddSuppliers(){
   const mall=addMall.value, sec=addSection.value;
-  addSupplier.innerHTML=''; 
+  addSupplier.innerHTML='';
   const arr=(((SUPPLIERS[mall]||{})[sec])||[]);
   if(!arr.length) addSupplier.appendChild(new Option('لا يوجد موردون في هذا القسم',''));
   arr.forEach(s=> addSupplier.appendChild(new Option(s,s)));
@@ -780,13 +883,115 @@ function fillAddSuppliers(){
 function updateAddBudgetNote(){
   const ym=currentMonthKey(); const mall=addMall.value; const sec=addSection.value;
   const b=getBudget(ym,mall,sec);
-  if(!b) { addBudgetNote.textContent='لا يوجد مخصص مسجل لهذا القسم حتى الآن.'; return;}
-  addBudgetNote.textContent=`مخصص ${sec} في ${mall} لشهر ${monthLabel(ym)}: ${fmtNum(b.amount)} ريال — متبقٍ: ${fmtNum(b.remaining)} — ${b.approved?'(معتمد)':'(غير معتمد)'}`;
+  if(!b) { addBudgetNote.textContent='لا يوجد مخصص مسجل لهذا القسم حتى الآن.';
+  } else {
+    addBudgetNote.textContent=`مخصص ${sec} في ${mall} لشهر ${monthLabel(ym)}: ${fmtNum(b.amount)} ريال — متبقٍ: ${fmtNum(Math.max(b.amount-b.consumed,0))} — ${b.approved?'(معتمد)':'(غير معتمد)'}`;
+  }
 }
 
-/* ======= Budget Modal ======= */
+/* ===== تعديل قبل الاعتماد ===== */
+function openEditModal(idx){
+  const d=debts[idx];
+  editIndex=idx;
+  edMall.value=d.mall; edSection.value=d.section;
+  edSupplier.value=d.supplier||'';
+  edTransferKind.value=d.transferKind||'مستحق';
+  edAmount.value=d.amount||0;
+  edDiscount.value=d.discount||0;
+  edDue.value=d.due||'';
+  show(modalEdit,true);
+}
+edCancel.addEventListener('click', ()=>{ editIndex=null; show(modalEdit,false); });
+edSave.addEventListener('click', ()=>{
+  if(editIndex==null){ show(modalEdit,false); return; }
+  const d=debts[editIndex];
+  if(d.approval!=='pending' && !currentUser.canEditCards){ alert('لا يمكن التعديل بعد الاعتماد بدون صلاحية.'); return; }
+  if(d.approval==='pending' && !(d.createdBy===currentUser.name || currentUser.canEditCards)){ alert('يمكن تعديل الطلب من قبل صاحبه فقط أو من لديه صلاحية تعديل الكروت.'); return; }
+  const supplier=edSupplier.value.trim();
+  const transferKind=edTransferKind.value;
+  const amount=parseFloat(edAmount.value)||0;
+  const discount=parseFloat(edDiscount.value)||0;
+  const due=edDue.value;
+  if(!supplier || !amount || !due){ alert('اكمل الحقول المطلوبة'); return; }
+  d.supplier=supplier; d.transferKind=transferKind; d.amount=amount; d.discount=discount; d.due=due;
+  saveDebts();
+  show(modalEdit,false); editIndex=null; renderCards();
+});
+
+/* ===== تعديل بعد الاعتماد/اعتماد أولي ===== */
+function openAdminEditModal(idx, fromApprove=false){
+  if(!currentUser || (!currentUser.canApprove && !currentUser.canEditCards)){ alert('لا تملك صلاحية فتح هذه الشاشة'); return; }
+  const d=debts[idx];
+  adminEditIndex=idx;
+  adSupplierDebt.value = (d.supplierDebt!=='' && d.supplierDebt!=null)? d.supplierDebt : 0;
+  adSupplierStock.value = (d.supplierStock!=='' && d.supplierStock!=null)? d.supplierStock : 0;
+  adPriority.value = d.supplierPriority || 'أولوية عادية';
+  adSupplier.value = d.supplier||'';
+  adTransferKind.value = d.transferKind||'مستحق';
+  adAmount.value = d.amount||0;
+  adDiscount.value = d.discount||0;
+  adDue.value = d.due||'';
+  modalAdminEdit.setAttribute('data-from-approve', fromApprove? '1':'0');
+  show(modalAdminEdit,true);
+}
+adCancel.addEventListener('click', ()=>{
+  const fromApprove = modalAdminEdit.getAttribute('data-from-approve')==='1';
+  if(fromApprove && adminEditIndex!=null){
+    const d=debts[adminEditIndex];
+    const ym=(d.created||d.due||new Date().toISOString()).slice(0,7);
+    const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
+    const isSpecial = d.createdBy && mergedUsers[d.createdBy] && mergedUsers[d.createdBy].role==='special';
+    if(isSpecial){ refundConsumption(ym, d.mall, d.section, netValue(d)); }
+  }
+  adminEditIndex=null;
+  show(modalAdminEdit,false);
+});
+adSave.addEventListener('click', ()=>{
+  if(adminEditIndex==null){ show(modalAdminEdit,false); return; }
+  const d=debts[adminEditIndex];
+  const prevNet = netValue(d);
+
+  const debt = Number(adSupplierDebt.value); if(isNaN(debt)||debt<0){ alert('مديونية غير صحيحة'); return; }
+  const stock = Number(adSupplierStock.value); if(isNaN(stock)||stock<0){ alert('مخزون غير صحيح'); return; }
+  const pr = adPriority.value||'أولوية عادية';
+
+  const supplier = adSupplier.value.trim();
+  const kind = adTransferKind.value;
+  const amount = Number(adAmount.value)||0;
+  const discount = Number(adDiscount.value)||0;
+  const due = adDue.value;
+  if(!supplier||!amount||!due){ alert('اكمل الحقول المطلوبة'); return; }
+
+  d.supplierDebt = debt;
+  d.supplierStock = stock;
+  d.supplierPriority = pr;
+  d.supplier = supplier;
+  d.transferKind = kind;
+  d.amount = amount;
+  d.discount = discount;
+  d.due = due;
+
+  if(d.approval!=='approved') d.approval='approved';
+
+  const mergedUsers={...BASE_USERS,...loadDynamicUsers()};
+  const isSpecial = d.createdBy && mergedUsers[d.createdBy] && mergedUsers[d.createdBy].role==='special';
+  if(isSpecial){
+    const ym=(d.created||d.due||new Date().toISOString()).slice(0,7);
+    const newNet = netValue(d);
+    const diff = newNet - prevNet;
+    if(diff>0) addConsumption(ym,d.mall,d.section,diff);
+    else if(diff<0) refundConsumption(ym,d.mall,d.section,Math.abs(diff));
+  }
+
+  saveDebts();
+  adminEditIndex=null;
+  show(modalAdminEdit,false);
+  renderCards();
+});
+
+/* ===== Budget Modal ===== */
 function openBudgetModal(){
-  if(!(currentUser && (currentUser.name==='نصر' || currentUser.name==='مصطفى'))) { alert('مسموح لنصر ومصطفى فقط'); return; }
+  if(!(currentUser && currentUser.canManageBudgets)) { alert('غير مسموح: لا تملك صلاحيات مخصصات الأقسام'); return; }
   budMall.innerHTML=''; Object.keys(MALL_SECTIONS).forEach(m=> budMall.appendChild(new Option(m,m)));
   budMonth.innerHTML=''; const base=new Date(); base.setMonth(base.getMonth()-1);
   for(let i=0;i<12;i++){const d=new Date(base.getFullYear(), base.getMonth()+i, 1); const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'); const key=`${y}-${m}`; const opt=new Option(monthLabel(key), key); if(key===currentMonthKey()) opt.selected=true; budMonth.appendChild(opt); }
@@ -794,15 +999,13 @@ function openBudgetModal(){
   show(modalBudget,true);
 }
 budClose.addEventListener('click', ()=> show(modalBudget,false));
-
 budLoad.addEventListener('click', ()=> loadBudgetGrid(false));
 budCopyPrev.addEventListener('click', ()=> loadBudgetGrid(true));
 budFillBulk.addEventListener('click', ()=>{
-  const v=prompt('أدخل قيمة تعبئة جماعية (ستطبق على كل الأقسام الظاهرة):'); if(!v) return;
+  const v=prompt('قيمة تعبئة جماعية لكل الأقسام:'); if(!v) return;
   const n=parseFloat(v)||0;
   budSecGrid.querySelectorAll('input[type="number"][data-sec]').forEach(i=> i.value=n);
 });
-
 function loadBudgetGrid(copyPrev){
   const mall=budMall.value; const ym=budMonth.value;
   if(!mall||!ym){alert('اختر المركز والشهر'); return;}
@@ -815,21 +1018,21 @@ function loadBudgetGrid(copyPrev){
       const prev=getBudget(prevKey,mall,sec);
       if(prev){ amt=prev.amount; appr=prev.approved; }
     }
-    const card=document.createElement('div'); card.className='sec-card';
+    const card=document.createElement('div'); card.className='admin-item';
     card.innerHTML=`
-      <div class="sec-title">${escapeHtml(sec)}</div>
-      <div class="row">
+      <div style="flex:1;font-weight:800">${escapeHtml(sec)}</div>
+      <div style="flex:2;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <input type="number" class="input" data-sec="${sec}" placeholder="المخصص (ريال)" value="${amt||0}">
         <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" class="bud-approve" data-sec="${sec}" ${appr?'checked':''}> اعتماد</label>
+        <div class="small-note">مستهلك: ${fmtNum(cur.consumed||0)} | متبقٍ: ${fmtNum((cur.amount||0)-(cur.consumed||0))}</div>
       </div>
-      <div class="sec-foot"><span>مستهلك: ${fmtNum(cur.consumed||0)}</span><span>متبقٍ: ${fmtNum((cur.amount||0)-(cur.consumed||0))}</span></div>
     `;
     budSecGrid.appendChild(card);
   });
 }
 function prevMonthKey(ym){
   const [y,m]=ym.split('-').map(Number);
-  const d=new Date(y, m-2, 1); // الشهر السابق
+  const d=new Date(y, m-2, 1);
   const yy=d.getFullYear(), mm=String(d.getMonth()+1).padStart(2,'0'); return `${yy}-${mm}`;
 }
 budSave.addEventListener('click', ()=>{
@@ -845,96 +1048,83 @@ budSave.addEventListener('click', ()=>{
   show(modalBudget,false);
 });
 
-/* ======= Admin Modal ======= */
+/* ===== Admin Modal ===== */
 function openAdminModal(){
   if(!currentUser || !(currentUser.role==='admin' || currentUser.name==='نصر')) {alert('غير مسموح'); return;}
-  // تعبئة مكرّر التعيين للمشرف
+  // إعداد القوائم
   assignMall.innerHTML=''; Object.keys(MALL_SECTIONS).forEach(m=> assignMall.appendChild(new Option(m,m)));
   fillAssignSections();
-  // موردين
   adminSupMall.innerHTML=''; Object.keys(MALL_SECTIONS).forEach(m=> adminSupMall.appendChild(new Option(m,m)));
   fillAdminSupSections();
-  // إعدادات
-  adminUserName.value=''; adminUserPass.value='';
-  adminUserRole.value='admin'; specialAssignWrap.style.display='none';
-  tempAssignments=[];
-  renderAssignTags();
-  renderAdminUsersList();
+  // تهيئة المدخلات
+  adminUserName.value=''; adminUserPass.value=''; adminUserRole.value='admin';
+  tempAssignments=[]; renderAssignTags(); renderAdminUsersList();
+  // افتراضات الصلاحيات حسب الدور
+  setPermsByRole('admin');
   show(modalAdmin,true);
 }
 adminClose.addEventListener('click', ()=> show(modalAdmin,false));
-
-adminUserRole.addEventListener('change', ()=>{
-  specialAssignWrap.style.display = (adminUserRole.value==='special') ? 'block' : 'none';
-});
-
-assignMall.addEventListener('change', fillAssignSections);
-function fillAssignSections(){
-  assignSection.innerHTML='';
-  (MALL_SECTIONS[assignMall.value]||[]).forEach(s=> assignSection.appendChild(new Option(s,s)));
+adminUserRole.addEventListener('change', (e)=> setPermsByRole(e.target.value));
+function setPermsByRole(role){
+  if(role==='admin'){
+    permAdd.checked=permBudgets.checked=permApprove.checked=permPay.checked=permEditCards.checked=permCancelCards.checked=true;
+    specialAssignWrap.style.display='none';
+  }else if(role==='accountant'){
+    permAdd.checked=false; permBudgets.checked=false; permApprove.checked=false; permPay.checked=true; permEditCards.checked=false; permCancelCards.checked=false;
+    specialAssignWrap.style.display='none';
+  }else if(role==='special'){
+    permAdd.checked=true; permBudgets.checked=false; permApprove.checked=false; permPay.checked=false; permEditCards.checked=false; permCancelCards.checked=false;
+    specialAssignWrap.style.display='block';
+  }else{ // viewer
+    permAdd.checked=false; permBudgets.checked=false; permApprove.checked=false; permPay.checked=false; permEditCards.checked=false; permCancelCards.checked=false;
+    specialAssignWrap.style.display='none';
+  }
 }
-
-/* تجميع تعيينات مؤقت قبل الحفظ */
+assignMall.addEventListener('change', fillAssignSections);
+function fillAssignSections(){ assignSection.innerHTML=''; (MALL_SECTIONS[assignMall.value]||[]).forEach(s=> assignSection.appendChild(new Option(s,s))); }
 let tempAssignments=[];
-assignAdd.addEventListener('click', ()=>{
-  const mall=assignMall.value; const sec=assignSection.value;
-  if(!mall||!sec) return;
-  if(tempAssignments.some(a=> a.mall===mall && a.section===sec)) return;
-  tempAssignments.push({mall,section:sec});
-  renderAssignTags();
-});
+assignAdd.addEventListener('click', ()=>{ const mall=assignMall.value; const sec=assignSection.value; if(!mall||!sec) return; if(tempAssignments.some(a=> a.mall===mall && a.section===sec)) return; tempAssignments.push({mall,section:sec}); renderAssignTags(); });
 function renderAssignTags(){
   assignTags.innerHTML='';
   if(!tempAssignments.length){ assignTags.innerHTML='<div class="small-note">لا توجد تعيينات بعد.</div>'; return;}
   tempAssignments.forEach((a,i)=>{
-    const t=document.createElement('span'); t.className='tag';
-    t.innerHTML=`${escapeHtml(a.mall)} — ${escapeHtml(a.section)} <button title="إزالة" data-i="${i}"><i class="fa fa-times"></i></button>`;
+    const t=document.createElement('span'); t.className='admin-item'; t.style.padding='6px 10px';
+    t.innerHTML=`${escapeHtml(a.mall)} — ${escapeHtml(a.section)} <button style="margin-inline-start:8px" title="إزالة" data-i="${i}" class="top-btn"><i class="fa fa-times"></i></button>`;
     t.querySelector('button').onclick=()=>{ tempAssignments.splice(i,1); renderAssignTags(); };
     assignTags.appendChild(t);
   });
 }
-
 adminAddUser.addEventListener('click', ()=>{
-  const name=adminUserName.value.trim(); const pass=adminUserPass.value.trim();
-  const role=adminUserRole.value;
+  const name=adminUserName.value.trim(); const pass=adminUserPass.value.trim(); const role=adminUserRole.value;
   if(!name||!pass){alert('أدخل اسم المستخدم وكلمة المرور'); return;}
   const dyn=loadDynamicUsers(); const all={...BASE_USERS,...dyn};
   if(all[name]){alert('اسم المستخدم موجود مسبقاً'); return;}
-  let canAdd = (role==='admin' || role==='special');
-  let canPay = (role==='admin' || role==='accountant');
-  const user={pass,role,canAdd,canPay,isEnabled:true};
+  const user={
+    pass,role,isEnabled:true,
+    canAdd:permAdd.checked,
+    canManageBudgets:permBudgets.checked,
+    canApprove:permApprove.checked,
+    canPay:permPay.checked,
+    canEditCards:permEditCards.checked,
+    canCancelCards:permCancelCards.checked
+  };
   if(role==='special'){
     if(!tempAssignments.length){alert('أضف تعيينًا واحدًا على الأقل للمشرف'); return;}
     user.assignments=tempAssignments.slice();
   }
-  dyn[name]=user;
-  saveDynamicUsers(dyn); USERS={...BASE_USERS,...dyn};
-  alert('تم حفظ المستخدم');
-  // تصفير
-  adminUserName.value=''; adminUserPass.value='';
-  tempAssignments=[]; renderAssignTags();
-  renderAdminUsersList();
+  dyn[name]=user; saveDynamicUsers(dyn); USERS={...BASE_USERS,...dyn};
+  alert('تم حفظ المستخدم'); adminUserName.value=''; adminUserPass.value=''; tempAssignments=[]; renderAssignTags(); renderAdminUsersList();
 });
-
-/* إضافة موردين */
 adminSupMall.addEventListener('change', fillAdminSupSections);
-function fillAdminSupSections(){
-  const m=adminSupMall.value; adminSupSection.innerHTML='';
-  (MALL_SECTIONS[m]||[]).forEach(s=> adminSupSection.appendChild(new Option(s,s)));
-}
+function fillAdminSupSections(){ const m=adminSupMall.value; adminSupSection.innerHTML=''; (MALL_SECTIONS[m]||[]).forEach(s=> adminSupSection.appendChild(new Option(s,s))); }
 adminAddSuppliers.addEventListener('click', ()=>{
   const mall=adminSupMall.value; const section=adminSupSection.value; const text=adminSuppliersText.value.trim();
   if(!mall || !section || !text){ alert('أدخل المركز والقسم والمورد/الموردين'); return; }
-  const names=text.split('\n').map(s=>s.trim()).filter(Boolean);
-  if(!names.length){alert('لا توجد أسماء صالحة'); return;}
+  const names=text.split('\n').map(s=>s.trim()).filter(Boolean); if(!names.length){alert('لا توجد أسماء صالحة'); return;}
   const all=loadSuppliers(); if(!all[mall]) all[mall]={}; if(!all[mall][section]) all[mall][section]=[];
-  const set=new Set(all[mall][section]); names.forEach(n=> set.add(n));
-  all[mall][section]=Array.from(set);
-  saveSuppliers(all); SUPPLIERS=all;
-  alert('تمت الإضافة'); adminSuppliersText.value='';
+  const set=new Set(all[mall][section]); names.forEach(n=> set.add(n)); all[mall][section]=Array.from(set);
+  saveSuppliers(all); SUPPLIERS=all; alert('تمت الإضافة'); adminSuppliersText.value='';
 });
-
-/* قائمة المستخدمين — تجميد/حذف */
 function renderAdminUsersList(){
   const dyn=loadDynamicUsers(); const entries=Object.entries(dyn);
   const wrap=adminUsersList; wrap.innerHTML='';
@@ -946,7 +1136,9 @@ function renderAdminUsersList(){
       <div>
         <strong>${escapeHtml(name)}</strong> — الدور: ${escapeHtml(translateRole(obj.role))}
         ${assigns? `<div class="small-note">التعيينات: ${escapeHtml(assigns)}</div>`:''}
-        <div class="small-note">الحالة: ${obj.isEnabled===false? 'مجمّد' : 'نشط'}</div>
+        <div class="small-note">الحالة: ${obj.isEnabled===false? 'مجمّد' : 'نشط'} — صلاحيات: 
+          ${obj.canAdd?'ترحيل, ':''}${obj.canManageBudgets?'مخصصات, ':''}${obj.canApprove?'اعتماد, ':''}${obj.canPay?'سداد, ':''}${obj.canEditCards?'تعديل, ':''}${obj.canCancelCards?'إلغاء':''}
+        </div>
       </div>
       <div style="display:flex;gap:6px">
         <button class="top-btn" data-act="toggle">${obj.isEnabled===false? 'إلغاء التجميد' : 'تجميد'}</button>
@@ -954,37 +1146,128 @@ function renderAdminUsersList(){
       </div>
     `;
     const [toggle, del] = el.querySelectorAll('button');
-    toggle.onclick=()=>{
-      const d=loadDynamicUsers(); if(!d[name]) return;
-      d[name].isEnabled = (d[name].isEnabled===false) ? true : false;
-      saveDynamicUsers(d); USERS={...BASE_USERS,...d}; renderAdminUsersList();
-    };
-    del.onclick=()=>{
-      if(confirm('حذف المستخدم؟')){
-        const d=loadDynamicUsers(); delete d[name]; saveDynamicUsers(d); USERS={...BASE_USERS,...d}; renderAdminUsersList();
-      }
-    };
+    toggle.onclick=()=>{ const d=loadDynamicUsers(); if(!d[name]) return; d[name].isEnabled = (d[name].isEnabled===false) ? true : false; saveDynamicUsers(d); USERS={...BASE_USERS,...d}; renderAdminUsersList(); };
+    del.onclick=()=>{ if(confirm('حذف المستخدم؟')){ const d=loadDynamicUsers(); delete d[name]; saveDynamicUsers(d); USERS={...BASE_USERS,...d}; renderAdminUsersList(); } };
     wrap.appendChild(el);
   });
 }
 
-/* ======= Utils ======= */
+/* ===== KPI Dashboard ===== */
+function openKPIModal(){
+  // إعداد قائمة الشهور
+  kpiMonth.innerHTML='<option value="">كل الشهور</option>';
+  for(let m=1;m<=12;m++){const mm=String(m).padStart(2,'0'); const opt=document.createElement('option'); opt.value=mm; opt.textContent=mm; kpiMonth.appendChild(opt);}
+  if(!kpiYear.value){ kpiYear.value=new Date().getFullYear(); }
+  show(modalKPI,true);
+  drawKPI();
+}
+kpiClose.addEventListener('click', ()=> show(modalKPI,false));
+kpiRefresh.addEventListener('click', drawKPI);
+
+function filteredDebtsForKPI(){
+  const y = kpiYear.value? Number(kpiYear.value) : null;
+  const m = kpiMonth.value || null;
+  const mall = kpiMall.value || null;
+  return debts.filter(d=>{
+    if(mall && d.mall!==mall) return false;
+    if(y || m){
+      const dt = (d.created || d.due || '').slice(0,10);
+      if(!dt) return false;
+      const yy=Number(dt.slice(0,4)), mm=dt.slice(5,7);
+      if(y && yy!==y) return false;
+      if(m && mm!==m) return false;
+    }
+    return true;
+  });
+}
+function sumPaid(d){ return Math.min(d.paidAmount||0, netValue(d)); }
+function sumTotal(d){ return netValue(d); }
+
+function drawKPI(){
+  const arr = filteredDebtsForKPI();
+
+  // 1) الحوالة المسددة على مستوى كل مركز
+  const byMall = {};
+  arr.forEach(d=>{ byMall[d.mall]=(byMall[d.mall]||0)+sumPaid(d); });
+  renderChart('chPaidByMall','bar','الحوالات المسددة حسب المركز',
+    {labels:Object.keys(byMall), datasets:[{label:'مسدد (ريال)', data:Object.values(byMall)}]});
+
+  // 2) الحوالات المسددة على مستوى كل قسم في كل مركز (حسب اختيار مركز في الفلتر إن وُجِد، وإلا جميعها)
+  const mallList = kpiMall.value? [kpiMall.value] : Object.keys(MALL_SECTIONS);
+  const secLabels = [...new Set([].concat(...mallList.map(m=> MALL_SECTIONS[m]||[])))];
+  const ds=[]; mallList.forEach(m=>{
+    const map={}; secLabels.forEach(s=> map[s]=0);
+    arr.filter(d=>d.mall===m).forEach(d=>{ map[d.section]=(map[d.section]||0)+sumPaid(d); });
+    ds.push({label:`${m}`, data:secLabels.map(s=> map[s])});
+  });
+  renderChart('chPaidBySectionPerMall','bar','المسدد حسب القسم/المركز',{labels:secLabels, datasets:ds});
+
+  // الحوالات المخططة والمسدد والملغية (إجماليات)
+  let planned=0, paid=0, cancelled=0;
+  arr.forEach(d=>{
+    if(d.cancelled) cancelled += sumTotal(d);
+    else if((d.paidAmount||0)>0) paid += sumPaid(d);
+    else planned += sumTotal(d);
+  });
+  renderChart('chPlannedPaidCancelled','bar','مخطط / مسدد / ملغي',{
+    labels:['مخططة','مسددة','ملغاة'],
+    datasets:[{label:'ريال',data:[planned,paid,cancelled]}]
+  });
+
+  // 3) إجمالي المديونيات لكل مركز والمسدد منها
+  const totMall={}, paidMall={};
+  arr.forEach(d=>{
+    totMall[d.mall]=(totMall[d.mall]||0)+sumTotal(d);
+    paidMall[d.mall]=(paidMall[d.mall]||0)+sumPaid(d);
+  });
+  const malls=Object.keys(totMall);
+  renderChart('chTotalVsPaidByMall','bar','إجمالي مقابل المسدد (حسب المركز)',{
+    labels:malls,
+    datasets:[
+      {label:'إجمالي', data:malls.map(m=> totMall[m])},
+      {label:'مسدد', data:malls.map(m=> paidMall[m])}
+    ]
+  });
+
+  // 4) إجمالي مديونية الموردين لكل قسم والمسدد على مستوى كل مركز (يعرض حسب المركز المختار أو جميعها)
+  const labelsSec=[...new Set(arr.map(d=> d.section))];
+  const ds2=[]; (kpiMall.value? [kpiMall.value] : Object.keys(MALL_SECTIONS)).forEach(m=>{
+    const totalMap={}, paidMap={}; labelsSec.forEach(s=> {totalMap[s]=0; paidMap[s]=0;});
+    arr.filter(d=>d.mall===m || !kpiMall.value).forEach(d=>{
+      totalMap[d.section]+=sumTotal(d);
+      paidMap[d.section]+=sumPaid(d);
+    });
+    ds2.push({label:`${m} — إجمالي`, data:labelsSec.map(s=> totalMap[s])});
+    ds2.push({label:`${m} — مسدد`, data:labelsSec.map(s=> paidMap[s])});
+  });
+  renderChart('chSupplierDebtBySection','bar','إجمالي/مسدد مديونية الموردين حسب القسم',{labels:labelsSec, datasets:ds2});
+}
+function renderChart(id, type, title, data){
+  const ctx=document.getElementById(id).getContext('2d');
+  if(kpiCharts[id]){ kpiCharts[id].destroy(); }
+  kpiCharts[id]=new Chart(ctx,{type, data, options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'top',labels:{font:{family:'Almarai'}}}, title:{display:true,text:title,font:{family:'Almarai'}}},
+    scales:{ x:{ticks:{font:{family:'Almarai'}}}, y:{ticks:{font:{family:'Almarai'}}} }
+  }});
+}
+
+/* ===== Utils ===== */
 function show(el, on){ el.style.display = on? 'flex':'none'; }
 
-/* ======= init ======= */
+/* ===== init ===== */
 (function init(){
   USERS={...BASE_USERS,...loadDynamicUsers()};
-  // استرجاع جلسة
   const ses=localStorage.getItem(SESSION_KEY);
+  // تهيئة أشهر KPI
+  for(let m=1;m<=12;m++){/*filled on open*/}
   if(ses && USERS[ses] && USERS[ses].isEnabled!==false){
     currentUser={name:ses, ...USERS[ses]};
     loginScreen.style.display='none'; appEl.style.display='block';
     welcomeTitle.textContent=`مرحباً، ${ses}`; roleLabel.textContent=`الدور: ${translateRole(USERS[ses].role)}`;
     applyRoleFeatures();
   }
-  populateFilterSections();
-  populateSupplierFilter();
-  renderCards();
+  populateFilterSections(); populateSupplierFilter(); renderCards();
 })();
 </script>
 </body>
