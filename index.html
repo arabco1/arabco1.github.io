@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -239,7 +237,7 @@
   </div>
 
   <script>
-    // بيانات الأقسام
+    // ============ بيانات الأقسام ============
     const mallsData = {
       ansar: {
         title: "الأنصار مول",
@@ -290,6 +288,9 @@
       }
     };
 
+    // ============ أدوات مساعدة ============
+    const fmt = (n, d=2) => (isFinite(n) ? (+n).toFixed(d) : '');
+
     /* حساب الهدف حسب عدد أيام الشهر */
     function getMonthDays(d=new Date()){
       return new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
@@ -306,8 +307,8 @@
       const now = new Date();
       const options = { month: 'long', day: 'numeric', year: 'numeric' };
       document.getElementById('currentDate').textContent = new Intl.DateTimeFormat('ar', options).format(now);
-      document.getElementById('dailyBadge').textContent = getDailyTarget(now) + '%';
-      document.getElementById('cumBadge').textContent   = getCumulativeTarget(now) + '%';
+      document.getElementById('dailyBadge').textContent = fmt(getDailyTarget(now), 5) + '%';
+      document.getElementById('cumBadge').textContent   = fmt(getCumulativeTarget(now), 2) + '%';
     }
 
     /* تحديث حالة كل بطاقة (مقارنة بالتراكمي) */
@@ -344,8 +345,8 @@
           <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
           <div class="stat-info">
             <div class="stat-title">أفضل مركز أداءً</div>
-            <div class="stat-value">${best.name} — ${best.pct.toFixed(2)}%</div>
-            <div class="stat-note">فارق عن التراكمي ${(best.pct-target>=0?'+':'-')}${Math.abs((best.pct-target).toFixed(2))}%</div>
+            <div class="stat-value">${best.name} — ${fmt(best.pct)}%</div>
+            <div class="stat-note">فارق عن التراكمي ${(best.pct-target>=0?'+':'-')}${fmt(Math.abs(best.pct-target))}%</div>
           </div>
         </div>
 
@@ -353,8 +354,8 @@
           <div class="stat-icon"><i class="fa-regular fa-circle-down"></i></div>
           <div class="stat-info">
             <div class="stat-title">أقل مركز أداءً</div>
-            <div class="stat-value">${worst.name} — ${worst.pct.toFixed(2)}%</div>
-            <div class="stat-note">فارق عن التراكمي ${(worst.pct-target>=0?'+':'-')}${Math.abs((worst.pct-target).toFixed(2))}%</div>
+            <div class="stat-value">${worst.name} — ${fmt(worst.pct)}%</div>
+            <div class="stat-note">فارق عن التراكمي ${(worst.pct-target>=0?'+':'-')}${fmt(Math.abs(worst.pct-target))}%</div>
           </div>
         </div>
 
@@ -362,8 +363,8 @@
           <div class="stat-icon"><i class="fa-solid fa-gauge-high"></i></div>
           <div class="stat-info">
             <div class="stat-title">متوسط الإنجاز</div>
-            <div class="stat-value">${avg}%</div>
-            <div class="stat-note">مقارنة بالتراكمي ${target}%</div>
+            <div class="stat-value">${fmt(avg)}%</div>
+            <div class="stat-note">مقارنة بالتراكمي ${fmt(target)}%</div>
           </div>
         </div>
 
@@ -371,7 +372,7 @@
           <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
           <div class="stat-info">
             <div class="stat-title">المستهدف التراكمي اليوم</div>
-            <div class="stat-value">${target}%</div>
+            <div class="stat-value">${fmt(target)}%</div>
             <div class="stat-note">يتحدّث تلقائياً حسب عدد أيام الشهر</div>
           </div>
         </div>
@@ -391,21 +392,22 @@
                 <div class="rank-badge"><i class="fa-solid fa-city"></i></div>
                 <div>
                   <div style="font-weight:800">${data.title}</div>
-                  <div style="font-size:12px;color:var(--muted)">أفضل 3 أقسام مقارنةً بالهدف ${target}%</div>
+                  <div style="font-size:12px;color:var(--muted)">أفضل 3 أقسام مقارنةً بالهدف ${fmt(target)}%</div>
                 </div>
               </div>
               <div class="chip">Top 3</div>
             </div>
             <div class="dept-list">
               ${top3.map((d,i)=>{
-                const diff = +(d.percentage - target).toFixed(2);
+                const p = +d.percentage; // لا قصّ للنسبة
+                const diff = +(p - target).toFixed(2);
                 const sign = diff>=0 ? '+' : '-';
                 return `
                   <div class="dept-row">
                     <i class="fa-solid ${d.icon}"></i>
                     <div class="dept-name">${i+1}. ${d.name}</div>
-                    <div class="chip dept-val">${d.percentage}%</div>
-                    <div class="chip">${sign}${Math.abs(diff)}%</div>
+                    <div class="chip dept-val">${fmt(p)}%</div>
+                    <div class="chip">${sign}${fmt(Math.abs(diff))}%</div>
                   </div>
                 `;
               }).join('')}
@@ -424,16 +426,17 @@
       const target = getCumulativeTarget();
 
       const html = mall.departments.map(dept => {
-        const p = Math.max(0, Math.min(100, +dept.percentage));
+        // >>> الإصلاح هنا: عرض النسبة الفعلية بدون حد أقصى 100%
+        const p = +dept.percentage; // لا استخدام للـ clamp
         const diff = +(p - target).toFixed(2);
         const cls = diff >= 0 ? 'above' : 'below';
         return `
           <div class="department-card">
             <i class="fa-solid ${dept.icon} department-icon"></i>
             <h3>${dept.name}</h3>
-            <div class="department-percentage">${p}%</div>
+            <div class="department-percentage">${fmt(p)}%</div>
             <div class="department-performance ${cls}">
-              ${Math.abs(diff)}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}
+              ${fmt(Math.abs(diff))}% ${diff >= 0 ? 'أعلى من المخطط' : 'أقل من المخطط'}
             </div>
           </div>
         `;
