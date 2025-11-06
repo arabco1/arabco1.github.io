@@ -501,7 +501,7 @@
       const currentDate = new Intl.DateTimeFormat('ar', options).format(now);
       document.getElementById('currentDate').textContent = currentDate;
       document.getElementById('dailyBadge').textContent = "الهدف اليومي " + fmt(getDailyTarget(now),5) + "%";
-      document.getElementById('cumBadge').textContent   = "التراكمي الآن " + fmt(getCumulativeTarget(now),3) + "%";
+      document.getElementById('cumBadge').textContent   = "المستهدف الآن " + fmt(getCumulativeTarget(now),3) + "%";
     }
 
     function updatePerformance(){
@@ -534,7 +534,7 @@
         <div class="stat-card">
           <div class="stat-icon">🏆</div>
           <div>
-            <div class="stat-title">أفضل مركز</div>
+            <div class="stat-title">الأفضل أداءً </div>
             <div class="stat-value">${best.name}</div>
             <div class="stat-note">حقق ${fmt(best.pct)}%</div>
           </div>
@@ -542,7 +542,7 @@
         <div class="stat-card">
           <div class="stat-icon">⬇️</div>
           <div>
-            <div class="stat-title">أقل مركز</div>
+            <div class="stat-title">الأقل أداءً</div>
             <div class="stat-value">${worst.name}</div>
             <div class="stat-note">حقق ${fmt(worst.pct)}%</div>
           </div>
@@ -550,7 +550,7 @@
         <div class="stat-card">
           <div class="stat-icon">📊</div>
           <div>
-            <div class="stat-title">متوسط الإنجاز</div>
+            <div class="stat-title">نسبة الإنجاز </div>
             <div class="stat-value">${fmt(avg)}%</div>
             <div class="stat-note">المستهدف الآن ${fmt(target)}%</div>
           </div>
@@ -558,9 +558,9 @@
         <div class="stat-card">
           <div class="stat-icon">⏱️</div>
           <div>
-            <div class="stat-title">تراكمي بالساعة</div>
+            <div class="stat-title"> المستهدف الآن</div>
             <div class="stat-value">${fmt(target,3)}%</div>
-            <div class="stat-note">يتغير حسب الساعة وعدد الأيام</div>
+            <div class="stat-note">يحدث تلقائياً كل ساعة</div>
           </div>
         </div>
       `;
@@ -577,7 +577,7 @@
                 <div class="badge-square">🏢</div>
                 <div>
                   <div style="font-size:.7rem;font-weight:700">${data.title}</div>
-                  <div style="font-size:.58rem;color:rgba(227,232,255,.7)">أعلى الأقسام</div>
+                  <div style="font-size:.58rem;color:rgba(227,232,255,.7)">أفضل الأقسام أداءً</div>
                 </div>
               </div>
               <div class="chip">Top 3</div>
